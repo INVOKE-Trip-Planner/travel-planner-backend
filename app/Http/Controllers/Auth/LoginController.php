@@ -143,9 +143,9 @@ class LoginController extends Controller
      *         description="Successful operation"
      *     ),
      *     @OA\Response(
-     *         response=422,
-     *         description="Error"
-     *     )
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
      * )
      */
     public function logout(Request $request)

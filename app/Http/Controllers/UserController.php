@@ -82,12 +82,12 @@ class UserController extends Controller
      *         description="Successful operation"
      *     ),
      *     @OA\Response(
-     *         response=422,
-     *         description="Error"
+     *         response=401,
+     *         description="Unauthorized"
      *     ),
      *     @OA\Response(
-     *         response=500,
-     *         description="Failed to generate token"
+     *         response=422,
+     *         description="Error"
      *     ),
      * )
      */
@@ -143,10 +143,6 @@ class UserController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation"
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized"
      *     ),
      *     @OA\Response(
      *         response=422,
