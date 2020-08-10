@@ -8,6 +8,9 @@
 5. Generate fake data by running php artisan db:seed 
     * This will generate 10 users with username from 'test0000' til 'test0009' and password same as the username.
 
+## Misc
+1. Documentation for APIs can be found at /api/documentation.
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
