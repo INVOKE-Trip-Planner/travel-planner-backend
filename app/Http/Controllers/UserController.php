@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
+use App\Models\User;
 use Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -77,6 +77,33 @@ class UserController extends Controller
      *             type="string"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *         name="phone",
+     *         in="query",
+     *         description="numeric | digits_between:10,11 | unique:users",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="gender",
+     *         in="query",
+     *         description="in:MALE,FEMALE,OTHER",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="birth_date",
+     *         in="query",
+     *         description="date_format:Y-m-d | before:today",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation"
@@ -97,13 +124,20 @@ class UserController extends Controller
             'username' => ['string', 'max:25', 'unique:users'],
             'name' => ['string', 'max:255'],
             'email' => ['email:rfc,dns', 'max:255', 'unique:users'],
+            'phone' => ['numeric', 'digits_between:10,11', 'unique:users'],
             'password' => ['string', 'min:8', 'confirmed'],
             'avatar' => ['image', 'mimes:jpeg, png, jpg, gif, svg', 'max:2048'],
+            'gender' => ['in:MALE,FEMALE,OTHER'],
+            'birth_date' => ['date_format:Y-m-d', 'before:today'],
         ])->validate();
 
-        $data = $request->all();
+        $data = $request->except(['password', 'avatar']);
 
         $user = Auth::user();
+
+        if ($request->has('password')) {
+            $data['password'] = Hash::make($data['password']);
+        }
 
         if ($request->has('avatar')) {
             $avatarName = $user->id . '_avatar' . time() . '.' .request()->avatar->getClientOriginalExtension();
@@ -158,12 +192,14 @@ class UserController extends Controller
         ])->validate();
 
         if ($request->has('username')) {
-            $user = User::where('username', request('username'))->get();
+            $user = User::select('id', 'avatar')
+                        ->where('username', request('username'))
+                        ->get();
         } else if ($request->has('email')) {
-            $user = User::where('email', request('email'))->get();
+            $user = User::select('id', 'avatar')
+                        ->where('email', request('email'))
+                        ->get();
         }
-
-        error_log('pass validation');
 
         return response()->json($user, 200);
         // return response()->json('Please pass in username or email.', 422);

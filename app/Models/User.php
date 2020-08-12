@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,7 +19,7 @@ class User extends Authenticatable implements Auditable, JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username', 'avatar', 'last_login_at', 'last_login_ip',
+        'name', 'email', 'password', 'username', 'avatar', 'phone', 'gender', 'birth_date', 'last_login_at', 'last_login_ip',
     ];
 
     /**
@@ -28,7 +28,7 @@ class User extends Authenticatable implements Auditable, JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'created_at', 'updated_at', 'last_login_at', 'last_login_ip', 'email_verified_at',
+        'password', 'remember_token', 'created_at', 'updated_at', 'last_login_at', 'last_login_ip', 'email_verified_at', 'pivot',
     ];
 
     /**
@@ -40,7 +40,15 @@ class User extends Authenticatable implements Auditable, JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-        /**
+    /**
+     * Get the trips for the user.
+     */
+    public function trips()
+    {
+        return $this->belongsToMany('App\Models\Trip');
+    }
+
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed

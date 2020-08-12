@@ -130,6 +130,33 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "description": "numeric | digits_between:10,11 | unique:users",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "gender",
+                        "in": "query",
+                        "description": "in:MALE,FEMALE,OTHER",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "birth_date",
+                        "in": "query",
+                        "description": "date_format:Y-m-d | before:today",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "requestBody": {
@@ -159,6 +186,288 @@
                         "description": "Error"
                     }
                 }
+            }
+        },
+        "/api/trip": {
+            "get": {
+                "tags": [
+                    "Trip"
+                ],
+                "summary": "Find trip",
+                "description": "Get trips exclude deleted",
+                "operationId": "get_trip",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Trip"
+                ],
+                "summary": "Create trip",
+                "description": "Create trip",
+                "operationId": "create_trip",
+                "parameters": [
+                    {
+                        "name": "trip_name",
+                        "in": "query",
+                        "description": "string | max:255",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "origin",
+                        "in": "query",
+                        "description": "string | max:100",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "date_format:Y-m-d | after:today",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "date_format:Y-m-d | after:start_date",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "cost",
+                        "in": "query",
+                        "description": "numeric",
+                        "schema": {
+                            "type": "decimal"
+                        }
+                    },
+                    {
+                        "name": "group_type",
+                        "in": "query",
+                        "description": "in:SOLO,COUPLE,FAMILY,FRIENDS",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "trip_type",
+                        "in": "query",
+                        "description": "in:WORK,LEISURE",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "trip_banner": {
+                                        "description": "image | mimes:jpeg, png, jpg, gif, svg | max:2048",
+                                        "type": "file",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/update_trip": {
+            "post": {
+                "tags": [
+                    "Trip"
+                ],
+                "summary": "Update trip",
+                "description": "Update trip",
+                "operationId": "update_trip",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "required | exists:trips",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "trip_name",
+                        "in": "query",
+                        "description": "required | string | max:255",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "origin",
+                        "in": "query",
+                        "description": "string | max:100",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "date_format:Y-m-d | after:today",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "date_format:Y-m-d | after:start_date",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "cost",
+                        "in": "query",
+                        "description": "numeric",
+                        "schema": {
+                            "type": "decimal"
+                        }
+                    },
+                    {
+                        "name": "group_type",
+                        "in": "query",
+                        "description": "in:SOLO,COUPLE,FAMILY,FRIENDS",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "trip_type",
+                        "in": "query",
+                        "description": "in:WORK,LEISURE",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "trip_banner": {
+                                        "description": "image | mimes:jpeg, png, jpg, gif, svg | max:2048",
+                                        "type": "file",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/delete_trip": {
+            "post": {
+                "tags": [
+                    "Trip"
+                ],
+                "summary": "Delete trip",
+                "description": "Delete trip",
+                "operationId": "delete_trip",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "required | exists:trips,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/user": {
@@ -245,6 +554,33 @@
                         "name": "password_confirmation",
                         "in": "query",
                         "description": "required_with:password",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "description": "numeric | digits_between:10,11 | unique:users",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "gender",
+                        "in": "query",
+                        "description": "in:MALE,FEMALE,OTHER",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "birth_date",
+                        "in": "query",
+                        "description": "date_format:Y-m-d | before:today",
                         "required": false,
                         "schema": {
                             "type": "string"

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -108,9 +108,36 @@ class RegisterController extends Controller
      *             type="string"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *         name="phone",
+     *         in="query",
+     *         description="numeric | digits_between:10,11 | unique:users",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="gender",
+     *         in="query",
+     *         description="in:MALE,FEMALE,OTHER",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="birth_date",
+     *         in="query",
+     *         description="date_format:Y-m-d | before:today",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Successful operation"
+     *         description="Successful operation",
      *     ),
      *     @OA\Response(
      *         response=422,
@@ -133,7 +160,10 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required' ,'email:rfc,dns', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'phone' => ['numeric', 'digits_between:10,11', 'unique:users'],
             'avatar' => ['image', 'mimes:jpeg, png, jpg, gif, svg', 'max:2048'],
+            'gender' => ['in:MALE,FEMALE,OTHER'],
+            'birth_date' => ['date_format:Y-m-d', 'before:today'],
         ])->validate();
 
         $data = $request->except('avatar');
@@ -154,7 +184,7 @@ class RegisterController extends Controller
 
         $token = $this->guard()->login($user);
         // $token = JWTAuth::attempt($request->only(['username', 'password']));
-        $user = User::find($user);
+        $user = User::find($user->id);
 
         // $execution_time = microtime(true) - $start_time;
         // error_log("Execution time of register = $execution_time");

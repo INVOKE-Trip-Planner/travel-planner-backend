@@ -26,6 +26,11 @@ Route::group([
     ], function () {
         Route::post('logout', 'Auth\LoginController@logout');
         Route::post('user', 'UserController@update');
+
+        Route::get('trip', 'TripController@find');
+        Route::post('trip', 'TripController@create');
+        Route::post('delete_trip', 'TripController@delete');
+        Route::post('update_trip', 'TripController@update');
     });
 
     Route::post('register', 'Auth\RegisterController@register');
