@@ -37,6 +37,8 @@ Route::group([
         Route::get('accommodation', 'AccommodationController@get');
         Route::post('accommodation', 'AccommodationController@create');
 
+        Route::post('transport', 'TransportController@create');
+
     });
 
     Route::get('accommodation/search', 'AccommodationController@find');
