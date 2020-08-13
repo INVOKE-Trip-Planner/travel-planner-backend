@@ -2,28 +2,22 @@
 
 namespace Tests\Feature;
 
-// This refresh the whole database
-// use Illuminate\Foundation\Testing\RefreshDatabase;
-
-use App\Traits\TestTrait;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\User;
-
-// This delete only the data created during tests
+use App\Traits\TestTrait;
+use App\Models\Trip;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class TripTest extends TestCase
+class TransportTest extends TestCase
 {
     use DatabaseTransactions;
     use TestTrait, WithFaker;
 
-    public function testCreateTrip()
+    public function testCreateTransport()
     {
-        // $users = factory(App\User::class, 3)->make();
-        // $user = factory(User::class)->make();
         $num_users = 3;
-        $num_destinations = 3;
+        $num_destinations = 1;
 
         $credentials = $this->generate_login_user($num_users);
 
@@ -31,24 +25,55 @@ class TripTest extends TestCase
         $destinations = [];
 
         foreach(range(0, $num_destinations) as $i) {
-
             array_push($cities, $this->faker->city);
 
             if ($i > 0) {
+                $transports = [];
+
+                array_push($transports,
+                    [
+                        'mode' => $this->faker->randomElement($array = ['FLIGHT', 'FERRY', 'BUS', 'TRAIN', 'OTHER']),
+                        'origin' => $cities[$i - 1],
+                        'destination' => $cities[$i],
+                        'cost' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 2000),
+                        'booking_id' => $this->faker->randomNumber($nbDigits = 6),
+                    ]
+                );
+
+                if ($i === $num_destinations) {
+                    array_push($transports,
+                        [
+                            'mode' => $this->faker->randomElement($array = ['FLIGHT', 'FERRY', 'BUS', 'TRAIN', 'OTHER']),
+                            'origin' => $cities[$i],
+                            'destination' => $cities[0],
+                            'cost' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 2000),
+                            'booking_id' => $this->faker->randomNumber($nbDigits = 6),
+                        ]
+                    );
+                }
 
                 array_push($destinations,
                     [
                         'location' => $cities[$i],
+                        'transports' => $transports,
                     ]
                 );
             }
         }
 
-        $payload = [
+        $trip = Trip::create([
             'trip_name' => 'Trip to ' . $cities[1],
             'origin' => $cities[0],
-            'users' => array_column($credentials, 'id'),
-            'destinations' => $destinations,
+            'created_by' => $credentials[0]['id'],
+        ]);
+
+        $trip->users()->sync(array_column($credentials, 'id'));
+
+        $trip->destinations()->createMany($destinations);
+
+        $payload = [
+            'destination_id' => $trip->destinations()->first()['id'],
+            'transport' => $destinations[0]['transports'],
         ];
 
         // error_log(print_r($destinations, true));

@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Models\User;
 use App\Task;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Hash;
 
 trait TestTrait
 {
+    use WithoutMiddleware;
 
     private function generate_user($num_user, $return_id_only=False)
     {

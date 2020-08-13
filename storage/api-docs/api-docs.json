@@ -14,6 +14,129 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/accommodation/search": {
+            "get": {
+                "tags": [
+                    "Accommodation"
+                ],
+                "summary": "Find accommodation by city",
+                "description": "Find accommodation by city",
+                "operationId": "search_accommodation",
+                "parameters": [
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "required | string",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/api/accommodation": {
+            "get": {
+                "tags": [
+                    "Accommodation"
+                ],
+                "summary": "Get all accommodations for users",
+                "description": "Get all accommodations for users",
+                "operationId": "get_accommodation",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Accommodation"
+                ],
+                "summary": "Create accommodation",
+                "description": "Create accommodation",
+                "operationId": "create_accommodation",
+                "parameters": [
+                    {
+                        "name": "destination_id",
+                        "in": "query",
+                        "description": "required | exists:destinations,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "body",
+                        "in": "query",
+                        "required": false,
+                        "explode": true,
+                        "schema": {
+                            "properties": {
+                                "accommodation": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "accommodation_name": {
+                                                "type": "string"
+                                            },
+                                            "checkin_time": {
+                                                "type": "string"
+                                            },
+                                            "checkout_time": {
+                                                "type": "string"
+                                            },
+                                            "cost": {
+                                                "type": "decimal"
+                                            },
+                                            "booking_id": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/login": {
             "post": {
                 "tags": [
@@ -188,30 +311,17 @@
                 }
             }
         },
-        "/api/hotel": {
+        "/api/destination": {
             "get": {
                 "tags": [
-                    "Hotel"
+                    "Destination"
                 ],
-                "summary": "Find hotels by city",
-                "description": "Find hotels by city",
-                "operationId": "get_hotels",
-                "parameters": [
-                    {
-                        "name": "city",
-                        "in": "query",
-                        "description": "required | string",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
+                "summary": "Get all destinations for users",
+                "description": "Get all destinations for users",
+                "operationId": "get_destination",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
                     },
                     "422": {
                         "description": "Error"

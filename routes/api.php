@@ -32,11 +32,15 @@ Route::group([
         Route::post('delete_trip', 'TripController@delete');
         Route::post('update_trip', 'TripController@update');
 
+        Route::get('destination', 'DestinationController@get');
+
+        Route::get('accommodation', 'AccommodationController@get');
+        Route::post('accommodation', 'AccommodationController@create');
 
     });
 
-    Route::get('hotel', 'HotelController@find');
-    
+    Route::get('accommodation/search', 'AccommodationController@find');
+
     Route::post('register', 'Auth\RegisterController@register');
     Route::post('login', 'Auth\LoginController@login');
     Route::get('user', 'UserController@find');

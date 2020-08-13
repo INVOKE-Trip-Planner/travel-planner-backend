@@ -172,7 +172,7 @@ class TripController extends Controller
         $trip->users()->sync($users);
 
         if ($request->has('trip_banner')) {
-            $bannerName = Auth::id() . '_' . $trip->id . '_banner' . time() . '.' .request()->trip_banner->getClientOriginalExtension();
+            $bannerName = $trip->id . '_banner' . time() . '.' .request()->trip_banner->getClientOriginalExtension();
             $request->trip_banner->storeAs('trip_banners', $bannerName);
             $trip->trip_banner = $bannerName;
             $trip->save();
@@ -338,7 +338,7 @@ class TripController extends Controller
         $data = $request->except(['trip_banner', 'created_by', 'users']);
 
         if ($request->has('trip_banner')) {
-            $bannerName = Auth::id() . '_' . $trip->id . '_banner' . time() . '.' .request()->trip_banner->getClientOriginalExtension();
+            $bannerName = $trip->id . '_banner' . time() . '.' .request()->trip_banner->getClientOriginalExtension();
             $request->trip_banner->storeAs('trip_banners', $bannerName);
             $trip->trip_banner = $bannerName;
             $trip->save();
@@ -366,8 +366,8 @@ class TripController extends Controller
      * @OA\Get(
      *     path="/api/trip",
      *     tags={"Trip"},
-     *     summary="Find trip",
-     *     description="Get trips exclude deleted",
+     *     summary="Get all trips for logged in user",
+     *     description="Get all trips excluding deleted ones",
      *     operationId="get_trip",
      *     security={{"bearerAuth":{}}},
      *     deprecated=false,
