@@ -15,7 +15,7 @@ class Transport extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'destination_id', 'mode', 'departure_time', 'arrival_time', 'origin', 'destination', 'booking_id', 'cost',
+        'destination_id', 'mode', 'departure_time', 'arrival_time', 'origin', 'destination', 'booking_id', 'operator', 'cost',
     ];
 
     /**

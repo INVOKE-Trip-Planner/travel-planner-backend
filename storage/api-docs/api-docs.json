@@ -188,6 +188,43 @@
                 }
             }
         },
+        "/api/hotel": {
+            "get": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Find hotels by city",
+                "description": "Find hotels by city",
+                "operationId": "get_hotels",
+                "parameters": [
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "required | string",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/trip": {
             "get": {
                 "tags": [
