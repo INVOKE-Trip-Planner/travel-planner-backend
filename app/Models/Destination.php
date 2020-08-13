@@ -15,7 +15,7 @@ class Destination extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'trip_id', 'start_date', 'end_date', 'cost',
+        'trip_id', 'start_date', 'end_date', 'cost', 'location'
     ];
 
     /**

@@ -130,30 +130,30 @@ class TripController extends Controller
             'users' => 'array',
             'users.*' => 'required_unless:users,null|exists:users,id',
             'destinations' => 'array',
-            'destinations.*["location"]' => 'required_with:destionations|string|max:100',
-            'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
-            'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
-            'destinations.*["cost"]'=> 'numeric|min:0',
-            'destinations.*["transport"]' => 'array',
-            'destinations.*["transport"].*["mode"]' => 'in:FLIGHT,FERRY,BUS,TRAIN,OTHER|required_with:destinations.*["transport"]',
-            'destinations.*["transport"].*["origin"]' => 'required_with:destinations.*["transport"]|string|max:100',
-            'destinations.*["transport"].*["destination"]' => 'required_with:destinations.*["transport"]|string|max:100',
-            'destinations.*["transport"].*["departure_time"]' => 'date_format:Y-m-d|after:today',
-            'destinations.*["transport"].*["arrival_time"]' => 'date_format:Y-m-d|after:start_date',
-            'destinations.*["transport"].*["cost"]'=> 'numeric|min:0',
-            'destinations.*["transport"].*["operator"]' => 'required_with:destinations.*["transport"]|string|max:100',
-            'destinations.*["transport"].*["booing_id"]'=> 'string|max:20',
-            'destinations.*["accommodations"]' => 'array',
-            'destinations.*["accommodations"].*["accommodation_name"]' => 'required_with:destinations.*["accommodations"]|string|max:100',
-            'destinations.*["accommodations"].*["checkin_time"]' => 'date_format:Y-m-d|after:today',
-            'destinations.*["accommodations"].*["checkout_time"]' => 'date_format:Y-m-d|after:start_date',
-            'destinations.*["accommodations"].*["cost"]'=> 'numeric|min:0',
-            'destinations.*["accommodations"].*["booing_id"]'=> 'string|max:20',
-            'destinations.*["itineraries"]' => 'array',
-            'destinations.*["itineraries"].*["date"]' => 'date_format:Y-m-d|after:today|required_with:destinations.*["itineraries"]',
-            'destinations.*["itineraries"].*["schedule"]' => 'array|required_with:destinations.*["itineraries"]',
-            'destinations.*["itineraries"].*["schedule"].*["activity"]' => 'string|min:1|required_with:destinations.*["itineraries"]',
-            'destinations.*["itineraries"].*["schedule"].*["cost"]' => 'numeric|min:0',
+            'destinations.*["location"]' => 'required_with:destinations|string|max:100',
+            // 'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
+            // 'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
+            // 'destinations.*["cost"]'=> 'numeric|min:0',
+            // 'destinations.*["transport"]' => 'array',
+            // 'destinations.*["transport"].*["mode"]' => 'in:FLIGHT,FERRY,BUS,TRAIN,OTHER|required_with:destinations.*["transport"]',
+            // 'destinations.*["transport"].*["origin"]' => 'required_with:destinations.*["transport"]|string|max:100',
+            // 'destinations.*["transport"].*["destination"]' => 'required_with:destinations.*["transport"]|string|max:100',
+            // 'destinations.*["transport"].*["departure_time"]' => 'date_format:Y-m-d|after:today',
+            // 'destinations.*["transport"].*["arrival_time"]' => 'date_format:Y-m-d|after:start_date',
+            // 'destinations.*["transport"].*["cost"]'=> 'numeric|min:0',
+            // 'destinations.*["transport"].*["operator"]' => 'required_with:destinations.*["transport"]|string|max:100',
+            // 'destinations.*["transport"].*["booing_id"]'=> 'string|max:20',
+            // 'destinations.*["accommodations"]' => 'array',
+            // 'destinations.*["accommodations"].*["accommodation_name"]' => 'required_with:destinations.*["accommodations"]|string|max:100',
+            // 'destinations.*["accommodations"].*["checkin_time"]' => 'date_format:Y-m-d|after:today',
+            // 'destinations.*["accommodations"].*["checkout_time"]' => 'date_format:Y-m-d|after:start_date',
+            // 'destinations.*["accommodations"].*["cost"]'=> 'numeric|min:0',
+            // 'destinations.*["accommodations"].*["booing_id"]'=> 'string|max:20',
+            // 'destinations.*["itineraries"]' => 'array',
+            // 'destinations.*["itineraries"].*["date"]' => 'date_format:Y-m-d|after:today|required_with:destinations.*["itineraries"]',
+            // 'destinations.*["itineraries"].*["schedule"]' => 'array|required_with:destinations.*["itineraries"]',
+            // 'destinations.*["itineraries"].*["schedule"].*["activity"]' => 'string|min:1|required_with:destinations.*["itineraries"]',
+            // 'destinations.*["itineraries"].*["schedule"].*["cost"]' => 'numeric|min:0',
         ])->validate();
 
         $data = $request->except(['trip_banner', 'created_by', 'users', 'destinations']);
@@ -176,19 +176,24 @@ class TripController extends Controller
             $trip->save();
         }
 
-        $request_destinations = $request->only('destinations');
-        $request_destinations = array_map(function($arr) use ($trip){
-            return $arr + ['trip_id' => $trip->id];
-        }, $request_destinations);
+        if ($request->has('destinations')) {
+            $request_destinations = $request->only('destinations')['destinations'];
 
-        error_log($request_destinations);
-        
-        Destination::insert($request_destinations);
+            $request_destinations = array_map(function($arr) use ($trip){
+                return $arr + ['trip_id' => $trip->id];
+            }, $request_destinations);
+
+            error_log(print_r($request_destinations, true));
+
+            Destination::insert($request_destinations);
+        }
 
         $trip = Trip::find($trip->id);
         $trip->users = $trip->users()->select('id', 'avatar')->get();
         $trip->destinations = $trip->destinations()->get();
         $trip = $this->get_destinations_details($trip);
+
+        // error_log(print_r($trip, true));
 
         return response()->json($trip, 201);
     }
