@@ -2,26 +2,21 @@
 
 namespace Tests\Feature;
 
-// This refresh the whole database
-// use Illuminate\Foundation\Testing\RefreshDatabase;
-
 use App\Traits\TestTrait;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\User;
 
 // This delete only the data created during tests
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class TripTest extends TestCase
+class DestinationTest extends TestCase
 {
     use DatabaseTransactions;
     use TestTrait, WithFaker;
 
     public function testCreateTrip()
     {
-        // $users = factory(App\User::class, 3)->make();
-        // $user = factory(User::class)->make();
         $num_users = 3;
         $num_destinations = 3;
 
@@ -36,10 +31,34 @@ class TripTest extends TestCase
             array_push($cities, $city);
 
             if ($i > 0) {
+                $transports = [];
+
+                array_push($transports,
+                    [
+                        'mode' => $this->faker->randomElement($array = ['FLIGHT', 'FERRY', 'BUS', 'TRAIN', 'OTHER']),
+                        'origin' => $cities[$i - 1],
+                        'destination' => $cities[$i],
+                        'cost' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 2000),
+                        'booking_id' => $this->faker->randomNumber($nbDigits = 6),
+                    ]
+                );
+
+                if ($i === $num_destinations) {
+                    array_push($transports,
+                        [
+                            'mode' => $this->faker->randomElement($array = ['FLIGHT', 'FERRY', 'BUS', 'TRAIN', 'OTHER']),
+                            'origin' => $cities[$i],
+                            'destination' => $cities[0],
+                            'cost' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 2000),
+                            'booking_id' => $this->faker->randomNumber($nbDigits = 6),
+                        ]
+                    );
+                }
 
                 array_push($destinations,
                     [
                         'location' => $city,
+                        'transports' => $transports,
                     ]
                 );
             }

@@ -131,10 +131,10 @@ class TripController extends Controller
             'users.*' => 'required_unless:users,null|exists:users,id',
             'destinations' => 'array',
             'destinations.*["location"]' => 'required_with:destinations|string|max:100',
-            // 'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
-            // 'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
-            // 'destinations.*["cost"]'=> 'numeric|min:0',
-            // 'destinations.*["transport"]' => 'array',
+            'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
+            'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
+            'destinations.*["cost"]'=> 'numeric|min:0',
+            'destinations.*["transport"]' => 'array',
             // 'destinations.*["transport"].*["mode"]' => 'in:FLIGHT,FERRY,BUS,TRAIN,OTHER|required_with:destinations.*["transport"]',
             // 'destinations.*["transport"].*["origin"]' => 'required_with:destinations.*["transport"]|string|max:100',
             // 'destinations.*["transport"].*["destination"]' => 'required_with:destinations.*["transport"]|string|max:100',
@@ -162,11 +162,13 @@ class TripController extends Controller
         $trip = Trip::create($data);
 
         $users = [Auth::id()];
+
         if ($request->has('users')) {
             array_merge($users, $request->users);
         }
 
-        // attach or sync sync will delete if not exists
+        // attach or sync to manage many to many relationships
+        // sync will delete if not exists
         $trip->users()->sync($users);
 
         if ($request->has('trip_banner')) {
@@ -179,15 +181,19 @@ class TripController extends Controller
         if ($request->has('destinations')) {
             $request_destinations = $request->only('destinations')['destinations'];
 
-            $request_destinations = array_map(function($arr) use ($trip){
-                return $arr + ['trip_id' => $trip->id];
-            }, $request_destinations);
+            // $request_destinations = array_map(function($arr) use ($trip){
+            //     return $arr + ['trip_id' => $trip->id];
+            // }, $request_destinations);
+            // data_fill($request_destinations, '*.trip_id', $trip->id);
 
-            error_log(print_r($request_destinations, true));
+            // Arr::except($request_destinations, '*.transports');
+            // error_log(print_r($request_destinations, true));
 
-            Destination::insert($request_destinations);
+            // Destination::insert(($request_destinations));
+            $trip->destinations()->createMany($request_destinations);
         }
 
+        // To get trip's users & destinations
         $trip = Trip::find($trip->id);
         $trip->users = $trip->users()->select('id', 'avatar')->get();
         $trip->destinations = $trip->destinations()->get();
@@ -314,6 +320,12 @@ class TripController extends Controller
             'trip_banner' => ['image', 'mimes:jpeg, png, jpg, gif, svg', 'max:2048'],
             'users' => 'array',
             'users.*' => 'required_unless:users,null|exists:users,id',
+            'destinations' => 'array',
+            'destinations.*["location"]' => 'required_with:destinations|string|max:100',
+            'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
+            'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
+            'destinations.*["cost"]'=> 'numeric|min:0',
+            'destinations.*["transport"]' => 'array',
         ])->validate();
 
         $trip = Trip::findOrFail(request('id'));
@@ -336,6 +348,12 @@ class TripController extends Controller
             $users = [Auth::id()];
             array_merge($users, $request->users);
             $trip->users()->sync($users);
+        }
+
+        if ($request->has('destinations')) {
+            $request_destinations = $request->only('destinations')['destinations'];
+            $trip->destinations()->delete();
+            $trip->destinations()->createMany($request_destinations);
         }
 
         $trip->update($data);
@@ -382,11 +400,6 @@ class TripController extends Controller
             $trip->destinations = $trip->destinations()->get();
 
             $trip = $this->get_destinations_details($trip);
-            // foreach($trip->destinations as $destination) {
-            //     $destination->transports = $destination->transports()->get();
-            //     $destination->accommodations = $destination->accommodations()->get();
-            //     $destination->itineraries = $destination->itineraries()->get();
-            // }
         }
 
         $execution_time = microtime(true) - $start_time;
