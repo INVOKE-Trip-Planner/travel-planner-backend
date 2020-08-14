@@ -57,7 +57,7 @@ class ItineraryController extends Controller
      *     @OA\Parameter(
      *         name="date",
      *         in="query",
-     *         description="required | date_format:Y-m-d | after:today",
+     *         description="date_format:Y-m-d | after:today",
      *         @OA\Schema(
      *             type="date"
      *         )
@@ -96,7 +96,7 @@ class ItineraryController extends Controller
     {
         Validator::make($request->all(), [
             'destination_id' => 'required|exists:destinations,id',
-            'date' => 'required|date_format:Y-m-d|after:today',
+            'date' => 'date_format:Y-m-d|after:today', // |required',
             'schedule' => 'required|array',
             'schedule.*["activity"]' => 'required|string|min:1',
             'schedule.*["cost"]' => 'numeric|min:0',
@@ -312,7 +312,7 @@ class ItineraryController extends Controller
         Validator::make($request->all(), [
             'destination_id' => 'required|exists:destinations,id',
             'itineraries' => 'array',
-            'itineraries.*["date"]' => 'date_format:Y-m-d|after:today|required_with:itineraries',
+            'itineraries.*["date"]' => 'date_format:Y-m-d|after:today', // |required_with:itineraries',
             'itineraries.*["schedule"]' => 'array|required_with:itineraries',
             'itineraries.*["schedule"].*["activity"]' => 'string|min:1|required_with:itineraries',
             'itineraries.*["schedule"].*["cost"]' => 'numeric|min:0',

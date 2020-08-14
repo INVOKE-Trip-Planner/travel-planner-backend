@@ -113,7 +113,7 @@ class TripController extends Controller
      *                                type="integer",
      *                            ),
      *               ),
-     *               @OA\Property(property="destination",
+     *               @OA\Property(property="destinations",
      *                            type="array",
      *                            @OA\Items(
      *                                type="object",
