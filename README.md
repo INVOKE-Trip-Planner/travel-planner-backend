@@ -1,3 +1,41 @@
+## API summaries
+1. GET /api/trip to get all trips belong to user.
+2. POST /api/trip to create new trip.
+    * trip_name, origin, start_date, end_date, cost, group_type, trip_type, users[] (array of user's id), destinations[] (array of objects with keys { location, start_date, end_date, cost }), trip_banner (photo) 
+3. POST /api/trip/update to update details of a trip as above EXCEPT location
+    * id* (trip id), trip_name, origin, start_date, end_date, cost, group_type, trip_type, users[] (array of user's id), trip_banner (photo) 
+4. POST /api/trip/delete to delete trip
+    * id* (trip id)
+
+5. POST /api/destination to add destination to trip already created
+    * trip_id*, location, start_date, end_date, cost
+6. POST /api/destination/update to update destination details
+    * id* (destination id), location, start_date, end_date, cost
+7. POST /api/destination/delete to delete destination
+    * id* (destination id)
+
+8. POST /api/accommodation to add 1 accommodation to a destination 
+    * destination_id*, accommodation_name, checkin_time, checkout_time, cost, booking_id
+9. POST /api/accommodation/update to update an accommodation
+    * id* (accommodation id), accommodation_name, checkin_time, checkout_time, cost, booking_id
+10. POST /api/accommodation/delete to delete an accommodation  
+    * id* (accommodation id)
+
+11. POST /api/transport to add 1 transport to a destination
+    * destination_id*, mode* (FLIGHT, FERRY, BUS, TRAIN, OTHER), origin*, destination*, departure_time, arrival_time, cost, operator, booking_id
+12. POST /api/transport/update to update a transport 
+    * id* (transport id), mode* (FLIGHT, FERRY, BUS, TRAIN, OTHER), origin*, destination*, departure_time, arrival_time, cost, operator, booking_id
+13. POST /api/transport/delete to delete a transport 
+    * id* (transport id)
+
+14. POST /api/itinerary to add itinerary for 1 day to a destination 
+    * destination_id, date, schedule[]* (array of objects with keys { activity, cost }*)
+15. POST /api/itinerary/update to update an itinerary 
+    * id (itinerary id), date, schedule[] (array of objects with keys { activity, cost }*)
+16. POST /api/itinerary/delete to delete an itinerary
+    * id (itinerary id)
+
+
 ## Set up
 1. composer update --no-scripts
 2. Rename .env.example to .env & edit the following:
