@@ -67,8 +67,10 @@ class Destination extends Model implements Auditable
     {
         return $this->hasManyDeep('App\Models\User',
             ['App\Models\Trip', 'trip_user'],
-            ['id', ['trip_id', 'user_id'], null],
-            ['trip_id', 'id', null]
+            // trip, trip_user, user
+            [ 'id', 'trip_id', 'id'],
+            // destination, trip, trip_user
+            ['trip_id', 'id', 'user_id']
         );
     }
 

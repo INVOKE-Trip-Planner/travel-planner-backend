@@ -103,15 +103,14 @@ class ItineraryController extends Controller
         ])->validate();
 
         $destination = Destination::find($request->destination_id);
-        $trip = $destination->trip()->first();
-
-        if (Auth::id() != $trip->created_by) {
+        // $trip = $destination->trip()->first();
+        // if (Auth::id() != $trip->created_by) {
+        if ($destination->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
 
         // $request_itineraries = $request['itineraries'];
-
         // error_log(print_r($request_itineraries, true));
 
         $itinerary = $destination->itineraries()->create($request->except('destination_id'));
@@ -186,10 +185,10 @@ class ItineraryController extends Controller
         ])->validate();
 
         $itinerary = Itinerary::findOrFail($request->id);
-        $destination = $itinerary->destination()->first();
-        $trip = $destination->trip()->first();
-
-        if (Auth::id() != $trip->created_by) {
+        // $destination = $itinerary->destination()->first();
+        // $trip = $destination->trip()->first();
+        // if (Auth::id() != $trip->created_by) {
+        if ($itinerary->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
@@ -238,10 +237,10 @@ class ItineraryController extends Controller
         ])->validate();
 
         $itinerary = Itinerary::findOrFail($request->id);
-        $destination = $itinerary->destination()->first();
-        $trip = $destination->trip()->first();
-
-        if (Auth::id() != $trip->created_by) {
+        // $destination = $itinerary->destination()->first();
+        // $trip = $destination->trip()->first();
+        // if (Auth::id() != $trip->created_by) {
+        if ($itinerary->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
@@ -320,9 +319,9 @@ class ItineraryController extends Controller
         ])->validate();
 
         $destination = Destination::find($request->destination_id);
-        $trip = $destination->trip()->first();
-
-        if (Auth::id() != $trip->created_by) {
+        // $trip = $destination->trip()->first();
+        // if (Auth::id() != $trip->created_by) {
+        if ($destination->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }

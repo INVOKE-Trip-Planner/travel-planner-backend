@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Auth;
-use Illuminate\Support\Facades\DB;
 
 class TripController extends Controller
 {
@@ -355,7 +354,8 @@ class TripController extends Controller
 
         $trip = Trip::findOrFail(request('id'));
 
-        if (Auth::id() != $trip->created_by) {
+        // if (Auth::id() != $trip->created_by) {
+        if ($trip->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
@@ -475,7 +475,8 @@ class TripController extends Controller
         $trip = Trip::findOrFail(request('id'));
 
         // Only creator can delete trip
-        if (Auth::id() != $trip->created_by) {
+        // if (Auth::id() != $trip->created_by) {
+        if ($trip->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }

@@ -113,7 +113,8 @@ class DestinationController extends Controller
 
         $trip = Trip::findOrFail($request->trip_id);
 
-        if (Auth::id() != $trip->created_by) {
+        // if (Auth::id() != $trip->created_by) {
+        if ($trip->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
@@ -203,11 +204,9 @@ class DestinationController extends Controller
         ])->validate();
 
         $destination = Destination::findOrFail($request->id);
-        $trip = $destination->trip()->first();
-
-        error_log(print_r($destination->users()->select('id')->get(), true));
-
-        if (Auth::id() != $trip->created_by) {
+        // $trip = $destination->trip()->first();
+        // if (Auth::id() != $trip->created_by) {
+        if ($destination->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
@@ -256,9 +255,9 @@ class DestinationController extends Controller
         ])->validate();
 
         $destination = Destination::findOrFail($request->id);
-        $trip = $destination->trip()->first();
-
-        if (Auth::id() != $trip->created_by) {
+        // $trip = $destination->trip()->first();
+        // if (Auth::id() != $trip->created_by) {
+        if ($destination->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }

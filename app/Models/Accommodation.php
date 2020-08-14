@@ -8,6 +8,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 class Accommodation extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
     /**
      * The attributes that are mass assignable.
@@ -33,5 +34,19 @@ class Accommodation extends Model implements Auditable
     public function destination()
     {
         return $this->belongsTo('App\Models\Destination');
+    }
+
+    /**
+     * Get the users for the accommodation.
+     */
+    public function users()
+    {
+        return $this->hasManyDeep('App\Models\User',
+            ['App\Models\Destination', 'App\Models\Trip', 'trip_user'],
+            // destination, trip, trip_user, user
+            [ 'id', 'id', 'trip_id', 'id'],
+            // accommodation, destination, trip, trip_user
+            ['destination_id' ,'trip_id', 'id', 'user_id']
+        );
     }
 }

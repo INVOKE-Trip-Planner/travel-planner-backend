@@ -121,9 +121,9 @@ class AccommodationController extends Controller
         ])->validate();
 
         $destination = Destination::find($request->destination_id);
-        $trip = $destination->trip()->first();
-
-        if (Auth::id() != $trip->created_by) {
+        // $trip = $destination->trip()->first();
+        // if (Auth::id() != $trip->created_by) {
+        if ($destination->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
@@ -222,10 +222,13 @@ class AccommodationController extends Controller
         ])->validate();
 
         $accommodation = Accommodation::findOrFail($request->id);
-        $destination = $accommodation->destination()->first();
-        $trip = $destination->trip()->first();
+        // $destination = $accommodation->destination()->first();
+        // $trip = $destination->trip()->first();
+        // if (Auth::id() != $trip->created_by) {
+        // error_log($accommodation->users()->toSql());
+        // return response()->json($accommodation->users()->get(), 200);
 
-        if (Auth::id() != $trip->created_by) {
+        if ($accommodation->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
@@ -274,10 +277,11 @@ class AccommodationController extends Controller
         ])->validate();
 
         $accommodation = Accommodation::findOrFail($request->id);
-        $destination = $accommodation->destination()->first();
-        $trip = $destination->trip()->first();
+        // $destination = $accommodation->destination()->first();
+        // $trip = $destination->trip()->first();
+        // if (Auth::id() != $trip->created_by) {
+        if ($accommodation->users()->find(Auth::id()) === null) {
 
-        if (Auth::id() != $trip->created_by) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
@@ -353,9 +357,9 @@ class AccommodationController extends Controller
         ])->validate();
 
         $destination = Destination::find($request->destination_id);
-        $trip = $destination->trip()->first();
-
-        if (Auth::id() != $trip->created_by) {
+        // $trip = $destination->trip()->first();
+        // if (Auth::id() != $trip->created_by) {
+        if ($destination->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }

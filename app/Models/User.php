@@ -29,7 +29,7 @@ class User extends Authenticatable implements Auditable, JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'created_at', 'updated_at', 'last_login_at', 'last_login_ip', 'email_verified_at', 'pivot',
+        'password', 'remember_token', 'created_at', 'updated_at', 'last_login_at', 'last_login_ip', 'email_verified_at', 'pivot', 'laravel_through_key',
     ];
 
     /**
