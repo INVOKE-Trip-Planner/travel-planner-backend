@@ -102,6 +102,30 @@ class TripController extends Controller
      *             type="string"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *           name="body",
+     *           in="query",
+     *           required=false,
+     *           explode=true,
+     *           @OA\Schema(
+     *               @OA\Property(property="users",
+     *                            type="array",
+     *                            @OA\Items(
+     *                                type="integer",
+     *                            ),
+     *               ),
+     *               @OA\Property(property="destination",
+     *                            type="array",
+     *                            @OA\Items(
+     *                                type="object",
+     *                                @OA\Property(property="location",  type="string",  ),
+     *                                @OA\Property(property="start_date",  type="string",  ),
+     *                                @OA\Property(property="end_date",  type="string",  ),
+     *                                @OA\Property(property="cost",  type="integer",  ),
+     *                            ),
+     *               ),
+     *           ),
+     *       ),
      *     @OA\Response(
      *         response=201,
      *         description="Successful operation"
@@ -134,7 +158,7 @@ class TripController extends Controller
             'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
             'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
             'destinations.*["cost"]'=> 'numeric|min:0',
-            'destinations.*["transport"]' => 'array',
+            // 'destinations.*["transport"]' => 'array',
             // 'destinations.*["transport"].*["mode"]' => 'in:FLIGHT,FERRY,BUS,TRAIN,OTHER|required_with:destinations.*["transport"]',
             // 'destinations.*["transport"].*["origin"]' => 'required_with:destinations.*["transport"]|string|max:100',
             // 'destinations.*["transport"].*["destination"]' => 'required_with:destinations.*["transport"]|string|max:100',
@@ -206,7 +230,7 @@ class TripController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/update_trip",
+     *     path="/api/trip/update",
      *     tags={"Trip"},
      *     summary="Update trip",
      *     description="Update trip",
@@ -320,12 +344,13 @@ class TripController extends Controller
             'trip_banner' => ['image', 'mimes:jpeg, png, jpg, gif, svg', 'max:2048'],
             'users' => 'array',
             'users.*' => 'required_unless:users,null|exists:users,id',
-            'destinations' => 'array',
-            'destinations.*["location"]' => 'required_with:destinations|string|max:100',
-            'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
-            'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
-            'destinations.*["cost"]'=> 'numeric|min:0',
-            'destinations.*["transport"]' => 'array',
+
+            // 'destinations' => 'array',
+            // 'destinations.*["location"]' => 'required_with:destinations|string|max:100',
+            // 'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
+            // 'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
+            // 'destinations.*["cost"]'=> 'numeric|min:0',
+            // 'destinations.*["transport"]' => 'array',
         ])->validate();
 
         $trip = Trip::findOrFail(request('id'));
@@ -350,11 +375,11 @@ class TripController extends Controller
             $trip->users()->sync($users);
         }
 
-        if ($request->has('destinations')) {
-            $request_destinations = $request->only('destinations')['destinations'];
-            $trip->destinations()->delete();
-            $trip->destinations()->createMany($request_destinations);
-        }
+        // if ($request->has('destinations')) {
+        //     $request_destinations = $request->only('destinations')['destinations'];
+        //     $trip->destinations()->delete();
+        //     $trip->destinations()->createMany($request_destinations);
+        // }
 
         $trip->update($data);
 
@@ -411,7 +436,7 @@ class TripController extends Controller
     //
     /**
      * @OA\Post(
-     *     path="/api/delete_trip",
+     *     path="/api/trip/delete",
      *     tags={"Trip"},
      *     summary="Delete trip",
      *     description="Delete trip",

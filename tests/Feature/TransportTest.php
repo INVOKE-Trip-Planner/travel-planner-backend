@@ -15,7 +15,7 @@ class TransportTest extends TestCase
     use DatabaseTransactions;
     use TestTrait, WithFaker;
 
-    public function testCreateTransport()
+    public function testBatchCreateTransport()
     {
         $num_users = 3;
         $num_destinations = 1;
@@ -65,7 +65,7 @@ class TransportTest extends TestCase
             'transports' => $transports,
         ];
 
-        $this->json('POST', 'api/transport', $payload, $credentials[$num_users - 1]['header'])
+        $this->json('POST', 'api/batch/transport', $payload, $credentials[$num_users - 1]['header'])
             ->assertStatus(201);
 
         $this->assertDatabaseHas('transports', $transports[0]);

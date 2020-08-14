@@ -6,16 +6,356 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Auth;
 use App\Models\Destination;
+use App\Models\Transport;
 
 class TransportController extends Controller
 {
     /**
+     * @OA\Get(
+     *     path="/api/transport",
+     *     tags={"Transport"},
+     *     summary="Get all transports for logged in user",
+     *     description="Get all transports for logged in user",
+     *     operationId="get_transport",
+     *     security={{"bearerAuth":{}}},
+     *     deprecated=false,
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error"
+     *     )
+     * )
+     */
+    function get(Request $request)
+    {
+        $transports = Auth::user()->transports()->get();
+
+        return response()->json($transports, 200);
+    }
+
+   /**
      * @OA\Post(
      *     path="/api/transport",
      *     tags={"Transport"},
-     *     summary="Create transport",
+     *     summary="Create a transport for a destination",
      *     description="Create transport",
      *     operationId="create_transport",
+     *     security={{"bearerAuth":{}}},
+     *     deprecated=false,
+     *     @OA\Parameter(
+     *         name="destination_id",
+     *         in="query",
+     *         description="required | exists:destinations,id",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="mode",
+     *         in="query",
+     *         description="required | in:FLIGHT,FERRY,BUS,TRAIN,OTHER",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="origin",
+     *         in="query",
+     *         description="required | string | max:100",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="destination",
+     *         in="query",
+     *         description="required | string | max:100",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="departure_time",
+     *         in="query",
+     *         description="date_format:Y-m-d H:i | after:today",
+     *         @OA\Schema(
+     *             type="date"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="arrival_time",
+     *         in="query",
+     *         description="date_format:Y-m-d H:i | after:departure_time",
+     *         @OA\Schema(
+     *             type="date"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="cost",
+     *         in="query",
+     *         description="numeric | min:0",
+     *         @OA\Schema(
+     *             type="decimal"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="operator",
+     *         in="query",
+     *         description="string | max:100",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="booking_id",
+     *         in="query",
+     *         description="string | max:20",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error"
+     *     )
+     * )
+     */
+    public function create(Request $request)
+    {
+        Validator::make($request->all(), [
+            'destination_id' => 'required|exists:destinations,id',
+            'mode' => 'required|in:FLIGHT,FERRY,BUS,TRAIN,OTHER',
+            'origin' => 'required|string|max:100',
+            'destination' => 'required|string|max:100',
+            'departure_time' => 'date_format:Y-m-d H:i|after:today',
+            'arrival_time' => 'date_format:Y-m-d H:i|after:departure_time',
+            'cost'=> 'numeric|min:0',
+            'operator' => 'string|max:100',
+            'booing_id'=> 'string|max:20',
+        ])->validate();
+
+        $destination = Destination::find($request->destination_id);
+        $trip = $destination->trip()->first();
+
+        if (Auth::id() != $trip->created_by) {
+            $response = ['message' => 'Unauthorized'];
+            return response($response, 401);
+        }
+
+        // $request_transports = $request['transports'];
+
+        // error_log(print_r($request_transports, true));
+
+        $transport = $destination->transports()->create($request->except('destination_id'));
+
+        return response()->json($transport, 201);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/transport/update",
+     *     tags={"Transport"},
+     *     summary="Update transport",
+     *     description="Update transport",
+     *     operationId="update_transport",
+     *     security={{"bearerAuth":{}}},
+     *     deprecated=false,
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         description="required | exists:transports,id",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="mode",
+     *         in="query",
+     *         description="in:FLIGHT,FERRY,BUS,TRAIN,OTHER",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="origin",
+     *         in="query",
+     *         description="string | max:100",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="destination",
+     *         in="query",
+     *         description="string | max:100",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="departure_time",
+     *         in="query",
+     *         description="date_format:Y-m-d H:i | after:today",
+     *         @OA\Schema(
+     *             type="date"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="arrival_time",
+     *         in="query",
+     *         description="date_format:Y-m-d H:i | after:departure_time",
+     *         @OA\Schema(
+     *             type="date"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="cost",
+     *         in="query",
+     *         description="numeric | min:0",
+     *         @OA\Schema(
+     *             type="decimal"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="operator",
+     *         in="query",
+     *         description="string | max:100",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="booking_id",
+     *         in="query",
+     *         description="string | max:20",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error"
+     *     )
+     * )
+     */
+    public function update(Request $request)
+    {
+        Validator::make($request->all(), [
+            'id' => 'required|exists:transports,id',
+            'mode' => 'in:FLIGHT,FERRY,BUS,TRAIN,OTHER',
+            'origin' => 'string|max:100',
+            'destination' => 'string|max:100',
+            'departure_time' => 'date_format:Y-m-d H:i|after:today',
+            'arrival_time' => 'date_format:Y-m-d H:i|after:departure_time',
+            'cost'=> 'numeric|min:0',
+            'operator' => 'string|max:100',
+            'booing_id'=> 'string|max:20',
+        ])->validate();
+
+        $transport = Transport::findOrFail($request->id);
+        $destination = $transport->destination()->first();
+        $trip = $destination->trip()->first();
+
+        if (Auth::id() != $trip->created_by) {
+            $response = ['message' => 'Unauthorized'];
+            return response($response, 401);
+        }
+
+        $transport->update($request->all());
+
+        return response()->json($transport, 200);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/transport/delete",
+     *     tags={"Transport"},
+     *     summary="Delete transport",
+     *     description="Delete transport",
+     *     operationId="delete_transport",
+     *     security={{"bearerAuth":{}}},
+     *     deprecated=false,
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         description="required | exists:transports,id",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error"
+     *     )
+     * )
+     */
+    public function delete(Request $request)
+    {
+        Validator::make($request->all(), [
+            'id' => 'required|exists:transports,id',
+        ])->validate();
+
+        $transport = Transport::findOrFail($request->id);
+        $destination = $transport->destination()->first();
+        $trip = $destination->trip()->first();
+
+        if (Auth::id() != $trip->created_by) {
+            $response = ['message' => 'Unauthorized'];
+            return response($response, 401);
+        }
+
+        $transport->delete($request->id);
+
+        $response = ['message' => 'The transport has been successfully deleted.'];
+
+        return response()->json($response, 200);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/batch/transport",
+     *     tags={"Transport"},
+     *     summary="Create multiple transports for a destination",
+     *     description="Create transport",
+     *     operationId="batch_create_transport",
      *     security={{"bearerAuth":{}}},
      *     deprecated=false,
      *     @OA\Parameter(
@@ -42,7 +382,7 @@ class TransportController extends Controller
      *                                @OA\Property(property="arrival_time",  type="string",  ),
      *                                @OA\Property(property="origin",  type="string",  ),
      *                                @OA\Property(property="destination",  type="string",  ),
-     *                                @OA\Property(property="cost",  type="decimal",  ),
+     *                                @OA\Property(property="cost",  type="integer",  ),
      *                                @OA\Property(property="operator",  type="string",  ),
      *                                @OA\Property(property="booking_id",  type="string",  ),
      *                            ),
@@ -63,7 +403,7 @@ class TransportController extends Controller
      *     )
      * )
      */
-    public function create(Request $request)
+    public function create_batch(Request $request)
     {
         Validator::make($request->all(), [
             'destination_id' => 'required|exists:destinations,id',
@@ -74,7 +414,7 @@ class TransportController extends Controller
             'transports.*["departure_time"]' => 'date_format:Y-m-d H:i|after:today',
             'transports.*["arrival_time"]' => 'date_format:Y-m-d H:i|after:departure_time',
             'transports.*["cost"]'=> 'numeric|min:0',
-            'transports.*["operator"]' => 'required_with:transports|string|max:100',
+            'transports.*["operator"]' => 'string|max:100',
             'transports.*["booing_id"]'=> 'string|max:20',
         ])->validate();
 

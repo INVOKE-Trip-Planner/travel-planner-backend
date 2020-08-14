@@ -15,7 +15,7 @@ class AccommodationTest extends TestCase
     use DatabaseTransactions;
     use TestTrait, WithFaker;
 
-    public function testCreateAccommodation()
+    public function testBatchCreateAccommodation()
     {
         $num_users = 3;
         $num_destinations = 1;
@@ -54,7 +54,7 @@ class AccommodationTest extends TestCase
             'accommodations' => $accommodations,
         ];
 
-        $this->json('POST', 'api/accommodation', $payload, $credentials[$num_users - 1]['header'])
+        $this->json('POST', 'api/batch/accommodation', $payload, $credentials[$num_users - 1]['header'])
             ->assertStatus(201);
 
         $this->assertDatabaseHas('accommodations', $accommodations[0]);

@@ -29,19 +29,35 @@ Route::group([
 
         Route::get('trip', 'TripController@find');
         Route::post('trip', 'TripController@create');
-        Route::post('delete_trip', 'TripController@delete');
-        Route::post('update_trip', 'TripController@update');
+        Route::post('trip/delete', 'TripController@delete');
+        Route::post('trip/update', 'TripController@update');
 
         Route::get('destination', 'DestinationController@get');
+        Route::post('destination', 'DestinationController@create');
+        Route::post('destination/update', 'DestinationController@update');
+        Route::post('destination/delete', 'DestinationController@delete');
+
+        Route::get('transport', 'TransportController@get');
+        Route::post('transport', 'TransportController@create');
+        Route::post('transport/update', 'TransportController@update');
+        Route::post('transport/delete', 'TransportController@delete');
+        Route::post('batch/transport', 'TransportController@create_batch');
 
         Route::get('accommodation', 'AccommodationController@get');
         Route::post('accommodation', 'AccommodationController@create');
+        Route::post('accommodation/update', 'AccommodationController@update');
+        Route::post('accommodation/delete', 'AccommodationController@delete');
+        Route::post('batch/accommodation', 'AccommodationController@create_batch');
 
-        Route::post('transport', 'TransportController@create');
+        Route::get('itinerary', 'ItineraryController@get');
+        Route::post('itinerary', 'ItineraryController@create');
+        Route::post('itinerary/update', 'ItineraryController@update');
+        Route::post('itinerary/delete', 'ItineraryController@delete');
+        Route::post('batch/itinerary', 'ItineraryController@create_batch');
 
     });
 
-    Route::get('accommodation/search', 'AccommodationController@find');
+    Route::get('accommodation/search', 'AccommodationController@search');
 
     Route::post('register', 'Auth\RegisterController@register');
     Route::post('login', 'Auth\LoginController@login');

@@ -8,6 +8,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 class Destination extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
     /**
      * The attributes that are mass assignable.
@@ -58,4 +59,17 @@ class Destination extends Model implements Auditable
     {
         return $this->hasMany('App\Models\Itinerary');
     }
+
+    /**
+     * Get the itineraries for the destination.
+     */
+    public function users()
+    {
+        return $this->hasManyDeep('App\Models\User',
+            ['App\Models\Trip', 'trip_user'],
+            ['id', ['trip_id', 'user_id'], null],
+            ['trip_id', 'id', null]
+        );
+    }
+
 }

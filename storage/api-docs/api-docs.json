@@ -14,42 +14,13 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/accommodation/search": {
-            "get": {
-                "tags": [
-                    "Accommodation"
-                ],
-                "summary": "Find accommodation by city",
-                "description": "Find accommodation by city",
-                "operationId": "search_accommodation",
-                "parameters": [
-                    {
-                        "name": "city",
-                        "in": "query",
-                        "description": "required | string",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation"
-                    },
-                    "422": {
-                        "description": "Error"
-                    }
-                },
-                "deprecated": false
-            }
-        },
         "/api/accommodation": {
             "get": {
                 "tags": [
                     "Accommodation"
                 ],
-                "summary": "Get all accommodations for users",
-                "description": "Get all accommodations for users",
+                "summary": "Get all accommodations for logged in user",
+                "description": "Get all accommodations for logged in user",
                 "operationId": "get_accommodation",
                 "responses": {
                     "200": {
@@ -70,9 +41,205 @@
                 "tags": [
                     "Accommodation"
                 ],
-                "summary": "Create accommodation",
+                "summary": "Create a accommodation for a destination",
                 "description": "Create accommodation",
                 "operationId": "create_accommodation",
+                "parameters": [
+                    {
+                        "name": "destination_id",
+                        "in": "query",
+                        "description": "required | exists:destinations,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "accommodation_name",
+                        "in": "query",
+                        "description": "required_with:accommodations | string | max:100",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "checkin_time",
+                        "in": "query",
+                        "description": "date_format:Y-m-d H:i | after:today",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "checkout_time",
+                        "in": "query",
+                        "description": "date_format:Y-m-d H:i | after:start_date",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "cost",
+                        "in": "query",
+                        "description": "numeric | min:0",
+                        "schema": {
+                            "type": "decimal"
+                        }
+                    },
+                    {
+                        "name": "booking_id",
+                        "in": "query",
+                        "description": "string | max:20",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/accommodation/update": {
+            "post": {
+                "tags": [
+                    "Accommodation"
+                ],
+                "summary": "Update accommodation",
+                "description": "Update accommodation",
+                "operationId": "update_accommodation",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "required | exists:accommodations,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "accommodation_name",
+                        "in": "query",
+                        "description": "required_with:accommodations | string | max:100",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "checkin_time",
+                        "in": "query",
+                        "description": "date_format:Y-m-d H:i | after:today",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "checkout_time",
+                        "in": "query",
+                        "description": "date_format:Y-m-d H:i | after:start_date",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "cost",
+                        "in": "query",
+                        "description": "numeric | min:0",
+                        "schema": {
+                            "type": "decimal"
+                        }
+                    },
+                    {
+                        "name": "booking_id",
+                        "in": "query",
+                        "description": "string | max:20",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/accommodation/delete": {
+            "post": {
+                "tags": [
+                    "Accommodation"
+                ],
+                "summary": "Delete accommodation",
+                "description": "Delete accommodation",
+                "operationId": "delete_accommodation",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "required | exists:accommodations,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/batch/accommodation": {
+            "post": {
+                "tags": [
+                    "Accommodation"
+                ],
+                "summary": "Create multiple accommodation for a destination",
+                "description": "Create accommodation",
+                "operationId": "batch_create_accommodation",
                 "parameters": [
                     {
                         "name": "destination_id",
@@ -104,7 +271,7 @@
                                                 "type": "string"
                                             },
                                             "cost": {
-                                                "type": "decimal"
+                                                "type": "integer"
                                             },
                                             "booking_id": {
                                                 "type": "string"
@@ -135,6 +302,35 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/accommodation/search": {
+            "get": {
+                "tags": [
+                    "Accommodation"
+                ],
+                "summary": "Find accommodation by city",
+                "description": "Find accommodation by city",
+                "operationId": "search_accommodation",
+                "parameters": [
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "required | string",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false
             }
         },
         "/api/login": {
@@ -316,12 +512,819 @@
                 "tags": [
                     "Destination"
                 ],
-                "summary": "Get all destinations for users",
-                "description": "Get all destinations for users",
+                "summary": "Get all destinations for logged in user",
+                "description": "Get all destinations for logged in user",
                 "operationId": "get_destination",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Destination"
+                ],
+                "summary": "Add a destination for a trip",
+                "description": "Add a destination to trip after creation",
+                "operationId": "create_destination",
+                "parameters": [
+                    {
+                        "name": "trip_id",
+                        "in": "query",
+                        "description": "required | exists:trips,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "location",
+                        "in": "query",
+                        "description": "required | string | max:100",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "date_format:Y-m-d | after:today",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "date_format:Y-m-d | after:start_date",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "cost",
+                        "in": "query",
+                        "description": "numeric | min:0",
+                        "schema": {
+                            "type": "decimal"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/destination/update": {
+            "post": {
+                "tags": [
+                    "Destination"
+                ],
+                "summary": "Update destination",
+                "description": "Update destination",
+                "operationId": "update_destination",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "required | exists:destinations,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "location",
+                        "in": "query",
+                        "description": "string | max:100",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "date_format:Y-m-d | after:today",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "date_format:Y-m-d | after:start_date",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "cost",
+                        "in": "query",
+                        "description": "numeric | min:0",
+                        "schema": {
+                            "type": "decimal"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/destination/delete": {
+            "post": {
+                "tags": [
+                    "Destination"
+                ],
+                "summary": "Delete destination",
+                "description": "Delete destination",
+                "operationId": "delete_destination",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "required | exists:destinations,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/itinerary": {
+            "get": {
+                "tags": [
+                    "Itinerary"
+                ],
+                "summary": "Get all itineraries for logged in user",
+                "description": "Get all itineraries for logged in user",
+                "operationId": "get_itinerary",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Itinerary"
+                ],
+                "summary": "Create a itinerary for a destination",
+                "description": "Create itinerary",
+                "operationId": "create_itinerary",
+                "parameters": [
+                    {
+                        "name": "destination_id",
+                        "in": "query",
+                        "description": "required | exists:destinations,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "required | date_format:Y-m-d | after:today",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "body",
+                        "in": "query",
+                        "required": false,
+                        "explode": true,
+                        "schema": {
+                            "properties": {
+                                "schedule": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "activity": {
+                                                "type": "string"
+                                            },
+                                            "cost": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/itinerary/update": {
+            "post": {
+                "tags": [
+                    "Itinerary"
+                ],
+                "summary": "Update itinerary",
+                "description": "Update itinerary",
+                "operationId": "update_itinerary",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "required | exists:itineraries,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "date_format:Y-m-d | after:today",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "body",
+                        "in": "query",
+                        "required": false,
+                        "explode": true,
+                        "schema": {
+                            "properties": {
+                                "schedule": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "activity": {
+                                                "type": "string"
+                                            },
+                                            "cost": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/itinerary/delete": {
+            "post": {
+                "tags": [
+                    "Itinerary"
+                ],
+                "summary": "Delete itinerary",
+                "description": "Delete itinerary",
+                "operationId": "delete_itinerary",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "required | exists:itineraries,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/batch/itinerary": {
+            "post": {
+                "tags": [
+                    "Itinerary"
+                ],
+                "summary": "Create multiple itineraries for a destination",
+                "description": "Create multiple itineraries for a destination",
+                "operationId": "batch_create_itinerary",
+                "parameters": [
+                    {
+                        "name": "destination_id",
+                        "in": "query",
+                        "description": "required | exists:destinations,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "body",
+                        "in": "query",
+                        "required": false,
+                        "explode": true,
+                        "schema": {
+                            "properties": {
+                                "itineraries": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "date": {
+                                                "type": "string"
+                                            },
+                                            "schedule": {
+                                                "type": "array",
+                                                "items": {
+                                                    "properties": {
+                                                        "activity": {
+                                                            "type": "string"
+                                                        },
+                                                        "cost": {
+                                                            "type": "integer"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/transport": {
+            "get": {
+                "tags": [
+                    "Transport"
+                ],
+                "summary": "Get all transports for logged in user",
+                "description": "Get all transports for logged in user",
+                "operationId": "get_transport",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Transport"
+                ],
+                "summary": "Create a transport for a destination",
+                "description": "Create transport",
+                "operationId": "create_transport",
+                "parameters": [
+                    {
+                        "name": "destination_id",
+                        "in": "query",
+                        "description": "required | exists:destinations,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "mode",
+                        "in": "query",
+                        "description": "required | in:FLIGHT,FERRY,BUS,TRAIN,OTHER",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "origin",
+                        "in": "query",
+                        "description": "required | string | max:100",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "destination",
+                        "in": "query",
+                        "description": "required | string | max:100",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "departure_time",
+                        "in": "query",
+                        "description": "date_format:Y-m-d H:i | after:today",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "arrival_time",
+                        "in": "query",
+                        "description": "date_format:Y-m-d H:i | after:departure_time",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "cost",
+                        "in": "query",
+                        "description": "numeric | min:0",
+                        "schema": {
+                            "type": "decimal"
+                        }
+                    },
+                    {
+                        "name": "operator",
+                        "in": "query",
+                        "description": "string | max:100",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "booking_id",
+                        "in": "query",
+                        "description": "string | max:20",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/transport/update": {
+            "post": {
+                "tags": [
+                    "Transport"
+                ],
+                "summary": "Update transport",
+                "description": "Update transport",
+                "operationId": "update_transport",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "required | exists:transports,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "mode",
+                        "in": "query",
+                        "description": "in:FLIGHT,FERRY,BUS,TRAIN,OTHER",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "origin",
+                        "in": "query",
+                        "description": "string | max:100",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "destination",
+                        "in": "query",
+                        "description": "string | max:100",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "departure_time",
+                        "in": "query",
+                        "description": "date_format:Y-m-d H:i | after:today",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "arrival_time",
+                        "in": "query",
+                        "description": "date_format:Y-m-d H:i | after:departure_time",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "cost",
+                        "in": "query",
+                        "description": "numeric | min:0",
+                        "schema": {
+                            "type": "decimal"
+                        }
+                    },
+                    {
+                        "name": "operator",
+                        "in": "query",
+                        "description": "string | max:100",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "booking_id",
+                        "in": "query",
+                        "description": "string | max:20",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/transport/delete": {
+            "post": {
+                "tags": [
+                    "Transport"
+                ],
+                "summary": "Delete transport",
+                "description": "Delete transport",
+                "operationId": "delete_transport",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "required | exists:transports,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/batch/transport": {
+            "post": {
+                "tags": [
+                    "Transport"
+                ],
+                "summary": "Create multiple transports for a destination",
+                "description": "Create transport",
+                "operationId": "batch_create_transport",
+                "parameters": [
+                    {
+                        "name": "destination_id",
+                        "in": "query",
+                        "description": "required | exists:destinations,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "body",
+                        "in": "query",
+                        "required": false,
+                        "explode": true,
+                        "schema": {
+                            "properties": {
+                                "transport": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "mode": {
+                                                "type": "string"
+                                            },
+                                            "departure_time": {
+                                                "type": "string"
+                                            },
+                                            "arrival_time": {
+                                                "type": "string"
+                                            },
+                                            "origin": {
+                                                "type": "string"
+                                            },
+                                            "destination": {
+                                                "type": "string"
+                                            },
+                                            "cost": {
+                                                "type": "integer"
+                                            },
+                                            "operator": {
+                                                "type": "string"
+                                            },
+                                            "booking_id": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     },
                     "422": {
                         "description": "Error"
@@ -340,8 +1343,8 @@
                 "tags": [
                     "Trip"
                 ],
-                "summary": "Find trip",
-                "description": "Get trips exclude deleted",
+                "summary": "Get all trips for logged in user",
+                "description": "Get all trips excluding deleted ones",
                 "operationId": "get_trip",
                 "responses": {
                     "200": {
@@ -425,6 +1428,43 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "body",
+                        "in": "query",
+                        "required": false,
+                        "explode": true,
+                        "schema": {
+                            "properties": {
+                                "users": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "destination": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "location": {
+                                                "type": "string"
+                                            },
+                                            "start_date": {
+                                                "type": "string"
+                                            },
+                                            "end_date": {
+                                                "type": "string"
+                                            },
+                                            "cost": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 ],
                 "requestBody": {
@@ -465,7 +1505,7 @@
                 ]
             }
         },
-        "/api/update_trip": {
+        "/api/trip/update": {
             "post": {
                 "tags": [
                     "Trip"
@@ -579,7 +1619,7 @@
                 ]
             }
         },
-        "/api/delete_trip": {
+        "/api/trip/delete": {
             "post": {
                 "tags": [
                     "Trip"
