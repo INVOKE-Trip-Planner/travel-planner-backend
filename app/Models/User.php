@@ -83,6 +83,22 @@ class User extends Authenticatable implements Auditable, JWTSubject
     }
 
     /**
+     * Get the accommodation bookings.
+     */
+    public function acommodationBookings()
+    {
+        return $this->hasMany('App\Models\AccommodationBooking');
+    }
+
+    /**
+     * Get the transport bookings.
+     */
+    public function transportBookings()
+    {
+        return $this->hasMany('App\Models\TransportBooking');
+    }
+
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed

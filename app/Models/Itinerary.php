@@ -25,7 +25,7 @@ class Itinerary extends Model implements Auditable
      * @var array
      */
     protected $hidden = [
-        'created_at', 'updated_at',
+        'created_at', 'updated_at', 'laravel_through_key',
     ];
 
     protected $casts = [

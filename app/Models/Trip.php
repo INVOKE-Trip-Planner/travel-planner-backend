@@ -24,7 +24,7 @@ class Trip extends Model implements Auditable
      * @var array
      */
     protected $hidden = [
-        'created_at', 'updated_at', 'group_type', 'trip_type', 'pivot',
+        'created_at', 'updated_at', 'group_type', 'trip_type', 'pivot', 'laravel_through_key',
     ];
 
     /**
