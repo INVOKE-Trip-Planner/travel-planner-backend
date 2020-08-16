@@ -132,7 +132,10 @@ class AccommodationController extends Controller
 
         // error_log(print_r($request_accommodations, true));
 
-        $accommodation = $destination->accommodations()->create($request->except('destination_id'));
+        $accommodation = $destination->accommodations()->create($request->except(['destination_id', 'cost']));
+        if ($request->has('cost')) {
+            $accommodation->cost->create($request->only('cost'));
+        }
 
         return response()->json($accommodation, 201);
     }
@@ -214,7 +217,7 @@ class AccommodationController extends Controller
     {
         Validator::make($request->all(), [
             'id' => 'required|exists:accommodations,id',
-            'accommodation_name' => 'required|string|max:100',
+            'accommodation_name' => 'string|max:100',
             'checkin_time' => 'date_format:Y-m-d H:i|after:today',
             'checkout_time' => 'date_format:Y-m-d H:i|after:start_date',
             'cost'=> 'numeric|min:0',
@@ -233,7 +236,18 @@ class AccommodationController extends Controller
             return response($response, 401);
         }
 
-        $accommodation->update($request->all());
+        $accommodation->update($request->except('cost'));
+
+        if ($request->has('cost')) {
+            if ($accommodation->cost) {
+                $accommodation->cost()->update($request->only('cost'));
+            } else {
+                $accommodation->cost()->create($request->only('cost'));
+            }
+        }
+
+        // to get updated values
+        $accommodation = Accommodation::findOrFail($request->id);
 
         return response()->json($accommodation, 200);
     }
@@ -301,7 +315,7 @@ class AccommodationController extends Controller
      *     description="Create accommodation",
      *     operationId="batch_create_accommodation",
      *     security={{"bearerAuth":{}}},
-     *     deprecated=false,
+     *     deprecated=true,
      *     @OA\Parameter(
      *         name="destination_id",
      *         in="query",

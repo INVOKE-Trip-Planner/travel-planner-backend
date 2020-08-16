@@ -29,6 +29,23 @@ class Accommodation extends Model implements Auditable
     ];
 
     /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [
+        'cost',
+    ];
+
+    /**
+     * Get the cost of the accommodation.
+     */
+    public function cost()
+    {
+        return $this->morphOne('App\Models\Cost', 'costable');
+    }
+
+    /**
      * Get the destination that owns the accommodation.
      */
     public function destination()

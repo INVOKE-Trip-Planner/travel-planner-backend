@@ -296,7 +296,7 @@
                         "description": "Error"
                     }
                 },
-                "deprecated": false,
+                "deprecated": true,
                 "security": [
                     {
                         "bearerAuth": []
@@ -752,7 +752,7 @@
                     {
                         "name": "date",
                         "in": "query",
-                        "description": "required | date_format:Y-m-d | after:today",
+                        "description": "date_format:Y-m-d | after:today",
                         "schema": {
                             "type": "date"
                         }
@@ -1442,7 +1442,7 @@
                                         "type": "integer"
                                     }
                                 },
-                                "destination": {
+                                "destinations": {
                                     "type": "array",
                                     "items": {
                                         "properties": {

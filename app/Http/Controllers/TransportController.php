@@ -162,7 +162,10 @@ class TransportController extends Controller
 
         // error_log(print_r($request_transports, true));
 
-        $transport = $destination->transports()->create($request->except('destination_id'));
+        $transport = $destination->transports()->create($request->except(['destination_id', 'cost']));
+        if ($request->has('cost')) {
+            $transport->cost->create($request->only('cost'));
+        }
 
         return response()->json($transport, 201);
     }
@@ -290,7 +293,18 @@ class TransportController extends Controller
             return response($response, 401);
         }
 
-        $transport->update($request->all());
+        $transport->update($request->except('cost'));
+
+        if ($request->has('cost')) {
+            if ($transport->cost) {
+                $transport->cost()->update($request->only('cost'));
+            } else {
+                $transport->cost()->create($request->only('cost'));
+            }
+        }
+
+        // to get updated values
+        $transport = Transport::findOrFail($request->id);
 
         return response()->json($transport, 200);
     }
@@ -357,7 +371,7 @@ class TransportController extends Controller
      *     description="Create transport",
      *     operationId="batch_create_transport",
      *     security={{"bearerAuth":{}}},
-     *     deprecated=false,
+     *     deprecated=true,
      *     @OA\Parameter(
      *         name="destination_id",
      *         in="query",

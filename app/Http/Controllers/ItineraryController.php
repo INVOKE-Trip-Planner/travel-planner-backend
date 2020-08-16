@@ -113,7 +113,10 @@ class ItineraryController extends Controller
         // $request_itineraries = $request['itineraries'];
         // error_log(print_r($request_itineraries, true));
 
-        $itinerary = $destination->itineraries()->create($request->except('destination_id'));
+        $itinerary = $destination->itineraries()->create($request->except(['destination_id', 'cost']));
+        if ($request->has('cost')) {
+            $itinerary->cost->create($request->only('cost'));
+        }
 
         return response()->json($itinerary, 201);
     }
@@ -193,7 +196,18 @@ class ItineraryController extends Controller
             return response($response, 401);
         }
 
-        $itinerary->update($request->all());
+        $itinerary->update($request->except('cost'));
+
+        if ($request->has('cost')) {
+            if ($itinerary->cost) {
+                $itinerary->cost()->update($request->only('cost'));
+            } else {
+                $itinerary->cost()->create($request->only('cost'));
+            }
+        }
+
+        // to get updated values
+        $itinerary = Itinerary::findOrFail($request->id);
 
         return response()->json($itinerary, 200);
     }
@@ -260,7 +274,7 @@ class ItineraryController extends Controller
      *     description="Create multiple itineraries for a destination",
      *     operationId="batch_create_itinerary",
      *     security={{"bearerAuth":{}}},
-     *     deprecated=false,
+     *     deprecated=true,
      *     @OA\Parameter(
      *         name="destination_id",
      *         in="query",

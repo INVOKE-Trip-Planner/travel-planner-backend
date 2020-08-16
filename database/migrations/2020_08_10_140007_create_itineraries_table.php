@@ -19,8 +19,7 @@ class CreateItinerariesTable extends Migration
             $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
             $table->date('date')->nullable();
             $table->json('schedule');
-            // $table->date('end_date')->nullable();
-            $table->unsignedDecimal('cost', 8, 2)->nullable();
+            // $table->unsignedDecimal('cost', 8, 2)->nullable();
             $table->timestamps();
         });
     }

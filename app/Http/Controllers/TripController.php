@@ -15,8 +15,22 @@ class TripController extends Controller
     private function get_destinations_details($trip) {
         foreach($trip->destinations as $destination) {
             $destination->transports = $destination->transports()->get();
+
+            foreach($destination->transports as $transport) {
+                $transport->cost = $transport->cost()->first();
+            }
+
             $destination->accommodations = $destination->accommodations()->get();
+
+            foreach($destination->accommodations as $accommodation) {
+                $accommodation->cost = $accommodation->cost()->first();
+            }
+
             $destination->itineraries = $destination->itineraries()->get();
+
+            foreach($destination->itineraries as $itinerary) {
+                $itinerary->cost = $itinerary->cost()->first();
+            }
         }
 
         return $trip;
@@ -218,9 +232,9 @@ class TripController extends Controller
 
         // To get trip's users & destinations
         $trip = Trip::find($trip->id);
-        $trip->users = $trip->users()->select('id', 'avatar')->get();
-        $trip->destinations = $trip->destinations()->get();
-        $trip = $this->get_destinations_details($trip);
+        // $trip->users = $trip->users()->select('id', 'avatar')->get();
+        // $trip->destinations = $trip->destinations()->get();
+        // $trip = $this->get_destinations_details($trip);
 
         // error_log(print_r($trip, true));
 
@@ -418,14 +432,35 @@ class TripController extends Controller
         // $trips = Trip::with(['user', 'destination', 'transport', 'accommodation', 'itinerary'])->get();
         // $users = User::select('id', 'avatar')->with('trips')->get();
 
-        $trips = Auth::user()->trips()->orderBy('start_date')->get();
+        $trips = Auth::user()
+                    ->trips()
+                    ->orderBy('start_date')
+                    ->get()
+                    ->toArray();
 
-        foreach ($trips as $trip) {
-            $trip->users = $trip->users()->select('id', 'avatar')->get();
-            $trip->destinations = $trip->destinations()->get();
+        // foreach ($trips as $trip) {
+        //     $trip->users = $trip->users()->select('id', 'avatar')->get();
+        //     $trip->destinations = $trip->destinations()->get();
+        //     $trip = $this->get_destinations_details($trip);
+        // }
 
-            $trip = $this->get_destinations_details($trip);
-        }
+        // $trips->each->destinations->transform(function($destination, $key) {
+        //     $destination->each->transports->transform(function($transport, $key) {
+        //         $transport->cost = $transport->cost['cost'];
+        //         return $transport;
+        //     });
+        //     return $destination;
+        // });
+
+        array_walk_recursive(
+            $trips,
+            function (&$value, $key) {
+                if ($key === 'cost') {
+                    error_log($value);
+                    $value = $value['cost'];
+                }
+            }
+        );
 
         $execution_time = microtime(true) - $start_time;
         error_log("Execution time of register = $execution_time");

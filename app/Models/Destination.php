@@ -29,6 +29,15 @@ class Destination extends Model implements Auditable
     ];
 
     /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [
+        'transports', 'accommodations', 'itineraries',
+    ];
+
+    /**
      * Get the trip that owns the destination.
      */
     public function trip()

@@ -21,7 +21,7 @@ class CreateTripsTable extends Migration
             $table->foreign('created_by')->references('id')->on('users');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->unsignedDecimal('cost', 8, 2)->nullable();
+            // $table->unsignedDecimal('cost', 8, 2)->nullable();
             $table->enum('group_type', ['SOLO', 'COUPLE', 'FAMILY', 'FRIENDS'])->nullable();
             $table->enum('trip_type', ['WORK', 'LEISURE'])->nullable();
             $table->string('trip_banner')->nullable();

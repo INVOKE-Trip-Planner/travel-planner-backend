@@ -20,7 +20,7 @@ class CreateAccommodationsTable extends Migration
             $table->datetime('checkin_time')->nullable();
             $table->datetime('checkout_time')->nullable();
             $table->string('accommodation_name');
-            $table->unsignedDecimal('cost', 8, 2)->nullable();
+            // $table->unsignedDecimal('cost', 8, 2)->nullable();
             $table->string('booking_id')->nullable();
             $table->timestamps();
         });

@@ -20,7 +20,7 @@ class CreateDestinationsTable extends Migration
             $table->string('location');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->unsignedDecimal('cost', 8, 2)->nullable();
+            // $table->unsignedDecimal('cost', 8, 2)->nullable();
             $table->timestamps();
         });
     }
