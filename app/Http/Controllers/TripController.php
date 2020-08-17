@@ -25,14 +25,14 @@ class TripController extends Controller
                 foreach($destination->transports as $transport) {
                     // error_log( $transport->cost['cost']);
                     // $transport->total = $transport->cost['cost'];
-                    $transport->cost = $transport->cost()->first()['cost'];
+                    // $transport->cost = $transport->cost()->first()['cost'];
                     // array_push($transport_cost, $transport->cost);
                     array_push($destination_cost, $transport->cost);
                     array_push($trip_cost, $transport->cost);
                 }
 
                 foreach($destination->accommodations as $accommodation) {
-                    $accommodation->cost = $accommodation->cost()->first()['cost'];
+                    // $accommodation->cost = $accommodation->cost()->first()['cost'];
                     // array_push($transport_cost, $accommodation->cost);
                     array_push($destination_cost, $accommodation->cost);
                     array_push($trip_cost, $accommodation->cost);
@@ -41,7 +41,7 @@ class TripController extends Controller
                 foreach($destination->itineraries as $itinerary) {
                     foreach($itinerary->schedules as $schedule) {
                         // error_log($schedule->cost());
-                        $schedule->cost = $schedule->cost()->first()['cost'];
+                        // $schedule->cost = $schedule->cost()->first()['cost'];
                         // array_push($itinerary_cost, $schedule->cost);
                         array_push($destination_cost, $schedule->cost);
                         array_push($trip_cost, $schedule->cost);

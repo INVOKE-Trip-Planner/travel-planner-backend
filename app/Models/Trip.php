@@ -36,6 +36,15 @@ class Trip extends Model implements Auditable
         'destinations', 'users:id,avatar',
     ];
 
+    public function getTripNameAttribute($value)
+    {
+        if ($value === null) {
+            return implode(', ', array_column($this->destinations()->select('location')->get()->toArray(), 'location'));
+        } else {
+            return $value;
+        }
+    }
+
     /**
      * Get the destinations for the trip.
      */

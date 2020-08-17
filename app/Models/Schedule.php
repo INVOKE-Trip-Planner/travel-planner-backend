@@ -41,6 +41,15 @@ class Schedule extends Model implements Auditable
         // 'cost',
     ];
 
+    protected $appends = [
+        'cost'
+    ];
+
+    public function getCostAttribute()
+    {
+        return $this->cost()->first()['cost'];
+    }
+
     // this is a recommended way to declare event handlers
     // public static function boot() {
     //     parent::boot();

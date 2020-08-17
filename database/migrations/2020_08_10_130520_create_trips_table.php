@@ -16,6 +16,7 @@ class CreateTripsTable extends Migration
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
             $table->string('trip_name');
+            // $table->boolean('trip_name_overwritten')->default(false);
             $table->string('origin')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')->references('id')->on('users');

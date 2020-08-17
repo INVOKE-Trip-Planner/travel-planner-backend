@@ -37,6 +37,15 @@ class Transport extends Model implements Auditable
         // 'cost',
     ];
 
+    protected $appends = [
+        'cost',
+    ];
+
+    public function getCostAttribute()
+    {
+        return $this->cost()->first()['cost'];
+    }
+
     /**
      * Get the cost of the transport.
      */
