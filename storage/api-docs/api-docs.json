@@ -64,19 +64,51 @@
                         }
                     },
                     {
-                        "name": "checkin_time",
+                        "name": "checkin_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d H:i | after:today",
+                        "description": "date_format:Y-m-d | after:today",
                         "schema": {
                             "type": "date"
                         }
                     },
                     {
-                        "name": "checkout_time",
+                        "name": "checkout_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d H:i | after:start_date",
+                        "description": "date_format:Y-m-d | after:checkin_date",
                         "schema": {
                             "type": "date"
+                        }
+                    },
+                    {
+                        "name": "checkin_hour",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:23",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "checkout_hour",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:23",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "checkin_minute",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:59",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "checkout_minute",
+                        "in": "query",
+                        "description": "nnumeric | min:0 | max:59",
+                        "schema": {
+                            "type": "integer"
                         }
                     },
                     {
@@ -143,19 +175,51 @@
                         }
                     },
                     {
-                        "name": "checkin_time",
+                        "name": "checkin_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d H:i | after:today",
+                        "description": "date_format:Y-m-d | after:today",
                         "schema": {
                             "type": "date"
                         }
                     },
                     {
-                        "name": "checkout_time",
+                        "name": "checkout_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d H:i | after:start_date",
+                        "description": "date_format:Y-m-d | after:checkin_date",
                         "schema": {
                             "type": "date"
+                        }
+                    },
+                    {
+                        "name": "checkin_hour",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:23",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "checkout_hour",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:23",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "checkin_minute",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:59",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "checkout_minute",
+                        "in": "query",
+                        "description": "nnumeric | min:0 | max:59",
+                        "schema": {
+                            "type": "integer"
                         }
                     },
                     {
@@ -1071,19 +1135,51 @@
                         }
                     },
                     {
-                        "name": "departure_time",
+                        "name": "departure_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d H:i | after:today",
+                        "description": "date_format:Y-m-d | after:today",
                         "schema": {
                             "type": "date"
                         }
                     },
                     {
-                        "name": "arrival_time",
+                        "name": "arrival_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d H:i | after:departure_time",
+                        "description": "date_format:Y-m-d | after:departure_date",
                         "schema": {
                             "type": "date"
+                        }
+                    },
+                    {
+                        "name": "departure_hour",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:23",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "arrival_hour",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:23",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "departure_minute",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:59",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "arrival_minute",
+                        "in": "query",
+                        "description": "nnumeric | min:0 | max:59",
+                        "schema": {
+                            "type": "integer"
                         }
                     },
                     {
@@ -1177,19 +1273,51 @@
                         }
                     },
                     {
-                        "name": "departure_time",
+                        "name": "departure_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d H:i | after:today",
+                        "description": "date_format:Y-m-d | after:today",
                         "schema": {
                             "type": "date"
                         }
                     },
                     {
-                        "name": "arrival_time",
+                        "name": "arrival_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d H:i | after:departure_time",
+                        "description": "date_format:Y-m-d | after:departure_date",
                         "schema": {
                             "type": "date"
+                        }
+                    },
+                    {
+                        "name": "departure_hour",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:23",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "arrival_hour",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:23",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "departure_minute",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:59",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "arrival_minute",
+                        "in": "query",
+                        "description": "nnumeric | min:0 | max:59",
+                        "schema": {
+                            "type": "integer"
                         }
                     },
                     {

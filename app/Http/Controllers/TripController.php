@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Auth;
+use Illuminate\Support\Arr;
 
 class TripController extends Controller
 {
@@ -34,6 +35,21 @@ class TripController extends Controller
         }
 
         return $trip;
+    }
+
+    private function flatten_cost($trips) {
+        // array_walk_recursive(
+        //     $trips,
+        //     function(&$value, $key) {
+        //         if ($key === 'cost') {
+        //             Arr::flatten($value);
+        //         }
+        //     }
+        // );
+
+        error_log(print_r($trips->pluck('destinations.*.transports.*.cost')->all(), true));
+
+        return $trips;
     }
 
     /**
@@ -216,7 +232,7 @@ class TripController extends Controller
         }
 
         if ($request->has('destinations')) {
-            $request_destinations = $request->destinations; 
+            $request_destinations = $request->destinations;
             //$request_destinations = $request->only('destinations')['destinations'];
 
             // $request_destinations = array_map(function($arr) use ($trip){
@@ -453,15 +469,7 @@ class TripController extends Controller
         //     return $destination;
         // });
 
-        // array_walk_recursive(
-        //     $trips,
-        //     function (&$value, $key) {
-        //         if ($key === 'cost') {
-        //             error_log($value);
-        //             $value = $value['cost'];
-        //         }
-        //     }
-        // );
+        $this->flatten_cost($trips);
 
         $execution_time = microtime(true) - $start_time;
         error_log("Execution time of register = $execution_time");
