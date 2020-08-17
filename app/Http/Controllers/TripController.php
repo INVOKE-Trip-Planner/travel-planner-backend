@@ -216,7 +216,8 @@ class TripController extends Controller
         }
 
         if ($request->has('destinations')) {
-            $request_destinations = $request->only('destinations')['destinations'];
+            $request_destinations = $request->destinations; 
+            //$request_destinations = $request->only('destinations')['destinations'];
 
             // $request_destinations = array_map(function($arr) use ($trip){
             //     return $arr + ['trip_id' => $trip->id];
@@ -452,15 +453,15 @@ class TripController extends Controller
         //     return $destination;
         // });
 
-        array_walk_recursive(
-            $trips,
-            function (&$value, $key) {
-                if ($key === 'cost') {
-                    error_log($value);
-                    $value = $value['cost'];
-                }
-            }
-        );
+        // array_walk_recursive(
+        //     $trips,
+        //     function (&$value, $key) {
+        //         if ($key === 'cost') {
+        //             error_log($value);
+        //             $value = $value['cost'];
+        //         }
+        //     }
+        // );
 
         $execution_time = microtime(true) - $start_time;
         error_log("Execution time of register = $execution_time");

@@ -15,7 +15,7 @@ class CreateCostsTable extends Migration
     {
         Schema::create('costs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedDecimal('cost', 8, 2);
+            $table->unsignedDecimal('cost', 8, 2)->nullable();
             $table->unsignedBigInteger('costable_id');
             $table->string('costable_type');
             $table->timestamps();

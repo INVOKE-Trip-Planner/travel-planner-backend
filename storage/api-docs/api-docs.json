@@ -736,7 +736,7 @@
                 "tags": [
                     "Itinerary"
                 ],
-                "summary": "Create a itinerary for a destination",
+                "summary": "Create an itinerary for a destination",
                 "description": "Create itinerary",
                 "operationId": "create_itinerary",
                 "parameters": [
@@ -750,9 +750,9 @@
                         }
                     },
                     {
-                        "name": "date",
+                        "name": "day",
                         "in": "query",
-                        "description": "date_format:Y-m-d | after:today",
+                        "description": "numeric | min:0",
                         "schema": {
                             "type": "date"
                         }
@@ -764,11 +764,20 @@
                         "explode": true,
                         "schema": {
                             "properties": {
-                                "schedule": {
+                                "schedules": {
                                     "type": "array",
                                     "items": {
                                         "properties": {
-                                            "activity": {
+                                            "hour": {
+                                                "type": "integer"
+                                            },
+                                            "minute": {
+                                                "type": "integer"
+                                            },
+                                            "title": {
+                                                "type": "string"
+                                            },
+                                            "description": {
                                                 "type": "string"
                                             },
                                             "cost": {
@@ -821,9 +830,9 @@
                         }
                     },
                     {
-                        "name": "date",
+                        "name": "day",
                         "in": "query",
-                        "description": "date_format:Y-m-d | after:today",
+                        "description": "numeric | min:0",
                         "schema": {
                             "type": "date"
                         }
@@ -835,11 +844,20 @@
                         "explode": true,
                         "schema": {
                             "properties": {
-                                "schedule": {
+                                "schedules": {
                                     "type": "array",
                                     "items": {
                                         "properties": {
-                                            "activity": {
+                                            "hour": {
+                                                "type": "integer"
+                                            },
+                                            "minute": {
+                                                "type": "integer"
+                                            },
+                                            "title": {
+                                                "type": "string"
+                                            },
+                                            "description": {
                                                 "type": "string"
                                             },
                                             "cost": {
@@ -977,7 +995,7 @@
                         "description": "Error"
                     }
                 },
-                "deprecated": false,
+                "deprecated": true,
                 "security": [
                     {
                         "bearerAuth": []
@@ -1330,7 +1348,7 @@
                         "description": "Error"
                     }
                 },
-                "deprecated": false,
+                "deprecated": true,
                 "security": [
                     {
                         "bearerAuth": []

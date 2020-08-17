@@ -3,6 +3,7 @@
 use App\Models\Accommodation;
 use App\Models\Destination;
 use App\Models\Itinerary;
+use App\Models\Schedule;
 use App\Models\Transport;
 use App\Models\Trip;
 use Illuminate\Database\Seeder;
@@ -86,29 +87,33 @@ class TripSeeder extends Seeder
 
                 $accommodation->cost()->create(['cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 30, $max = 2000)]);
 
-                $schedule = [];
-
-                foreach(range(0, $faker->randomDigit) as $k) {
-                    $activity = [
-                        'activity' => $faker->sentence($nbWords = 6, $variableNbWords = true),
-                        // 'cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 500),
-                    ];
-                    array_push($schedule, $activity);
-                }
-
                 // array_push($itineraries, [
                 //     'destination_id' => $destination->id,
                 //     'date' =>  date('Y-m-d', strtotime("+1 week")),
                 //     'schedule' => $schedule,
                 // ]);
 
-                $itinerary = Itinerary::create([
-                    'destination_id' => $destination->id,
-                    'date' =>  date('Y-m-d', strtotime("+1 week")),
-                    'schedule' => $schedule,
-                ]);
+                foreach(range(1, $faker->numberBetween($min=1, $max=3)) as $k) {
+                    $itinerary = Itinerary::create([
+                        'destination_id' => $destination->id,
+                        'day' =>  $k,
+                    ]);
 
-                $itinerary->cost()->create(['cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 2000)]);
+
+                    foreach(range(0, $faker->randomDigit) as $m) {
+
+                        $schedule = Schedule::create([
+                            'itinerary_id' => $itinerary->id,
+                            'title' => $faker->sentence($nbWords = 6, $variableNbWords = true),
+                            'hour' => 12,
+                            'minute' => 00,
+                            // 'description' => $faker->sentence($nbWords = 6, $variableNbWords = true),
+                            // 'cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 500),
+                        ]);
+
+                        $schedule->cost()->create(['cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 2000)]);
+                    }
+                }
 
 
                 if ($j === $n - 1) {

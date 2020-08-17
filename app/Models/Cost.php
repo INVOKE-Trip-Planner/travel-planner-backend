@@ -15,7 +15,7 @@ class Cost extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'cost',
+        'cost', 'costable_id', 'costable_type',
     ];
 
     /**

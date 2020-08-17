@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cost;
 use Illuminate\Http\Request;
 use App\Models\Destination;
 use Illuminate\Support\Facades\Validator;
 use Auth;
 use App\Models\Itinerary;
+use Illuminate\Support\Arr;
 
 class ItineraryController extends Controller
 {
@@ -40,7 +42,7 @@ class ItineraryController extends Controller
      * @OA\Post(
      *     path="/api/itinerary",
      *     tags={"Itinerary"},
-     *     summary="Create a itinerary for a destination",
+     *     summary="Create an itinerary for a destination",
      *     description="Create itinerary",
      *     operationId="create_itinerary",
      *     security={{"bearerAuth":{}}},
@@ -55,9 +57,9 @@ class ItineraryController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="date",
+     *         name="day",
      *         in="query",
-     *         description="date_format:Y-m-d | after:today",
+     *         description="numeric | min:0",
      *         @OA\Schema(
      *             type="date"
      *         )
@@ -68,11 +70,14 @@ class ItineraryController extends Controller
      *           required=false,
      *           explode=true,
      *           @OA\Schema(
-     *               @OA\Property(property="schedule",
+     *               @OA\Property(property="schedules",
      *                            type="array",
      *                            @OA\Items(
      *                                type="object",
-     *                                @OA\Property(property="activity",  type="string",  ),
+     *                                @OA\Property(property="hour",  type="integer",  ),
+     *                                @OA\Property(property="minute",  type="integer",  ),
+     *                                @OA\Property(property="title",  type="string",  ),
+     *                                @OA\Property(property="description",  type="string",  ),
      *                                @OA\Property(property="cost",  type="integer",  ),
      *                            ),
      *               ),
@@ -96,10 +101,13 @@ class ItineraryController extends Controller
     {
         Validator::make($request->all(), [
             'destination_id' => 'required|exists:destinations,id',
-            'date' => 'date_format:Y-m-d|after:today', // |required',
-            'schedule' => 'required|array',
-            'schedule.*["activity"]' => 'required|string|min:1',
-            'schedule.*["cost"]' => 'numeric|min:0',
+            'day' => 'numeric|min:0', // |required',
+            'schedules' => 'required|array',
+            'schedules.*["hour"]' => 'numeric|min:0|max:23',
+            'schedules.*["minute]' => 'numeric|min:0|max:59',
+            'schedules.*["title"]' => 'required|string|min:1',
+            'schedules.*["description"]' => 'string|min:1',
+            'schedules.*["cost"]' => 'numeric|min:0',
         ])->validate();
 
         $destination = Destination::find($request->destination_id);
@@ -112,11 +120,38 @@ class ItineraryController extends Controller
 
         // $request_itineraries = $request['itineraries'];
         // error_log(print_r($request_itineraries, true));
+        $itinerary = $destination->itineraries()->create($request->except(['destination_id', 'schedules']));
+        // error_log(print_r($itinerary, true));
 
-        $itinerary = $destination->itineraries()->create($request->except(['destination_id', 'cost']));
-        if ($request->has('cost')) {
-            $itinerary->cost->create($request->only('cost'));
-        }
+        // $request_schedules = $request->schedules;
+
+        // error_log(print_r($request_schedules, true));
+        $schedules = $itinerary->schedules()->createMany($request->schedules);
+        $schedule_ids = array_column($schedules->toArray(), 'id');
+        $costs = $request->only('schedules.*.cost')['schedules']['*']['cost'];
+
+        // error_log(print_r($schedule_ids, true));
+        // error_log(print_r($request_schedules, true));
+        // error_log(print_r(Arr::only($request_schedules, ['*.cost']), true));
+
+        // error_log(print_r($costs, true));
+        // $cost = array_combine($schedule_ids, $request->only('schedules.*.cost')['schedules']['*']['cost']);
+
+        $new_costs = array_map(function($schedule_id, $cost) {
+            return [
+                'costable_id' => $schedule_id,
+                'cost' => $cost,
+                'costable_type' => 'App\Models\Schedule',
+            ];
+        }, $schedule_ids, $costs);
+
+        error_log(print_r($new_costs, true));
+
+        Cost::insert($new_costs);
+
+        // if ($request->has('cost')) {
+        //     $itinerary->cost->create($request->only('cost'));
+        // }
 
         return response()->json($itinerary, 201);
     }
@@ -140,9 +175,9 @@ class ItineraryController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="date",
+     *         name="day",
      *         in="query",
-     *         description="date_format:Y-m-d | after:today",
+     *         description="numeric | min:0",
      *         @OA\Schema(
      *             type="date"
      *         )
@@ -153,11 +188,14 @@ class ItineraryController extends Controller
      *           required=false,
      *           explode=true,
      *           @OA\Schema(
-     *               @OA\Property(property="schedule",
+     *               @OA\Property(property="schedules",
      *                            type="array",
      *                            @OA\Items(
      *                                type="object",
-     *                                @OA\Property(property="activity",  type="string",  ),
+     *                                @OA\Property(property="hour",  type="integer",  ),
+     *                                @OA\Property(property="minute",  type="integer",  ),
+     *                                @OA\Property(property="title",  type="string",  ),
+     *                                @OA\Property(property="description",  type="string",  ),
      *                                @OA\Property(property="cost",  type="integer",  ),
      *                            ),
      *               ),
@@ -181,10 +219,13 @@ class ItineraryController extends Controller
     {
         Validator::make($request->all(), [
             'id' => 'required|exists:itineraries,id',
-            'date' => 'date_format:Y-m-d|after:today',
-            'schedule' => 'array',
-            'schedule.*["activity"]' => 'required_with:schedule|string|min:1',
-            'schedule.*["cost"]' => 'numeric|min:0',
+            'day' => 'numeric|min:0',
+            'schedules' => 'array',
+            'schedules.*["hour"]' => 'numeric|min:0|max:23',
+            'schedules.*["minute]' => 'numeric|min:0|max:59',
+            'schedules.*["title"]' => 'required_with:schedules|string|min:1',
+            'schedules.*["description"]' => 'string|min:1',
+            'schedules.*["cost"]' => 'numeric|min:0',
         ])->validate();
 
         $itinerary = Itinerary::findOrFail($request->id);
@@ -196,14 +237,29 @@ class ItineraryController extends Controller
             return response($response, 401);
         }
 
-        $itinerary->update($request->except('cost'));
+        $itinerary->update($request->except(['cost', 'schedules']));
 
-        if ($request->has('cost')) {
-            if ($itinerary->cost) {
-                $itinerary->cost()->update($request->only('cost'));
-            } else {
-                $itinerary->cost()->create($request->only('cost'));
-            }
+        // if ($request->has('cost')) {
+        //     if ($itinerary->cost) {
+        //         $itinerary->cost()->update($request->only('cost'));
+        //     } else {
+        //         $itinerary->cost()->create($request->only('cost'));
+        //     }
+        // }
+
+        if ($request->has('schedules')) {
+            $itinerary->schedules()->delete();
+            $schedules = $itinerary->schedules()->createMany($request->schedules);
+            $schedule_ids = array_column($schedules->toArray(), 'id');
+            $costs = $request->only('schedules.*.cost')['schedules']['*']['cost'];
+            $new_costs = array_map(function($schedule_id, $cost) {
+                return [
+                    'costable_id' => $schedule_id,
+                    'cost' => $cost,
+                    'costable_type' => 'App\Models\Schedule',
+                ];
+            }, $schedule_ids, $costs);
+            Cost::insert($new_costs);
         }
 
         // to get updated values

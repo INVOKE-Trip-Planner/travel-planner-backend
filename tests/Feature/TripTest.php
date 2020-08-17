@@ -63,7 +63,7 @@ class TripTest extends TestCase
                 'created_by',
                 'start_date',
                 'end_date',
-                'cost',
+                // 'cost',
                 'trip_banner',
                 'users' => [
                     '*' => [
@@ -78,7 +78,7 @@ class TripTest extends TestCase
                         'location',
                         'start_date',
                         'end_date',
-                        'cost',
+                        // 'cost',
                         'transports' => [],
                         'accommodations' => [],
                         'itineraries' => [],

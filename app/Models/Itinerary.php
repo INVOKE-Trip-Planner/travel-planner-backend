@@ -16,7 +16,7 @@ class Itinerary extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'destination_id', 'date', 'schedule', 'cost',
+        'destination_id', 'day', // 'date', 'schedule', 'cost',
     ];
 
     /**
@@ -28,26 +28,9 @@ class Itinerary extends Model implements Auditable
         'created_at', 'updated_at', 'laravel_through_key',
     ];
 
-    protected $casts = [
-        'schedule' => 'array',
-    ];
-
-        /**
-     * The relationships that should always be loaded.
-     *
-     * @var array
-     */
-    protected $with = [
-        'cost',
-    ];
-    
-    /**
-     * Get the cost of the itinerary.
-     */
-    public function cost()
-    {
-        return $this->morphOne('App\Models\Cost', 'costable');
-    }
+    // protected $casts = [
+    //     'schedule' => 'array',
+    // ];
 
     /**
      * Get the destination that owns the itinerary.
@@ -55,6 +38,23 @@ class Itinerary extends Model implements Auditable
     public function destination()
     {
         return $this->belongsTo('App\Models\Destination');
+    }
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [
+        'schedules',
+    ];
+
+    /**
+     * Get the itineraries for the .
+     */
+    public function schedules()
+    {
+        return $this->hasMany('App\Models\Schedule');
     }
 
     /**

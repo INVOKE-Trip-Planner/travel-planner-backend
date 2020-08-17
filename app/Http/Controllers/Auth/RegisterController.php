@@ -184,8 +184,9 @@ class RegisterController extends Controller
 
         $token = $this->guard()->login($user);
         // $token = JWTAuth::attempt($request->only(['username', 'password']));
-        $user = User::find($user->id);
-
+        // $user = User::find($user->id);
+        $user = $user->fresh();
+        
         // $execution_time = microtime(true) - $start_time;
         // error_log("Execution time of register = $execution_time");
 
