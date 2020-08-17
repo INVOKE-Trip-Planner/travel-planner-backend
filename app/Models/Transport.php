@@ -34,7 +34,7 @@ class Transport extends Model implements Auditable
      * @var array
      */
     protected $with = [
-        'cost',
+        // 'cost',
     ];
 
     /**

@@ -34,7 +34,7 @@ class Accommodation extends Model implements Auditable
      * @var array
      */
     protected $with = [
-        'cost',
+        // 'cost',
     ];
 
     /**

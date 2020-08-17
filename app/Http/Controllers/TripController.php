@@ -38,16 +38,39 @@ class TripController extends Controller
     }
 
     private function flatten_cost($trips) {
+
+        foreach($trips as $trip) {
+            foreach($trip->destinations as $destination) {
+
+                foreach($destination->transports as $transport) {
+                    // error_log( $transport->cost['cost']);
+                    // $transport->total = $transport->cost['cost'];
+                    $transport->cost = $transport->cost()->first()['cost'];
+                }
+
+                foreach($destination->accommodations as $accommodation) {
+                    $accommodation->cost = $accommodation->cost()->first()['cost'];
+                }
+
+                foreach($destination->itineraries as $itinerary) {
+                    foreach($itinerary->schedules as $schedule) {
+                        // error_log($schedule->cost());
+                        $schedule->cost = $schedule->cost()->first()['cost'];
+                    }
+                }
+            }
+        }
         // array_walk_recursive(
         //     $trips,
         //     function(&$value, $key) {
         //         if ($key === 'cost') {
-        //             Arr::flatten($value);
+        //             $value['cost'] = $value['cost']['cost'];
+        //             // Arr::flatten($value);
         //         }
         //     }
         // );
 
-        error_log(print_r($trips->pluck('destinations.*.transports.*.cost')->all(), true));
+        // error_log(print_r($trips->pluck('destinations.*.transports.*.cost')->all(), true));
 
         return $trips;
     }
@@ -452,8 +475,8 @@ class TripController extends Controller
         $trips = Auth::user()
                     ->trips()
                     ->orderBy('start_date')
-                    ->get()
-                    ->toArray();
+                    ->get();
+                    // ->toArray();
 
         // foreach ($trips as $trip) {
         //     $trip->users = $trip->users()->select('id', 'avatar')->get();

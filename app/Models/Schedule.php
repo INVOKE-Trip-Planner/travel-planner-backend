@@ -38,7 +38,7 @@ class Schedule extends Model implements Auditable
      * @var array
      */
     protected $with = [
-        'cost',
+        // 'cost',
     ];
 
     // this is a recommended way to declare event handlers
