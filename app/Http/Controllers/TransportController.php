@@ -183,7 +183,7 @@ class TransportController extends Controller
             'arrival_minute' => 'numeric|min:0|max:59',
             'cost'=> 'numeric|min:0',
             'operator' => 'string|max:100',
-            'booing_id'=> 'string|max:20',
+            'booking_id'=> 'string|max:20',
         ])->validate();
 
         $destination = Destination::find($request->destination_id);
@@ -353,7 +353,7 @@ class TransportController extends Controller
             'arrival_minute' => 'numeric|min:0|max:59',
             'cost'=> 'numeric|min:0',
             'operator' => 'string|max:100',
-            'booing_id'=> 'string|max:20',
+            'booking_id'=> 'string|max:20',
         ])->validate();
 
         $transport = Transport::findOrFail($request->id);

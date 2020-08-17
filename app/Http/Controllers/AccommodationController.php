@@ -153,7 +153,7 @@ class AccommodationController extends Controller
             'checkin_minute' => 'numeric|min:0|max:59',
             'checkout_minute' => 'numeric|min:0|max:59',
             'cost'=> 'numeric|min:0',
-            'booing_id'=> 'string|max:20',
+            'booking_id'=> 'string|max:20',
         ])->validate();
 
         $destination = Destination::find($request->destination_id);
@@ -293,7 +293,7 @@ class AccommodationController extends Controller
             'checkin_minute' => 'numeric|min:0|max:59',
             'checkout_minute' => 'numeric|min:0|max:59',
             'cost'=> 'numeric|min:0',
-            'booing_id'=> 'string|max:20',
+            'booking_id'=> 'string|max:20',
         ])->validate();
 
         $accommodation = Accommodation::findOrFail($request->id);
