@@ -15,13 +15,17 @@ class UserSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
 
+        $users = [];
+
         for ($i = 0; $i < 10; $i++) {
-            User::create([
+            array_push($users, [
                 'username' => "test000$i",
                 'name' => $faker->name,
                 'email' => "test000$i@gmail.com", // $faker->email
                 'password' => Hash::make("test000$i"),
             ]);
         }
+
+        User::insert($users);
     }
 }

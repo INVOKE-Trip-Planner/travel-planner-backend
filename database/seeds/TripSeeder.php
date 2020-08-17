@@ -1,9 +1,7 @@
 <?php
 
-use App\Models\Accommodation;
+use App\Models\Cost;
 use App\Models\Destination;
-use App\Models\Itinerary;
-use App\Models\Schedule;
 use App\Models\Transport;
 use App\Models\Trip;
 use Illuminate\Database\Seeder;
@@ -19,9 +17,7 @@ class TripSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
 
-        // $transports = [];
-        // $accommodations = [];
-        // $itineraries = [];
+        $transports = [];
 
         for ($i = 1; $i <= 20; $i++) {
 
@@ -47,105 +43,48 @@ class TripSeeder extends Seeder
                 }
 
                 $destination = Destination::create([
-                    'trip_id' => $i,
+                    'trip_id' => $trip->id,
                     'location' => $cities[$j],
                 ]);
 
-                // array_push($transports, [
-                //     'destination_id' => $destination->id,
-                //     'mode' => $faker->randomElement($array = ['FLIGHT', 'FERRY', 'BUS', 'TRAIN', 'OTHER']),
-                //     'origin' => $cities[$j - 1],
-                //     'destination' => $cities[$j],
-                //     // 'cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 2000),
-                //     'booking_id' => $faker->randomNumber($nbDigits = 6),
-                // ]);
-
-                $transport = Transport::create([
+                // transport to destination
+                array_push($transports, [
                     'destination_id' => $destination->id,
                     'mode' => $faker->randomElement($array = ['FLIGHT', 'FERRY', 'BUS', 'TRAIN', 'OTHER']),
                     'origin' => $cities[$j - 1],
                     'destination' => $cities[$j],
-                    // 'cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 2000),
                     'booking_id' => $faker->randomNumber($nbDigits = 6),
                 ]);
 
-                $transport->cost()->create(['cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 2000)]);
-
-                // array_push($accommodations, [
-                //     'destination_id' => $destination->id,
-                //     'accommodation_name' => $faker->company . ' ' . $faker->randomElement($array = ['Hotel', 'Resort', 'Suite', 'Homestay', 'Hostel']),
-                //     // 'cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 30, $max = 2000),
-                //     'booking_id' => $faker->bothify('??#####?'),
-                // ]);
-
-                $accommodation = Accommodation::create([
-                    'destination_id' => $destination->id,
-                    'accommodation_name' => $faker->company . ' ' . $faker->randomElement($array = ['Hotel', 'Resort', 'Suite', 'Homestay', 'Hostel']),
-                    // 'cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 30, $max = 2000),
-                    'booking_id' => $faker->bothify('??#####?'),
-                ]);
-
-                $accommodation->cost()->create(['cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 30, $max = 2000)]);
-
-                // array_push($itineraries, [
-                //     'destination_id' => $destination->id,
-                //     'date' =>  date('Y-m-d', strtotime("+1 week")),
-                //     'schedule' => $schedule,
-                // ]);
-
-                foreach(range(1, $faker->numberBetween($min=1, $max=3)) as $k) {
-                    $itinerary = Itinerary::create([
-                        'destination_id' => $destination->id,
-                        'day' =>  $k,
-                    ]);
-
-
-                    foreach(range(0, $faker->randomDigit) as $m) {
-
-                        $schedule = Schedule::create([
-                            'itinerary_id' => $itinerary->id,
-                            'title' => $faker->sentence($nbWords = 6, $variableNbWords = true),
-                            'hour' => 12,
-                            'minute' => 00,
-                            // 'description' => $faker->sentence($nbWords = 6, $variableNbWords = true),
-                            // 'cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 500),
-                        ]);
-
-                        $schedule->cost()->create(['cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 2000)]);
-                    }
-                }
-
-
+                // transport back to origin
                 if ($j === $n - 1) {
-
-                    // array_push($transports, [
-                    //     'destination_id' => $destination->id,
-                    //     'mode' => $faker->randomElement($array = ['FLIGHT', 'FERRY', 'BUS', 'TRAIN', 'OTHER']),
-                    //     'origin' => $cities[$j],
-                    //     'destination' => $cities[0],
-                    //     // 'cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 2000),
-                    //     'booking_id' => $faker->bothify('???###'),
-                    // ]);
-
-                    $transport = Transport::create([
+                    array_push($transports, [
                         'destination_id' => $destination->id,
                         'mode' => $faker->randomElement($array = ['FLIGHT', 'FERRY', 'BUS', 'TRAIN', 'OTHER']),
                         'origin' => $cities[$j],
                         'destination' => $cities[0],
-                        // 'cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 2000),
                         'booking_id' => $faker->bothify('???###'),
                     ]);
-
-                    $transport->cost()->create(['cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 2000)]);
-
                 }
             }
 
 
         }
 
-        // Transport::insert($transports);
-        // Accommodation::insert($accommodations);
-        // Itinerary::insert($itineraries);
+        Transport::insert($transports);
+
+        $transport_count = Transport::all()->count();
+        $costs = [];
+
+        for ($i = 1; $i <= $transport_count; $i++) {
+            array_push($costs, [
+                    'costable_id' => $i,
+                    'costable_type' => 'App\Models\Transport',
+                    'cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 2000),
+                ]
+            );
+        }
+
+        Cost::insert($costs);
     }
 }

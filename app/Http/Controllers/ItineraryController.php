@@ -253,9 +253,7 @@ class ItineraryController extends Controller
             foreach ($itinerary->schedules()->get() as $schedule) {
                 array_push($old_costs, $schedule->cost()->first()->id);
             }
-
             // error_log(print_r($old_costs, true));
-
             Cost::destroy($old_costs);
 
             $itinerary->schedules()->delete();
