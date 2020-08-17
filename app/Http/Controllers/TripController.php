@@ -12,53 +12,49 @@ use Illuminate\Support\Arr;
 
 class TripController extends Controller
 {
-
-    private function get_destinations_details($trip) {
-        foreach($trip->destinations as $destination) {
-            $destination->transports = $destination->transports()->get();
-
-            foreach($destination->transports as $transport) {
-                $transport->cost = $transport->cost()->first();
-            }
-
-            $destination->accommodations = $destination->accommodations()->get();
-
-            foreach($destination->accommodations as $accommodation) {
-                $accommodation->cost = $accommodation->cost()->first();
-            }
-
-            $destination->itineraries = $destination->itineraries()->get();
-
-            foreach($destination->itineraries as $itinerary) {
-                $itinerary->cost = $itinerary->cost()->first();
-            }
-        }
-
-        return $trip;
-    }
-
     private function flatten_cost($trips) {
-
+        // TODO: optimize the algorithm
         foreach($trips as $trip) {
+            $trip_cost = [];
             foreach($trip->destinations as $destination) {
+                $destination_cost = [];
+                // $transport_cost = [];
+                // $accommodation_cost = [];
+                // $itinerary_cost = [];
 
                 foreach($destination->transports as $transport) {
                     // error_log( $transport->cost['cost']);
                     // $transport->total = $transport->cost['cost'];
                     $transport->cost = $transport->cost()->first()['cost'];
+                    // array_push($transport_cost, $transport->cost);
+                    array_push($destination_cost, $transport->cost);
+                    array_push($trip_cost, $transport->cost);
                 }
 
                 foreach($destination->accommodations as $accommodation) {
                     $accommodation->cost = $accommodation->cost()->first()['cost'];
+                    // array_push($transport_cost, $accommodation->cost);
+                    array_push($destination_cost, $accommodation->cost);
+                    array_push($trip_cost, $accommodation->cost);
                 }
 
                 foreach($destination->itineraries as $itinerary) {
                     foreach($itinerary->schedules as $schedule) {
                         // error_log($schedule->cost());
                         $schedule->cost = $schedule->cost()->first()['cost'];
+                        // array_push($itinerary_cost, $schedule->cost);
+                        array_push($destination_cost, $schedule->cost);
+                        array_push($trip_cost, $schedule->cost);
                     }
                 }
+                // $destination->transports->cost = sprintf("%01.2f", array_sum($transport_cost));
+                // $destination->accommodations->cost = sprintf("%01.2f", array_sum($accommodation_cost));
+                // $destination->itineraries->cost = sprintf("%01.2f", array_sum($itinerary_cost));
+
+                $destination->cost = sprintf("%01.2f", array_sum($destination_cost));
+                // $trip_cost = array_merge($trip_cost, $destination_cost);
             }
+            $trip->cost = sprintf("%01.2f", array_sum($trip_cost));
         }
         // array_walk_recursive(
         //     $trips,
