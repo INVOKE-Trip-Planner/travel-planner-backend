@@ -41,6 +41,16 @@ class Schedule extends Model implements Auditable
         'cost',
     ];
 
+    // this is a recommended way to declare event handlers
+    // public static function boot() {
+    //     parent::boot();
+
+    //     static::deleting(function($schedule) { // before delete() method call this
+    //          $schedule->cost()->delete();
+    //          // do the rest of the cleanup...
+    //     });
+    // }
+
     /**
      * Get the cost of the schedule.
      */

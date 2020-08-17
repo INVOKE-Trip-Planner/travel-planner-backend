@@ -145,7 +145,7 @@ class ItineraryController extends Controller
             ];
         }, $schedule_ids, $costs);
 
-        error_log(print_r($new_costs, true));
+        // error_log(print_r($new_costs, true));
 
         Cost::insert($new_costs);
 
@@ -248,6 +248,16 @@ class ItineraryController extends Controller
         // }
 
         if ($request->has('schedules')) {
+            $old_costs = [];
+
+            foreach ($itinerary->schedules()->get() as $schedule) {
+                array_push($old_costs, $schedule->cost()->first()->id);
+            }
+
+            // error_log(print_r($old_costs, true));
+
+            Cost::destroy($old_costs);
+
             $itinerary->schedules()->delete();
             $schedules = $itinerary->schedules()->createMany($request->schedules);
             $schedule_ids = array_column($schedules->toArray(), 'id');

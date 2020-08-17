@@ -50,7 +50,7 @@ class Itinerary extends Model implements Auditable
     ];
 
     /**
-     * Get the itineraries for the .
+     * Get the schedules for the itinerary.
      */
     public function schedules()
     {
@@ -69,5 +69,15 @@ class Itinerary extends Model implements Auditable
             // itinerary, destination, trip, trip_user
             ['destination_id' ,'trip_id', 'id', 'user_id']
         );
+    }
+
+    public function update_schedules($new_schedules) {
+        $costs = [];
+
+        foreach ($this->schedules() as $schedule) {
+            array_push($schedule->cost()->id);
+        }
+
+        Cost::destroy($costs);
     }
 }

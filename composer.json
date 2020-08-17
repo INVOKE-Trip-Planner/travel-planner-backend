@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.1",
         "owen-it/laravel-auditing": "^10.0",
+        "shiftonelabs/laravel-cascade-deletes": "^1.0",
         "staudenmeir/eloquent-has-many-deep": "^1.12",
         "tymon/jwt-auth": "^1.0"
     },
