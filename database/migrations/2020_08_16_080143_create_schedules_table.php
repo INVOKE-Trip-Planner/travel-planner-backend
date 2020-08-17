@@ -17,8 +17,8 @@ class CreateSchedulesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('itinerary_id');
             $table->foreign('itinerary_id')->references('id')->on('itineraries')->onDelete('cascade');
-            $table->unsignedSmallInteger('hour')->nullable();
-            $table->unsignedSmallInteger('minute')->nullable();
+            $table->unsignedTinyInteger('hour')->nullable();
+            $table->unsignedTinyInteger('minute')->nullable();
             $table->string('title');
             $table->string('description')->nullable();
             $table->unsignedDecimal('cost', 8, 2)->nullable();

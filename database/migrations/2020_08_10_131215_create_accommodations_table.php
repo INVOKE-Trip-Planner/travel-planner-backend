@@ -17,8 +17,12 @@ class CreateAccommodationsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('destination_id');
             $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
-            $table->datetime('checkin_time')->nullable();
-            $table->datetime('checkout_time')->nullable();
+            $table->date('checkin_date')->nullable();
+            $table->date('checkout_date')->nullable();
+            $table->unsignedTinyInteger('checkin_hour')->nullable();
+            $table->unsignedTinyInteger('checkout_hour')->nullable();
+            $table->unsignedTinyInteger('checkin_minute')->nullable();
+            $table->unsignedTinyInteger('checkout_minute')->nullable();
             $table->string('accommodation_name');
             // $table->unsignedDecimal('cost', 8, 2)->nullable();
             $table->string('booking_id')->nullable();

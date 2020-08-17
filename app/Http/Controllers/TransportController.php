@@ -82,19 +82,51 @@ class TransportController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="departure_time",
+     *         name="departure_date",
      *         in="query",
-     *         description="date_format:Y-m-d H:i | after:today",
+     *         description="date_format:Y-m-d | after:today",
      *         @OA\Schema(
      *             type="date"
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="arrival_time",
+     *         name="arrival_date",
      *         in="query",
-     *         description="date_format:Y-m-d H:i | after:departure_time",
+     *         description="date_format:Y-m-d | after:departure_date",
      *         @OA\Schema(
      *             type="date"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="departure_hour",
+     *         in="query",
+     *         description="numeric | min:0 | max:23",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="arrival_hour",
+     *         in="query",
+     *         description="numeric | min:0 | max:23",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="departure_minute",
+     *         in="query",
+     *         description="numeric | min:0 | max:59",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="arrival_minute",
+     *         in="query",
+     *         description="nnumeric | min:0 | max:59",
+     *         @OA\Schema(
+     *             type="integer"
      *         )
      *     ),
      *     @OA\Parameter(
@@ -143,8 +175,12 @@ class TransportController extends Controller
             'mode' => 'required|in:FLIGHT,FERRY,BUS,TRAIN,OTHER',
             'origin' => 'required|string|max:100',
             'destination' => 'required|string|max:100',
-            'departure_time' => 'date_format:Y-m-d H:i|after:today',
-            'arrival_time' => 'date_format:Y-m-d H:i|after:departure_time',
+            'departure_date' => 'date_format:Y-m-d|after:today',
+            'arrival_date' => 'date_format:Y-m-d|after:departure_date',
+            'departure_hour' => 'numeric|min:0|max:23',
+            'arrival_hour' => 'numeric|min:0|max:23',
+            'departure_minute' => 'numeric|min:0|max:59',
+            'arrival_minute' => 'numeric|min:0|max:59',
             'cost'=> 'numeric|min:0',
             'operator' => 'string|max:100',
             'booing_id'=> 'string|max:20',
@@ -216,19 +252,51 @@ class TransportController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="departure_time",
+     *         name="departure_date",
      *         in="query",
-     *         description="date_format:Y-m-d H:i | after:today",
+     *         description="date_format:Y-m-d | after:today",
      *         @OA\Schema(
      *             type="date"
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="arrival_time",
+     *         name="arrival_date",
      *         in="query",
-     *         description="date_format:Y-m-d H:i | after:departure_time",
+     *         description="date_format:Y-m-d | after:departure_date",
      *         @OA\Schema(
      *             type="date"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="departure_hour",
+     *         in="query",
+     *         description="numeric | min:0 | max:23",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="arrival_hour",
+     *         in="query",
+     *         description="numeric | min:0 | max:23",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="departure_minute",
+     *         in="query",
+     *         description="numeric | min:0 | max:59",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="arrival_minute",
+     *         in="query",
+     *         description="nnumeric | min:0 | max:59",
+     *         @OA\Schema(
+     *             type="integer"
      *         )
      *     ),
      *     @OA\Parameter(
@@ -277,8 +345,12 @@ class TransportController extends Controller
             'mode' => 'in:FLIGHT,FERRY,BUS,TRAIN,OTHER',
             'origin' => 'string|max:100',
             'destination' => 'string|max:100',
-            'departure_time' => 'date_format:Y-m-d H:i|after:today',
-            'arrival_time' => 'date_format:Y-m-d H:i|after:departure_time',
+            'departure_date' => 'date_format:Y-m-d|after:today',
+            'arrival_date' => 'date_format:Y-m-d|after:departure_date',
+            'departure_hour' => 'numeric|min:0|max:23',
+            'arrival_hour' => 'numeric|min:0|max:23',
+            'departure_minute' => 'numeric|min:0|max:59',
+            'arrival_minute' => 'numeric|min:0|max:59',
             'cost'=> 'numeric|min:0',
             'operator' => 'string|max:100',
             'booing_id'=> 'string|max:20',

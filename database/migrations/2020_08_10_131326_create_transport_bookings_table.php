@@ -20,8 +20,12 @@ class CreateTransportBookingsTable extends Migration
             $table->unsignedBigInteger('destination_id')->nullable();
             $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
             $table->enum('mode', ['FLIGHT', 'FERRY', 'BUS', 'TRAIN', 'OTHER']);
-            $table->datetime('departure_time')->nullable();
-            $table->datetime('arrival_time')->nullable();
+            $table->date('departure_date')->nullable();
+            $table->date('arrival_date')->nullable();
+            $table->unsignedTinyInteger('departure_hour')->nullable();
+            $table->unsignedTinyInteger('arrival_hour')->nullable();
+            $table->unsignedTinyInteger('departure_minute')->nullable();
+            $table->unsignedTinyInteger('arrival_minute')->nullable();
             $table->string('origin');
             $table->string('destination');
             $table->unsignedDecimal('cost', 8, 2)->nullable();

@@ -64,19 +64,51 @@ class AccommodationController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="checkin_time",
+     *         name="checkin_date",
      *         in="query",
-     *         description="date_format:Y-m-d H:i | after:today",
+     *         description="date_format:Y-m-d | after:today",
      *         @OA\Schema(
      *             type="date"
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="checkout_time",
+     *         name="checkout_date",
      *         in="query",
-     *         description="date_format:Y-m-d H:i | after:start_date",
+     *         description="date_format:Y-m-d | after:checkin_date",
      *         @OA\Schema(
      *             type="date"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="checkin_hour",
+     *         in="query",
+     *         description="numeric | min:0 | max:23",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="checkout_hour",
+     *         in="query",
+     *         description="numeric | min:0 | max:23",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="checkin_minute",
+     *         in="query",
+     *         description="numeric | min:0 | max:59",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="checkout_minute",
+     *         in="query",
+     *         description="nnumeric | min:0 | max:59",
+     *         @OA\Schema(
+     *             type="integer"
      *         )
      *     ),
      *     @OA\Parameter(
@@ -114,8 +146,12 @@ class AccommodationController extends Controller
         Validator::make($request->all(), [
             'destination_id' => 'required|exists:destinations,id',
             'accommodation_name' => 'required|string|max:100',
-            'checkin_time' => 'date_format:Y-m-d H:i|after:today',
-            'checkout_time' => 'date_format:Y-m-d H:i|after:start_date',
+            'checkin_date' => 'date_format:Y-m-d|after:today',
+            'checkout_date' => 'date_format:Y-m-d|after:checkin_date',
+            'checkin_hour' => 'numeric|min:0|max:23',
+            'checkout_hour' => 'numeric|min:0|max:23',
+            'checkin_minute' => 'numeric|min:0|max:59',
+            'checkout_minute' => 'numeric|min:0|max:59',
             'cost'=> 'numeric|min:0',
             'booing_id'=> 'string|max:20',
         ])->validate();
@@ -168,19 +204,51 @@ class AccommodationController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="checkin_time",
+     *         name="checkin_date",
      *         in="query",
-     *         description="date_format:Y-m-d H:i | after:today",
+     *         description="date_format:Y-m-d | after:today",
      *         @OA\Schema(
      *             type="date"
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="checkout_time",
+     *         name="checkout_date",
      *         in="query",
-     *         description="date_format:Y-m-d H:i | after:start_date",
+     *         description="date_format:Y-m-d | after:checkin_date",
      *         @OA\Schema(
      *             type="date"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="checkin_hour",
+     *         in="query",
+     *         description="numeric | min:0 | max:23",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="checkout_hour",
+     *         in="query",
+     *         description="numeric | min:0 | max:23",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="checkin_minute",
+     *         in="query",
+     *         description="numeric | min:0 | max:59",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="checkout_minute",
+     *         in="query",
+     *         description="nnumeric | min:0 | max:59",
+     *         @OA\Schema(
+     *             type="integer"
      *         )
      *     ),
      *     @OA\Parameter(
@@ -218,8 +286,12 @@ class AccommodationController extends Controller
         Validator::make($request->all(), [
             'id' => 'required|exists:accommodations,id',
             'accommodation_name' => 'string|max:100',
-            'checkin_time' => 'date_format:Y-m-d H:i|after:today',
-            'checkout_time' => 'date_format:Y-m-d H:i|after:start_date',
+            'checkin_date' => 'date_format:Y-m-d|after:today',
+            'checkout_date' => 'date_format:Y-m-d|after:checkin_date',
+            'checkin_hour' => 'numeric|min:0|max:23',
+            'checkout_hour' => 'numeric|min:0|max:23',
+            'checkin_minute' => 'numeric|min:0|max:59',
+            'checkout_minute' => 'numeric|min:0|max:59',
             'cost'=> 'numeric|min:0',
             'booing_id'=> 'string|max:20',
         ])->validate();
@@ -365,7 +437,7 @@ class AccommodationController extends Controller
             'accommodations' => 'array',
             'accommodations.*["accommodation_name"]' => 'required_with:accommodations|string|max:100',
             'accommodations.*["checkin_time"]' => 'date_format:Y-m-d H:i|after:today',
-            'accommodations.*["checkout_time"]' => 'date_format:Y-m-d H:i|after:start_date',
+            'accommodations.*["checkout_time"]' => 'date_format:Y-m-d H:i|after:checkin_date',
             'accommodations.*["cost"]'=> 'numeric|min:0',
             'accommodations.*["booing_id"]'=> 'string|max:20',
         ])->validate();

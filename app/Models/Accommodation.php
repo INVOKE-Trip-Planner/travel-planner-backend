@@ -16,7 +16,7 @@ class Accommodation extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'destination_id', 'checkin_time', 'checkout_time', 'accommodation_name', 'booking_id', 'cost',
+        'destination_id', 'checkin_date', 'checkout_date',  'checkin_hour', 'checkout_hour',  'checkin_minute', 'checkout_minute', 'accommodation_name', 'booking_id', 'cost',
     ];
 
     /**
