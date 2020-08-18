@@ -47,8 +47,22 @@ class Schedule extends Model implements Auditable
 
     public function getCostAttribute()
     {
-        return (float) $this->cost()->first()['cost'];
+        $cost = (float) $this->cost()->first();
+
+        return $cost ? $cost['cost'] : null;
     }
+
+    /**
+	 * Convert the model instance to an array.
+	 *
+	 * @return array
+	 */
+	// public function toArray()
+	// {
+	// 	$attributes = $this->attributesToArray();
+
+	// 	return array_merge($attributes, $this->relationsToArray());
+	// }
 
     // this is a recommended way to declare event handlers
     // public static function boot() {

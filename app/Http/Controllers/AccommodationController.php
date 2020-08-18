@@ -164,13 +164,13 @@ class AccommodationController extends Controller
             return response($response, 401);
         }
 
-        // $request_accommodations = $request['accommodations'];
-
-        // error_log(print_r($request_accommodations, true));
+        // error_log(print_r($request->except(['destination_id', 'cost']), true));
+        // error_log(print_r($destination->accommodations()->create($request->except(['destination_id', 'cost']))->toSql()));
 
         $accommodation = $destination->accommodations()->create($request->except(['destination_id', 'cost']));
         if ($request->has('cost')) {
-            $accommodation->cost->create($request->only('cost'));
+            // error_log(print_r($request->only('cost'), true));
+            $accommodation->cost()->create($request->only('cost'));
         }
 
         return response()->json($accommodation, 201);
@@ -246,7 +246,7 @@ class AccommodationController extends Controller
      *     @OA\Parameter(
      *         name="checkout_minute",
      *         in="query",
-     *         description="nnumeric | min:0 | max:59",
+     *         description="numeric | min:0 | max:59",
      *         @OA\Schema(
      *             type="integer"
      *         )

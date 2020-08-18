@@ -13,7 +13,7 @@ use App\Models\Itinerary;
 
 class ItineraryTest extends TestCase
 {
-    // use DatabaseTransactions;
+    use DatabaseTransactions;
     use TestTrait, WithFaker;
 
     public function testCreateItinerary()
@@ -49,7 +49,8 @@ class ItineraryTest extends TestCase
             if ($k % 2 === 0) {
                 $activity = [
                     'title' => $this->faker->sentence($nbWords = 6, $variableNbWords = true),
-                    'cost' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 500),
+                    // 'description' => $this->faker->sentence($nbWords = 10, $variableNbWords = true),
+                    // 'cost' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 500),
                 ];
             } else {
                 $activity = [
@@ -72,6 +73,7 @@ class ItineraryTest extends TestCase
 
         $this->json('POST', 'api/itinerary', $payload, $credentials[$num_users - 1]['header'])
             ->assertStatus(201);
+            // ->assertStatus(500)->assertJson(['test']);
 
         // failed assert but did insert
         // $this->assertDatabaseHas('itineraries', $payload);

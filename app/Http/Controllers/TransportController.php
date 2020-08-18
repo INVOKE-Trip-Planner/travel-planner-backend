@@ -200,7 +200,7 @@ class TransportController extends Controller
 
         $transport = $destination->transports()->create($request->except(['destination_id', 'cost']));
         if ($request->has('cost')) {
-            $transport->cost->create($request->only('cost'));
+            $transport->cost()->create($request->only('cost'));
         }
 
         return response()->json($transport, 201);

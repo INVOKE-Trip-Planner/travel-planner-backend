@@ -71,13 +71,13 @@ class Itinerary extends Model implements Auditable
         );
     }
 
-    public function update_schedules($new_schedules) {
-        $costs = [];
+    // public function update_schedules($new_schedules) {
+    //     $costs = [];
 
-        foreach ($this->schedules() as $schedule) {
-            array_push($schedule->cost()->id);
-        }
+    //     foreach ($this->schedules() as $schedule) {
+    //         array_push($schedule->cost()->id);
+    //     }
 
-        Cost::destroy($costs);
-    }
+    //     Cost::destroy($costs);
+    // }
 }

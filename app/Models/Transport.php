@@ -43,7 +43,9 @@ class Transport extends Model implements Auditable
 
     public function getCostAttribute()
     {
-        return (float) $this->cost()->first()['cost'];
+        $cost = (float) $this->cost()->first();
+
+        return $cost ? $cost['cost'] : null;
     }
 
     /**

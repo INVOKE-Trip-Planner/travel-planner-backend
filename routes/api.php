@@ -64,4 +64,6 @@ Route::group([
     Route::post('register', 'Auth\RegisterController@register');
     Route::post('login', 'Auth\LoginController@login');
     Route::get('user/checkavailability', 'UserController@checkUsernameEmailAvailability');
+
+    Route::get('v2/documentation', 'CustomSwaggerController@api');
 });
