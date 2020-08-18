@@ -152,11 +152,11 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/user",
+     *     path="/api/user/checkavailability",
      *     tags={"User"},
      *     summary="Find user",
-     *     description="Get user by username or email",
-     *     operationId="user_by_username_email",
+     *     description="Check username or email availability",
+     *     operationId="username_email_availability",
      *     deprecated=false,
      *     @OA\Parameter(
      *         name="username",
@@ -184,22 +184,62 @@ class UserController extends Controller
      *     )
      * )
      */
-    function find(Request $request) {
+    function checkUsernameEmailAvailability(Request $request) {
 
         Validator::make($request->all(), [
             'username' => 'required_without:email|string|exists:users',
             'email' => 'required_without:username|email|exists:users',
+        ], [
+            'exists' => 'The :attribute is available.',
+            'exists' => 'The :attribute is available.',
         ])->validate();
 
         if ($request->has('username')) {
-            $user = User::select('id', 'avatar')
-                        ->where('username', request('username'))
-                        ->get();
+            // $user = User::select('id', 'avatar')
+            //             ->where('username', request('username'))
+            //             ->get();
+            $response = ['message' => 'Username is already taken.'];
         } else if ($request->has('email')) {
-            $user = User::select('id', 'avatar')
-                        ->where('email', request('email'))
-                        ->get();
+            // $user = User::select('id', 'avatar')
+            //             ->where('email', request('email'))
+            //             ->get();
+            $response = ['message' => 'Email is already taken.'];
         }
+
+        return response()->json($response, 200);
+        // return response()->json($user, 200);
+        // return response()->json('Please pass in username or email.', 422);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/user/find/{id}",
+     *     tags={"User"},
+     *     summary="Find user",
+     *     description="Get user by id",
+     *     operationId="user_by_id",
+     *     security={{"bearerAuth":{}}},
+     *     deprecated=false,
+     *     @OA\Parameter(
+     *          @OA\Schema(type="string"),
+     *          in="path",
+     *          allowReserved=true,
+     *          name="id",
+     *          parameter="id"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error"
+     *     )
+     * )
+     */
+    function findById(Request $request, $id) {
+
+        $user = User::findOrFail($id)->only('id', 'avatar', 'name');
 
         return response()->json($user, 200);
         // return response()->json('Please pass in username or email.', 422);

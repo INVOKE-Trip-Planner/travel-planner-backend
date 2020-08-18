@@ -635,14 +635,6 @@
                         "schema": {
                             "type": "date"
                         }
-                    },
-                    {
-                        "name": "cost",
-                        "in": "query",
-                        "description": "numeric | min:0",
-                        "schema": {
-                            "type": "decimal"
-                        }
                     }
                 ],
                 "responses": {
@@ -705,14 +697,6 @@
                         "description": "date_format:Y-m-d | after:start_date",
                         "schema": {
                             "type": "date"
-                        }
-                    },
-                    {
-                        "name": "cost",
-                        "in": "query",
-                        "description": "numeric | min:0",
-                        "schema": {
-                            "type": "decimal"
                         }
                     }
                 ],
@@ -1552,14 +1536,6 @@
                         }
                     },
                     {
-                        "name": "cost",
-                        "in": "query",
-                        "description": "numeric",
-                        "schema": {
-                            "type": "decimal"
-                        }
-                    },
-                    {
                         "name": "group_type",
                         "in": "query",
                         "description": "in:SOLO,COUPLE,FAMILY,FRIENDS",
@@ -1600,9 +1576,6 @@
                                             },
                                             "end_date": {
                                                 "type": "string"
-                                            },
-                                            "cost": {
-                                                "type": "integer"
                                             }
                                         },
                                         "type": "object"
@@ -1703,14 +1676,6 @@
                         }
                     },
                     {
-                        "name": "cost",
-                        "in": "query",
-                        "description": "numeric",
-                        "schema": {
-                            "type": "decimal"
-                        }
-                    },
-                    {
                         "name": "group_type",
                         "in": "query",
                         "description": "in:SOLO,COUPLE,FAMILY,FRIENDS",
@@ -1804,41 +1769,6 @@
             }
         },
         "/api/user": {
-            "get": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Find user",
-                "description": "Get user by username or email",
-                "operationId": "user_by_username_email",
-                "parameters": [
-                    {
-                        "name": "username",
-                        "in": "query",
-                        "description": "required_without:email | string | exists:users",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "email",
-                        "in": "query",
-                        "description": "required_without:username | email | exists:users",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation"
-                    },
-                    "422": {
-                        "description": "Error"
-                    }
-                },
-                "deprecated": false
-            },
             "post": {
                 "tags": [
                     "User"
@@ -1950,6 +1880,78 @@
                         "description": "Error"
                     }
                 },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/checkavailability": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Find user",
+                "description": "Check username or email availability",
+                "operationId": "username_email_availability",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "description": "required_without:email | string | exists:users",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "required_without:username | email | exists:users",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/api/user/find/{id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Find user",
+                "description": "Get user by id",
+                "operationId": "user_by_id",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "allowReserved": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
                 "security": [
                     {
                         "bearerAuth": []

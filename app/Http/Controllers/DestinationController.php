@@ -79,14 +79,6 @@ class DestinationController extends Controller
      *             type="date"
      *         )
      *     ),
-     *     @OA\Parameter(
-     *         name="cost",
-     *         in="query",
-     *         description="numeric | min:0",
-     *         @OA\Schema(
-     *             type="decimal"
-     *         )
-     *     ),
      *     @OA\Response(
      *         response=201,
      *         description="Successful operation"
@@ -171,14 +163,6 @@ class DestinationController extends Controller
      *             type="date"
      *         )
      *     ),
-     *     @OA\Parameter(
-     *         name="cost",
-     *         in="query",
-     *         description="numeric | min:0",
-     *         @OA\Schema(
-     *             type="decimal"
-     *         )
-     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation"
@@ -200,7 +184,6 @@ class DestinationController extends Controller
             'location' => 'string|max:100',
             'start_date' => 'date_format:Y-m-d|after:today',
             'end_date' => 'date_format:Y-m-d|after:start_date',
-            'cost'=> 'numeric|min:0',
         ])->validate();
 
         $destination = Destination::findOrFail($request->id);

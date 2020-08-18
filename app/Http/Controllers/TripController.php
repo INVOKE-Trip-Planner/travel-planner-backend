@@ -127,14 +127,6 @@ class TripController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="cost",
-     *         in="query",
-     *         description="numeric",
-     *         @OA\Schema(
-     *             type="decimal"
-     *         )
-     *     ),
-     *     @OA\Parameter(
      *         name="group_type",
      *         in="query",
      *         description="in:SOLO,COUPLE,FAMILY,FRIENDS",
@@ -169,7 +161,6 @@ class TripController extends Controller
      *                                @OA\Property(property="location",  type="string",  ),
      *                                @OA\Property(property="start_date",  type="string",  ),
      *                                @OA\Property(property="end_date",  type="string",  ),
-     *                                @OA\Property(property="cost",  type="integer",  ),
      *                            ),
      *               ),
      *           ),
@@ -195,7 +186,6 @@ class TripController extends Controller
             'origin' => 'string|max:100',
             'start_date' => 'date_format:Y-m-d|after:today',
             'end_date' => 'date_format:Y-m-d|after:start_date',
-            'cost'=>'numeric|min:0',
             'group_type' => 'in:SOLO,COUPLE,FAMILY,FRIENDS',
             'trip_type' => 'in:WORK,LEISURE',
             'trip_banner' => 'image|mimes:jpeg, png, jpg, gif, svg|max:2048',
@@ -205,7 +195,6 @@ class TripController extends Controller
             'destinations.*["location"]' => 'required_with:destinations|string|max:100',
             'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
             'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
-            'destinations.*["cost"]'=> 'numeric|min:0',
             // 'destinations.*["transport"]' => 'array',
             // 'destinations.*["transport"].*["mode"]' => 'in:FLIGHT,FERRY,BUS,TRAIN,OTHER|required_with:destinations.*["transport"]',
             // 'destinations.*["transport"].*["origin"]' => 'required_with:destinations.*["transport"]|string|max:100',
@@ -342,14 +331,6 @@ class TripController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="cost",
-     *         in="query",
-     *         description="numeric",
-     *         @OA\Schema(
-     *             type="decimal"
-     *         )
-     *     ),
-     *     @OA\Parameter(
      *         name="group_type",
      *         in="query",
      *         description="in:SOLO,COUPLE,FAMILY,FRIENDS",
@@ -387,7 +368,6 @@ class TripController extends Controller
             'origin' => 'string|max:100',
             'start_date' => 'date_format:Y-m-d|after:today',
             'end_date' => 'date_format:Y-m-d|after:start_date',
-            'cost'=>'numeric|min:0',
             'group_type' => 'in:SOLO,COUPLE,FAMILY,FRIENDS',
             'trip_type' => 'in:WORK,LEISURE',
             'trip_banner' => ['image', 'mimes:jpeg, png, jpg, gif, svg', 'max:2048'],

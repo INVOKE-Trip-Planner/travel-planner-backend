@@ -55,11 +55,13 @@ Route::group([
         Route::post('itinerary/delete', 'ItineraryController@delete');
         Route::post('batch/itinerary', 'ItineraryController@create_batch');
 
+        Route::get('user/find/{id}', 'UserController@findById');
+
     });
 
     Route::get('accommodation/search', 'AccommodationController@search');
 
     Route::post('register', 'Auth\RegisterController@register');
     Route::post('login', 'Auth\LoginController@login');
-    Route::get('user', 'UserController@find');
+    Route::get('user/checkavailability', 'UserController@checkUsernameEmailAvailability');
 });

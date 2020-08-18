@@ -33,7 +33,7 @@ class Trip extends Model implements Auditable
      * @var array
      */
     protected $with = [
-        'destinations', 'users:id,avatar',
+        'destinations', 'users:id,name,avatar',
     ];
 
     protected $appends = [
