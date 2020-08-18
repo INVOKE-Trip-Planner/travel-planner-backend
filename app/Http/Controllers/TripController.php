@@ -488,7 +488,7 @@ class TripController extends Controller
         //     return $destination;
         // });
 
-        $this->flatten_cost($trips);
+        // $this->flatten_cost($trips);
 
         $execution_time = microtime(true) - $start_time;
         error_log("Execution time of register = $execution_time");

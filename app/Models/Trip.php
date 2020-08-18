@@ -36,6 +36,15 @@ class Trip extends Model implements Auditable
         'destinations', 'users:id,avatar',
     ];
 
+    protected $appends = [
+        'total'
+    ];
+
+    public function getTotalAttribute()
+    {
+        return round($this->destinations()->get()->sum('subtotal'), 2);
+    }
+
     public function getTripNameAttribute($value)
     {
         if ($value === null) {
