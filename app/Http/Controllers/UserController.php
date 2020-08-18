@@ -152,6 +152,74 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
+     *     path="/api/user/search/{query}",
+     *     tags={"User"},
+     *     summary="Search user",
+     *     description="Search users table username, name & email columns",
+     *     operationId="user_by_query",
+     *     security={{"bearerAuth":{}}},
+     *     deprecated=false,
+     *     @OA\Parameter(
+     *          @OA\Schema(type="string"),
+     *          in="path",
+     *          allowReserved=true,
+     *          name="query",
+     *          parameter="query"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error"
+     *     )
+     * )
+     */
+    function search(Request $request, $query) {
+
+        $users = User::select('id', 'name', 'avatar')->search($query)->get();
+
+        return response()->json($users, 200);
+        // return response()->json('Please pass in username or email.', 422);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/user/find/{id}",
+     *     tags={"User"},
+     *     summary="Find user",
+     *     description="Get user by id",
+     *     operationId="user_by_id",
+     *     security={{"bearerAuth":{}}},
+     *     deprecated=false,
+     *     @OA\Parameter(
+     *          @OA\Schema(type="string"),
+     *          in="path",
+     *          allowReserved=true,
+     *          name="id",
+     *          parameter="id"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error"
+     *     )
+     * )
+     */
+    function findById(Request $request, $id) {
+
+        $user = User::findOrFail($id)->only('id', 'avatar', 'name');
+
+        return response()->json($user, 200);
+        // return response()->json('Please pass in username or email.', 422);
+    }
+
+    /**
+     * @OA\Get(
      *     path="/api/user/checkavailability",
      *     tags={"User"},
      *     summary="Find user",
@@ -211,37 +279,4 @@ class UserController extends Controller
         // return response()->json('Please pass in username or email.', 422);
     }
 
-    /**
-     * @OA\Get(
-     *     path="/api/user/find/{id}",
-     *     tags={"User"},
-     *     summary="Find user",
-     *     description="Get user by id",
-     *     operationId="user_by_id",
-     *     security={{"bearerAuth":{}}},
-     *     deprecated=false,
-     *     @OA\Parameter(
-     *          @OA\Schema(type="string"),
-     *          in="path",
-     *          allowReserved=true,
-     *          name="id",
-     *          parameter="id"
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Successful operation"
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Error"
-     *     )
-     * )
-     */
-    function findById(Request $request, $id) {
-
-        $user = User::findOrFail($id)->only('id', 'avatar', 'name');
-
-        return response()->json($user, 200);
-        // return response()->json('Please pass in username or email.', 422);
-    }
 }

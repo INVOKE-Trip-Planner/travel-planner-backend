@@ -56,6 +56,7 @@ Route::group([
         Route::post('batch/itinerary', 'ItineraryController@create_batch');
 
         Route::get('user/find/{id}', 'UserController@findById');
+        Route::get('user/search/{query}', 'UserController@search');
 
     });
 

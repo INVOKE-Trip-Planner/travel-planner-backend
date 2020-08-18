@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use App\Traits\FullTextSearch;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use OwenIt\Auditing\Contracts\Auditable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Laravel\Scout\Searchable;
 
 class User extends Authenticatable implements Auditable, JWTSubject
 {
     use Notifiable;
     use \OwenIt\Auditing\Auditable;
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+    // use Searchable;
+    use FullTextSearch;
 
     /**
      * The attributes that are mass assignable.
@@ -29,7 +33,7 @@ class User extends Authenticatable implements Auditable, JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'created_at', 'updated_at', 'last_login_at', 'last_login_ip', 'email_verified_at', 'pivot', 'laravel_through_key',
+        'password', 'remember_token', 'created_at', 'updated_at', 'last_login_at', 'last_login_ip', 'email_verified_at', 'pivot', 'laravel_through_key', 'relevance_score',
     ];
 
     /**
@@ -39,6 +43,13 @@ class User extends Authenticatable implements Auditable, JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+    ];
+
+    /**
+     * The columns of the full text index
+     */
+    protected $searchable = [
+        'username', 'name', 'email',
     ];
 
     /**
@@ -117,4 +128,17 @@ class User extends Authenticatable implements Auditable, JWTSubject
     {
         return [];
     }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    // public function toSearchableArray()
+    // {
+    //     $array = $this->toArray();
+    //     error_log(print_r($array, true));
+
+    //     return $array;
+    // }
 }

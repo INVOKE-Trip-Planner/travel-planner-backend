@@ -153,7 +153,7 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        // $start_time = microtime(true);
+        $start_time = microtime(true);
 
         Validator::make($request->all(), [
             'username' => ['required', 'string', 'max:25', 'unique:users'],
@@ -186,9 +186,9 @@ class RegisterController extends Controller
         // $token = JWTAuth::attempt($request->only(['username', 'password']));
         // $user = User::find($user->id);
         $user = $user->fresh();
-        
-        // $execution_time = microtime(true) - $start_time;
-        // error_log("Execution time of register = $execution_time");
+
+        $execution_time = microtime(true) - $start_time;
+        error_log("Execution time of register = $execution_time");
 
         return response()->json(compact('token', 'user'), 201);
     }

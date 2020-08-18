@@ -217,7 +217,7 @@
                     {
                         "name": "checkout_minute",
                         "in": "query",
-                        "description": "nnumeric | min:0 | max:59",
+                        "description": "numeric | min:0 | max:59",
                         "schema": {
                             "type": "integer"
                         }
@@ -1887,27 +1887,20 @@
                 ]
             }
         },
-        "/api/user/checkavailability": {
+        "/api/user/search/{query}": {
             "get": {
                 "tags": [
                     "User"
                 ],
-                "summary": "Find user",
-                "description": "Check username or email availability",
-                "operationId": "username_email_availability",
+                "summary": "Search user",
+                "description": "Search users table username, name & email columns",
+                "operationId": "user_by_query",
                 "parameters": [
                     {
-                        "name": "username",
-                        "in": "query",
-                        "description": "required_without:email | string | exists:users",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "email",
-                        "in": "query",
-                        "description": "required_without:username | email | exists:users",
+                        "parameter": "query",
+                        "name": "query",
+                        "in": "path",
+                        "allowReserved": true,
                         "schema": {
                             "type": "string"
                         }
@@ -1921,7 +1914,12 @@
                         "description": "Error"
                     }
                 },
-                "deprecated": false
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/user/find/{id}": {
@@ -1957,6 +1955,43 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/user/checkavailability": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Find user",
+                "description": "Check username or email availability",
+                "operationId": "username_email_availability",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "description": "required_without:email | string | exists:users",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "required_without:username | email | exists:users",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false
             }
         }
     },
