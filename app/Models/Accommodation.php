@@ -40,12 +40,12 @@ class Accommodation extends Model implements Auditable
     protected $appends = [
         'cost',
     ];
-    
+
     public function getCostAttribute()
     {
-        $cost = (float) $this->cost()->first();
+        $cost = $this->cost()->first();
 
-        return $cost ? $cost['cost'] : null;
+        return $cost ? (float) $cost['cost'] : null;
     }
 
     /**

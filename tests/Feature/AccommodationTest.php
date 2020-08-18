@@ -50,6 +50,7 @@ class AccommodationTest extends TestCase
 
         $this->json('POST', 'api/accommodation', $payload, $credentials[$num_users - 1]['header'])
             ->assertStatus(201);
+            // ->assertJson(['yes']);
 
         // $this->assertDatabaseHas('accommodations', $payload);
     }

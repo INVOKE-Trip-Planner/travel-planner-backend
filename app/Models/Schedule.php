@@ -47,9 +47,9 @@ class Schedule extends Model implements Auditable
 
     public function getCostAttribute()
     {
-        $cost = (float) $this->cost()->first();
+        $cost = $this->cost()->first();
 
-        return $cost ? $cost['cost'] : null;
+        return $cost ? (float) $cost['cost'] : null;
     }
 
     /**
