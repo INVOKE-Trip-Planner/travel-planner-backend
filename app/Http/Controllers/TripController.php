@@ -241,8 +241,14 @@ class TripController extends Controller
 
         if ($request->has('destinations')) {
             $request_destinations = $request->destinations;
-            //$request_destinations = $request->only('destinations')['destinations'];
-
+            // $request_destinations = $request->only('destinations')['destinations'];
+            // error_log(print_r($request_destinations[0], true));
+            foreach ($request_destinations as &$destination) {
+                if (is_string($destination)) {
+                    $destination = (array) json_decode($destination);
+                }
+            }
+            // error_log(print_r($request_destinations, true));
             // $request_destinations = array_map(function($arr) use ($trip){
             //     return $arr + ['trip_id' => $trip->id];
             // }, $request_destinations);

@@ -123,8 +123,14 @@ class ItineraryController extends Controller
         $itinerary = $destination->itineraries()->create($request->except(['destination_id', 'schedules']));
         // error_log(print_r($itinerary, true));
 
+        $request_schedules = $request->schedules;
+        foreach ($request_schedules as &$schedule) {
+            if (is_string($schedule)) {
+                $schedule = (array) json_decode($schedule);
+            }
+        }
         // error_log(print_r($request->schedules, true));
-        $schedules = $itinerary->schedules()->createMany($request->schedules);
+        $schedules = $itinerary->schedules()->createMany($request_schedules);
         // error_log(print_r($schedules->toArray(), true));
         $schedule_ids = array_column($schedules->toArray(), 'id');
         $costs = $request->only('schedules.*.cost')['schedules']['*']['cost'];
@@ -256,7 +262,15 @@ class ItineraryController extends Controller
             Cost::destroy($old_costs);
 
             $itinerary->schedules()->delete();
-            $schedules = $itinerary->schedules()->createMany($request->schedules);
+
+            $request_schedules = $request->schedules;
+            foreach ($request_schedules as &$schedule) {
+                if (is_string($schedule)) {
+                    $schedule = (array) json_decode($schedule);
+                }
+            }
+
+            $schedules = $itinerary->schedules()->createMany($request_schedules);
             $schedule_ids = array_column($schedules->toArray(), 'id');
             $costs = $request->only('schedules.*.cost')['schedules']['*']['cost'];
             $new_costs = array_map(function($schedule_id, $cost) {
