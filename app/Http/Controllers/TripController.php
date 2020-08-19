@@ -463,7 +463,7 @@ class TripController extends Controller
 
         $trips = Auth::user()
                     ->trips()
-                    ->orderByRaw(DB::raw("-start_date desc"))
+                    // ->orderByRaw(DB::raw("-start_date desc"))
                     // ->orderBy('start_date')
                     ->get();
                     // ->toArray();

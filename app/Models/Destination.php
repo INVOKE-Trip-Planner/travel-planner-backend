@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Destination extends Model implements Auditable
@@ -61,7 +62,7 @@ class Destination extends Model implements Auditable
      */
     public function transports()
     {
-        return $this->hasMany('App\Models\Transport');
+        return $this->hasMany('App\Models\Transport')->orderByRaw(DB::raw("-departure_date desc"));;
     }
 
     /**
@@ -69,7 +70,7 @@ class Destination extends Model implements Auditable
      */
     public function accommodations()
     {
-        return $this->hasMany('App\Models\Accommodation');
+        return $this->hasMany('App\Models\Accommodation')->orderByRaw(DB::raw("-checkin_date desc"));;
     }
 
     /**
@@ -77,7 +78,7 @@ class Destination extends Model implements Auditable
      */
     public function itineraries()
     {
-        return $this->hasMany('App\Models\Itinerary');
+        return $this->hasMany('App\Models\Itinerary')->orderByRaw(DB::raw("-day desc"));
     }
 
     /**

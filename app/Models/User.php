@@ -6,6 +6,7 @@ use App\Traits\FullTextSearch;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use OwenIt\Auditing\Contracts\Auditable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Laravel\Scout\Searchable;
@@ -57,7 +58,7 @@ class User extends Authenticatable implements Auditable, JWTSubject
      */
     public function trips()
     {
-        return $this->belongsToMany('App\Models\Trip');
+        return $this->belongsToMany('App\Models\Trip')->orderByRaw(DB::raw("-start_date desc"));
     }
 
     /**
