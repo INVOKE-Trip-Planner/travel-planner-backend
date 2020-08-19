@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Auth;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class TripController extends Controller
 {
@@ -462,7 +463,8 @@ class TripController extends Controller
 
         $trips = Auth::user()
                     ->trips()
-                    ->orderBy('start_date')
+                    ->orderByRaw(DB::raw("-start_date desc"))
+                    // ->orderBy('start_date')
                     ->get();
                     // ->toArray();
 
