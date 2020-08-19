@@ -225,8 +225,11 @@ class TripController extends Controller
         $users = [Auth::id()];
 
         if ($request->has('users')) {
-            array_merge($users, $request->users);
+            // error_log(print_r($request->users, true));
+            // error_log(print_r($users, true));
+            $users = array_merge($users, $request->users);
         }
+        // error_log(print_r($users, true));
 
         // attach or sync to manage many to many relationships
         // sync will delete if not exists
