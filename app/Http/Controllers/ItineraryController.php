@@ -270,9 +270,12 @@ class ItineraryController extends Controller
         }
 
         // to get updated values
-        $itinerary = Itinerary::findOrFail($request->id);
+        // $itinerary = Itinerary::findOrFail($request->id);
 
-        return response()->json($itinerary, 200);
+        // return response()->json($itinerary, 200);
+        $response = ['message' => 'The itinerary has been successfully updated.'];
+
+        return response()->json($response, 200);
     }
 
     /**

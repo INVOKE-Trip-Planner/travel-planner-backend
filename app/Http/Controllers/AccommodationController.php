@@ -319,9 +319,12 @@ class AccommodationController extends Controller
         }
 
         // to get updated values
-        $accommodation = Accommodation::findOrFail($request->id);
+        // $accommodation = Accommodation::findOrFail($request->id);
+        // return response()->json($accommodation, 200);
 
-        return response()->json($accommodation, 200);
+        $response = ['message' => 'The accommodation has been successfully updated.'];
+
+        return response()->json($response, 200);
     }
 
     /**

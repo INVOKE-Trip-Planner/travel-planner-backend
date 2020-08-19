@@ -196,7 +196,10 @@ class DestinationController extends Controller
 
         $destination->update($request->all());
 
-        return response()->json($destination, 200);
+        // return response()->json($destination, 200);
+        $response = ['message' => 'The destination has been successfully updated.'];
+
+        return response()->json($response, 200);
     }
 
     /**

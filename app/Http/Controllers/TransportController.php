@@ -376,9 +376,11 @@ class TransportController extends Controller
         }
 
         // to get updated values
-        $transport = Transport::findOrFail($request->id);
+        // $transport = Transport::findOrFail($request->id);
+        $response = ['message' => 'The transport has been successfully updated.'];
 
-        return response()->json($transport, 200);
+        return response()->json($response, 200);
+        // return response()->json($transport, 200);
     }
 
     /**
