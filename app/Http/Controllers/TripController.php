@@ -310,7 +310,7 @@ class TripController extends Controller
      *     @OA\Parameter(
      *         name="trip_name",
      *         in="query",
-     *         description="required | string | max:255",
+     *         description="string | max:255",
      *         required=false,
      *         @OA\Schema(
      *             type="string"
@@ -374,7 +374,7 @@ class TripController extends Controller
     {
         Validator::make($request->all(), [
             'id' => 'required|exists:trips',
-            'trip_name' => 'required|string|max:255',
+            'trip_name' => 'string|max:255',
             'origin' => 'string|max:100',
             'start_date' => 'date_format:Y-m-d|after:today',
             'end_date' => 'date_format:Y-m-d|after:start_date',
