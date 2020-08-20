@@ -175,7 +175,7 @@ class RegisterController extends Controller
 
         if ($request->has('avatar')) {
             $avatarName = $user->id . '_avatar' . time() . '.' .request()->avatar->getClientOriginalExtension();
-            $request->avatar->storeAs('avatars', $avatarName);
+            $request->avatar->storeAs('avatars', $avatarName, 'public');
             $user->avatar = $avatarName;
             $user->save();
         } // else {

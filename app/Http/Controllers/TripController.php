@@ -238,7 +238,7 @@ class TripController extends Controller
 
         if ($request->has('trip_banner')) {
             $bannerName = $trip->id . '_banner' . time() . '.' .request()->trip_banner->getClientOriginalExtension();
-            $request->trip_banner->storeAs('trip_banners', $bannerName);
+            $request->trip_banner->storeAs('trip_banners', $bannerName, 'public');
             $trip->trip_banner = $bannerName;
             $trip->save();
         }
@@ -404,7 +404,7 @@ class TripController extends Controller
 
         if ($request->has('trip_banner')) {
             $bannerName = $trip->id . '_banner' . time() . '.' .request()->trip_banner->getClientOriginalExtension();
-            $request->trip_banner->storeAs('trip_banners', $bannerName);
+            $request->trip_banner->storeAs('trip_banners', $bannerName, 'public');
             $trip->trip_banner = $bannerName;
             $trip->save();
         }
