@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Destination;
 use App\Models\Trip;
 use App\Models\User;
+use App\Rules\DateNotOverlap;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Auth;
@@ -182,6 +183,8 @@ class TripController extends Controller
      */
     public function create(Request $request)
     {
+        $start_time = microtime(true);
+
         Validator::make($request->all(), [
             'trip_name' => 'string|max:255',
             'origin' => 'string|max:100',
@@ -192,7 +195,7 @@ class TripController extends Controller
             'trip_banner' => 'image|mimes:jpeg, png, jpg, gif, svg|max:2048',
             'users' => 'array',
             'users.*' => 'required_unless:users,null|exists:users,id',
-            'destinations' => 'array',
+            // 'destinations' => 'array',
             'destinations.*["location"]' => 'required_with:destinations|string|max:100',
             'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
             'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
@@ -252,6 +255,10 @@ class TripController extends Controller
                     $destination = (array) json_decode($destination);
                 }
             }
+
+            Validator::make(['destinations' => $request_destinations], [
+                'destinations' => new DateNotOverlap('start_date', 'end_date'),
+            ])->validate();
             // error_log(print_r($request_destinations, true));
             // $request_destinations = array_map(function($arr) use ($trip){
             //     return $arr + ['trip_id' => $trip->id];
@@ -272,6 +279,9 @@ class TripController extends Controller
         // $trip = $this->get_destinations_details($trip);
 
         // error_log(print_r($trip, true));
+
+        $execution_time = microtime(true) - $start_time;
+        error_log("Execution time of create trip = $execution_time");
 
         return response()->json($trip, 201);
     }
