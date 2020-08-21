@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Itinerary extends Model implements Auditable
@@ -54,7 +55,7 @@ class Itinerary extends Model implements Auditable
      */
     public function schedules()
     {
-        return $this->hasMany('App\Models\Schedule');
+        return $this->hasMany('App\Models\Schedule')->orderBy("hour")->orderBy("minute");
     }
 
     /**

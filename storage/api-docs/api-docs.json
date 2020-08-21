@@ -1645,7 +1645,7 @@
                     {
                         "name": "trip_name",
                         "in": "query",
-                        "description": "required | string | max:255",
+                        "description": "string | max:255",
                         "required": false,
                         "schema": {
                             "type": "string"

@@ -60,7 +60,7 @@ class Trip extends Model implements Auditable
      */
     public function destinations()
     {
-        return $this->hasMany('App\Models\Destination')->orderByRaw(DB::raw("-start_date desc"));;
+        return $this->hasMany('App\Models\Destination')->orderByRaw(DB::raw("-start_date desc"));
     }
 
     /**
