@@ -14,64 +14,6 @@ use Illuminate\Support\Facades\DB;
 
 class TripController extends Controller
 {
-    private function flatten_cost($trips) {
-        // TODO: optimize the algorithm
-        foreach($trips as $trip) {
-            $trip_cost = [];
-            foreach($trip->destinations as $destination) {
-                $destination_cost = [];
-                // $transport_cost = [];
-                // $accommodation_cost = [];
-                // $itinerary_cost = [];
-
-                foreach($destination->transports as $transport) {
-                    // error_log( $transport->cost['cost']);
-                    // $transport->total = $transport->cost['cost'];
-                    // $transport->cost = $transport->cost()->first()['cost'];
-                    // array_push($transport_cost, $transport->cost);
-                    array_push($destination_cost, $transport->cost);
-                    array_push($trip_cost, $transport->cost);
-                }
-
-                foreach($destination->accommodations as $accommodation) {
-                    // $accommodation->cost = $accommodation->cost()->first()['cost'];
-                    // array_push($transport_cost, $accommodation->cost);
-                    array_push($destination_cost, $accommodation->cost);
-                    array_push($trip_cost, $accommodation->cost);
-                }
-
-                foreach($destination->itineraries as $itinerary) {
-                    foreach($itinerary->schedules as $schedule) {
-                        // error_log($schedule->cost());
-                        // $schedule->cost = $schedule->cost()->first()['cost'];
-                        // array_push($itinerary_cost, $schedule->cost);
-                        array_push($destination_cost, $schedule->cost);
-                        array_push($trip_cost, $schedule->cost);
-                    }
-                }
-                // $destination->transports->cost = sprintf("%01.2f", array_sum($transport_cost));
-                // $destination->accommodations->cost = sprintf("%01.2f", array_sum($accommodation_cost));
-                // $destination->itineraries->cost = sprintf("%01.2f", array_sum($itinerary_cost));
-
-                $destination->cost = sprintf("%01.2f", array_sum($destination_cost));
-                // $trip_cost = array_merge($trip_cost, $destination_cost);
-            }
-            $trip->cost = sprintf("%01.2f", array_sum($trip_cost));
-        }
-        // array_walk_recursive(
-        //     $trips,
-        //     function(&$value, $key) {
-        //         if ($key === 'cost') {
-        //             $value['cost'] = $value['cost']['cost'];
-        //             // Arr::flatten($value);
-        //         }
-        //     }
-        // );
-
-        // error_log(print_r($trips->pluck('destinations.*.transports.*.cost')->all(), true));
-
-        return $trips;
-    }
 
     /**
      * @OA\Post(
@@ -185,6 +127,22 @@ class TripController extends Controller
     {
         $start_time = microtime(true);
 
+        if ($request->has('destinations')) {
+            $request_destinations = $request->destinations;
+            foreach ($request_destinations as &$destination) {
+                if (is_string($destination)) {
+                    $destination = (array) json_decode($destination);
+                }
+            }
+
+            Validator::make(['destinations' => $request_destinations], [
+                'destinations' => ['array', new DateNotOverlap('start_date', 'end_date')],
+                'destinations.*["location"]' => 'required_with:destinations|string|max:100',
+                'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
+                'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
+            ])->validate();
+        }
+
         Validator::make($request->all(), [
             'trip_name' => 'string|max:255',
             'origin' => 'string|max:100',
@@ -196,9 +154,10 @@ class TripController extends Controller
             'users' => 'array',
             'users.*' => 'required_unless:users,null|exists:users,id',
             // 'destinations' => 'array',
-            'destinations.*["location"]' => 'required_with:destinations|string|max:100',
-            'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
-            'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
+            // 'destinations' => ['array', new DateNotOverlap('start_date', 'end_date')],
+            // 'destinations.*["location"]' => 'required_with:destinations|string|max:100',
+            // 'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
+            // 'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
             // 'destinations.*["transport"]' => 'array',
             // 'destinations.*["transport"].*["mode"]' => 'in:FLIGHT,FERRY,BUS,TRAIN,OTHER|required_with:destinations.*["transport"]',
             // 'destinations.*["transport"].*["origin"]' => 'required_with:destinations.*["transport"]|string|max:100',
@@ -247,18 +206,14 @@ class TripController extends Controller
         }
 
         if ($request->has('destinations')) {
-            $request_destinations = $request->destinations;
             // $request_destinations = $request->only('destinations')['destinations'];
             // error_log(print_r($request_destinations[0], true));
-            foreach ($request_destinations as &$destination) {
-                if (is_string($destination)) {
-                    $destination = (array) json_decode($destination);
-                }
-            }
+            // foreach ($request_destinations as &$destination) {
+            //     if (is_string($destination)) {
+            //         $destination = (array) json_decode($destination);
+            //     }
+            // }
 
-            Validator::make(['destinations' => $request_destinations], [
-                'destinations' => new DateNotOverlap('start_date', 'end_date'),
-            ])->validate();
             // error_log(print_r($request_destinations, true));
             // $request_destinations = array_map(function($arr) use ($trip){
             //     return $arr + ['trip_id' => $trip->id];
@@ -393,13 +348,10 @@ class TripController extends Controller
             'trip_banner' => ['image', 'mimes:jpeg, png, jpg, gif, svg', 'max:2048'],
             'users' => 'array',
             'users.*' => 'required_unless:users,null|exists:users,id',
-
-            // 'destinations' => 'array',
-            // 'destinations.*["location"]' => 'required_with:destinations|string|max:100',
-            // 'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
-            // 'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
-            // 'destinations.*["cost"]'=> 'numeric|min:0',
-            // 'destinations.*["transport"]' => 'array',
+            'destinations' => ['array', new DateNotOverlap('start_date', 'end_date')],
+            'destinations.*["location"]' => 'required_with:destinations|string|max:100',
+            'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
+            'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
         ])->validate();
 
         $trip = Trip::findOrFail(request('id'));
@@ -553,4 +505,62 @@ class TripController extends Controller
         $response = ['message' => 'Trip is successfully deleted.'];
         return response()->json($response, 204);
     }
+
+    // private function flatten_cost($trips) {
+    //     foreach($trips as $trip) {
+    //         $trip_cost = [];
+    //         foreach($trip->destinations as $destination) {
+    //             $destination_cost = [];
+    //             // $transport_cost = [];
+    //             // $accommodation_cost = [];
+    //             // $itinerary_cost = [];
+
+    //             foreach($destination->transports as $transport) {
+    //                 // error_log( $transport->cost['cost']);
+    //                 // $transport->total = $transport->cost['cost'];
+    //                 // $transport->cost = $transport->cost()->first()['cost'];
+    //                 // array_push($transport_cost, $transport->cost);
+    //                 array_push($destination_cost, $transport->cost);
+    //                 array_push($trip_cost, $transport->cost);
+    //             }
+
+    //             foreach($destination->accommodations as $accommodation) {
+    //                 // $accommodation->cost = $accommodation->cost()->first()['cost'];
+    //                 // array_push($transport_cost, $accommodation->cost);
+    //                 array_push($destination_cost, $accommodation->cost);
+    //                 array_push($trip_cost, $accommodation->cost);
+    //             }
+
+    //             foreach($destination->itineraries as $itinerary) {
+    //                 foreach($itinerary->schedules as $schedule) {
+    //                     // error_log($schedule->cost());
+    //                     // $schedule->cost = $schedule->cost()->first()['cost'];
+    //                     // array_push($itinerary_cost, $schedule->cost);
+    //                     array_push($destination_cost, $schedule->cost);
+    //                     array_push($trip_cost, $schedule->cost);
+    //                 }
+    //             }
+    //             // $destination->transports->cost = sprintf("%01.2f", array_sum($transport_cost));
+    //             // $destination->accommodations->cost = sprintf("%01.2f", array_sum($accommodation_cost));
+    //             // $destination->itineraries->cost = sprintf("%01.2f", array_sum($itinerary_cost));
+
+    //             $destination->cost = sprintf("%01.2f", array_sum($destination_cost));
+    //             // $trip_cost = array_merge($trip_cost, $destination_cost);
+    //         }
+    //         $trip->cost = sprintf("%01.2f", array_sum($trip_cost));
+    //     }
+    //     // array_walk_recursive(
+    //     //     $trips,
+    //     //     function(&$value, $key) {
+    //     //         if ($key === 'cost') {
+    //     //             $value['cost'] = $value['cost']['cost'];
+    //     //             // Arr::flatten($value);
+    //     //         }
+    //     //     }
+    //     // );
+
+    //     // error_log(print_r($trips->pluck('destinations.*.transports.*.cost')->all(), true));
+
+    //     return $trips;
+    // }
 }

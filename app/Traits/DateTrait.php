@@ -6,6 +6,10 @@ use DateTime;
 
 trait TestTrait
 {
+
+    /**
+     * Sample Code
+     */
     private function checkOverlappingDates()
     {
         $ranges = array(

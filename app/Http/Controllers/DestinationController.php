@@ -44,7 +44,7 @@ class DestinationController extends Controller
      *     description="Add a destination to trip after creation",
      *     operationId="create_destination",
      *     security={{"bearerAuth":{}}},
-     *     deprecated=false,
+     *     deprecated=true,
      *     @OA\Parameter(
      *         name="trip_id",
      *         in="query",
@@ -128,7 +128,7 @@ class DestinationController extends Controller
      *     description="Update destination",
      *     operationId="update_destination",
      *     security={{"bearerAuth":{}}},
-     *     deprecated=false,
+     *     deprecated=true,
      *     @OA\Parameter(
      *         name="id",
      *         in="query",
@@ -210,7 +210,7 @@ class DestinationController extends Controller
      *     description="Delete destination",
      *     operationId="delete_destination",
      *     security={{"bearerAuth":{}}},
-     *     deprecated=false,
+     *     deprecated=true,
      *     @OA\Parameter(
      *         name="id",
      *         in="query",

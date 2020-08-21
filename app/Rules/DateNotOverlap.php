@@ -28,6 +28,16 @@ class DateNotOverlap implements Rule
     public function passes($attribute, $value)
     {
         $intersect = true;
+
+        // check if values is array
+        // foreach ($value as &$v) {
+        //     if (is_string($v)) {
+        //         $v = (array) json_decode($v);
+        //     } else {
+        //         break;
+        //     }
+        // }
+
         for($i=0;$i<count($value); $i++){
             for($j=$i+1;$j<count($value); $j++){
                 // Does not allow ranges that 'touch'
