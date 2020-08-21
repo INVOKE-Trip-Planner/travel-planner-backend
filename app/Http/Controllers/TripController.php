@@ -337,6 +337,33 @@ class TripController extends Controller
      */
     public function update(Request $request)
     {
+        if ($request->has('destinations')) {
+            $request_destinations = $request->destinations;
+            $destination_ids = [];
+            $destination_update = [];
+            $destination_create = [];
+
+            foreach ($request_destinations as &$destination) {
+                if (is_string($destination)) {
+                    $destination = (array) json_decode($destination);
+                }
+                if (isset($destination['id'])) {
+                    array_push($destination_ids, $destination['id']);
+                    array_push($destination_update, $destination);
+                } else {
+                    array_push($destination_create, $destination);
+                }
+            }
+
+            Validator::make(['destinations' => $request_destinations], [
+                'destinations' => ['array', new DateNotOverlap('start_date', 'end_date')],
+                'destinations.*["id"]' => 'numeric|exists:destinations,id',
+                'destinations.*["location"]' => 'required_with:destinations|string|max:100',
+                'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
+                'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
+            ])->validate();
+        }
+
         Validator::make($request->all(), [
             'id' => 'required|exists:trips',
             'trip_name' => 'string|max:255',
@@ -348,10 +375,6 @@ class TripController extends Controller
             'trip_banner' => ['image', 'mimes:jpeg, png, jpg, gif, svg', 'max:2048'],
             'users' => 'array',
             'users.*' => 'required_unless:users,null|exists:users,id',
-            'destinations' => ['array', new DateNotOverlap('start_date', 'end_date')],
-            'destinations.*["location"]' => 'required_with:destinations|string|max:100',
-            'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
-            'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
         ])->validate();
 
         $trip = Trip::findOrFail(request('id'));
@@ -377,11 +400,15 @@ class TripController extends Controller
             $trip->users()->sync($users);
         }
 
-        // if ($request->has('destinations')) {
-        //     $request_destinations = $request->only('destinations')['destinations'];
-        //     $trip->destinations()->delete();
-        //     $trip->destinations()->createMany($request_destinations);
-        // }
+        if ($request->has('destinations')) {
+            $request_destinations = $request->only('destinations')['destinations'];
+            $trip->destinations()->whereNotIn('destinations.id', $destination_ids)->delete();
+            // $trip->destinations()->update($destination_update);
+            foreach($destination_update as $destination) {
+                $trip->destinations()->find($destination['id'])->fill($destination)->save();
+            }
+            $trip->destinations()->createMany($destination_create);
+        }
 
         $trip->update($data);
 
