@@ -442,16 +442,26 @@ class TripController extends Controller
         // Eager Loading ??
         // $trips = Trip::with(['user', 'destination', 'transport', 'accommodation', 'itinerary'])->get();
         // $users = User::select('id', 'avatar')->with('trips')->get();
-
+        // error_log(print_r(Trip::leftJoin('destinations', 'trips.id', '=', 'destinations.trip_id')->orderByRaw(DB::raw("-start_date desc"))->groupBy('trips.id')->toSql(), true));
+        // $agg = Trip::with('destinations')->all();
         $trips = Auth::user()
                     ->trips()
-                    // ->orderByRaw(DB::raw("-start_date desc"))
+                    ->leftJoin(DB::raw('(select min(start_date) as start_date, trips.id from trips left join destinations on trips.id = destinations.trip_id group by trips.id) trip_agg'),
+                    function($join) {
+                        $join->on('trips.id', '=', 'trip_agg.id');
+                    })
+                    // ->groupBy('trips.id')
+                    ->orderByRaw(DB::raw("-start_date desc"))
                     // ->orderBy('start_date')
-                    ->get()
-                    ->sortByDesc('-start_date')
-                    ->values();
+                    ->get();
+                    // ->sortByDesc(function($trip) {
+                    //     return -1 * (int) $trip->start_date;
+                    // });
+                    // ->sortByDesc('-start_date')
+                    // ->values()
                     // ->toArray();
-
+        // $trips = Trip::leftJoin('destinations', 'trips.id', '=', 'destinations.trip_id')->orderByRaw(DB::raw("-start_date desc"))->groupBy('trips.id')->get()->toArray();
+        // error_log(print_r($agg->toArray(), true));
         // foreach ($trips as $trip) {
         //     $trip->users = $trip->users()->select('id', 'avatar')->get();
         //     $trip->destinations = $trip->destinations()->get();
@@ -469,7 +479,7 @@ class TripController extends Controller
         // $this->flatten_cost($trips);
 
         $execution_time = microtime(true) - $start_time;
-        error_log("Execution time of register = $execution_time");
+        error_log("Execution time of get trips = $execution_time");
 
         return response()->json($trips, 200);
     }

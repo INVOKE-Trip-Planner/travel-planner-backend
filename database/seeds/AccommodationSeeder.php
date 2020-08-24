@@ -15,15 +15,17 @@ class AccommodationSeeder extends Seeder
     public function run()
     {
         $faker = \Faker\Factory::create();
-        $destination_count = Destination::all()->count();
+        $destinations = Destination::all()->toArray();
         $accommodations = [];
 
-        for ($i = 1; $i <= $destination_count; $i ++ ) {
+        foreach($destinations as $destination) {
             foreach(range(1, $faker->numberBetween($min=1, $max=3)) as $j) {
                 array_push($accommodations, [
-                    'destination_id' => $i,
+                    'destination_id' => $destination['id'],
                     'accommodation_name' => $faker->company . ' ' . $faker->randomElement($array = ['Hotel', 'Resort', 'Suite', 'Homestay', 'Hostel']),
                     'booking_id' => $faker->bothify('??#####?'),
+                    'checkin_date' => $destination['start_date'],
+                    'checkout_date' => $destination['end_date'],
                 ]);
             }
         }

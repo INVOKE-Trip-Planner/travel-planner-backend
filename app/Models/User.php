@@ -58,7 +58,7 @@ class User extends Authenticatable implements Auditable, JWTSubject
      */
     public function trips()
     {
-        return $this->belongsToMany('App\Models\Trip'); //->orderByRaw(DB::raw("-start_date desc"));
+        return $this->belongsToMany('App\Models\Trip');
     }
 
     /**
@@ -67,7 +67,7 @@ class User extends Authenticatable implements Auditable, JWTSubject
     public function destinations()
     {
         // return $this->hasManyThrough('App\Models\Destination', 'App\Models\Trip');
-        return $this->hasManyDeep('App\Models\Destination', ['trip_user', 'App\Models\Trip']);
+        return $this->hasManyDeep('App\Models\Destination', ['trip_user', 'App\Models\Trip']); //->orderByRaw(DB::raw("-destinations.start_date desc"));
     }
 
     /**
