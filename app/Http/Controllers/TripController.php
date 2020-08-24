@@ -448,7 +448,8 @@ class TripController extends Controller
                     // ->orderByRaw(DB::raw("-start_date desc"))
                     // ->orderBy('start_date')
                     ->get()
-                    ->sortBy('start_date');
+                    ->sortByDesc('-start_date')
+                    ->values();
                     // ->toArray();
 
         // foreach ($trips as $trip) {

@@ -1520,22 +1520,6 @@
                         }
                     },
                     {
-                        "name": "start_date",
-                        "in": "query",
-                        "description": "date_format:Y-m-d | after:today",
-                        "schema": {
-                            "type": "date"
-                        }
-                    },
-                    {
-                        "name": "end_date",
-                        "in": "query",
-                        "description": "date_format:Y-m-d | after:start_date",
-                        "schema": {
-                            "type": "date"
-                        }
-                    },
-                    {
                         "name": "group_type",
                         "in": "query",
                         "description": "in:SOLO,COUPLE,FAMILY,FRIENDS",
@@ -1660,22 +1644,6 @@
                         }
                     },
                     {
-                        "name": "start_date",
-                        "in": "query",
-                        "description": "date_format:Y-m-d | after:today",
-                        "schema": {
-                            "type": "date"
-                        }
-                    },
-                    {
-                        "name": "end_date",
-                        "in": "query",
-                        "description": "date_format:Y-m-d | after:start_date",
-                        "schema": {
-                            "type": "date"
-                        }
-                    },
-                    {
                         "name": "group_type",
                         "in": "query",
                         "description": "in:SOLO,COUPLE,FAMILY,FRIENDS",
@@ -1689,6 +1657,40 @@
                         "description": "in:WORK,LEISURE",
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    {
+                        "name": "body",
+                        "in": "query",
+                        "required": false,
+                        "explode": true,
+                        "schema": {
+                            "properties": {
+                                "users": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "destinations": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "location": {
+                                                "type": "string"
+                                            },
+                                            "start_date": {
+                                                "type": "string"
+                                            },
+                                            "end_date": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            },
+                            "type": "object"
                         }
                     }
                 ],
