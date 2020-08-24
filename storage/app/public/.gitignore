@@ -1,6 +1,10 @@
 *
+avatars/*
+trip_banners/*
 !.gitignore
+!trip_banners
 !trip_banners/placeholder.jpg
+!avatars
 !avatars/placeholder.jpg
 !avatars/placeholder.png
 !avatars/test0000.jpg
