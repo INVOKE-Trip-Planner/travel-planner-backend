@@ -16,7 +16,7 @@ class Trip extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'trip_name', 'created_by', 'start_date', 'end_date', 'cost', 'origin', 'group_type', 'trip_type', 'trip_banner',
+        'trip_name', 'created_by', 'cost', 'origin', 'group_type', 'trip_type', 'trip_banner', // 'start_date', 'end_date',
     ];
 
     /**
@@ -38,12 +38,22 @@ class Trip extends Model implements Auditable
     ];
 
     protected $appends = [
-        'total'
+        'total', 'start_date', 'end_date',
     ];
 
     public function getTotalAttribute()
     {
         return round($this->destinations()->get()->sum('subtotal'), 2);
+    }
+
+    public function getStartDateAttribute()
+    {
+        return $this->destinations()->get()->min('start_date');
+    }
+
+    public function getEndDateAttribute()
+    {
+        return $this->destinations()->get()->max('end_date');
     }
 
     public function getTripNameAttribute($value)

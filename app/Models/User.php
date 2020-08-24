@@ -58,7 +58,7 @@ class User extends Authenticatable implements Auditable, JWTSubject
      */
     public function trips()
     {
-        return $this->belongsToMany('App\Models\Trip')->orderByRaw(DB::raw("-start_date desc"));
+        return $this->belongsToMany('App\Models\Trip'); //->orderByRaw(DB::raw("-start_date desc"));
     }
 
     /**

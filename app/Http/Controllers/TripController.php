@@ -55,22 +55,6 @@ class TripController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="start_date",
-     *         in="query",
-     *         description="date_format:Y-m-d | after:today",
-     *         @OA\Schema(
-     *             type="date"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="end_date",
-     *         in="query",
-     *         description="date_format:Y-m-d | after:start_date",
-     *         @OA\Schema(
-     *             type="date"
-     *         )
-     *     ),
-     *     @OA\Parameter(
      *         name="group_type",
      *         in="query",
      *         description="in:SOLO,COUPLE,FAMILY,FRIENDS",
@@ -146,8 +130,8 @@ class TripController extends Controller
         Validator::make($request->all(), [
             'trip_name' => 'string|max:255',
             'origin' => 'string|max:100',
-            'start_date' => 'date_format:Y-m-d|after:today',
-            'end_date' => 'date_format:Y-m-d|after:start_date',
+            // 'start_date' => 'date_format:Y-m-d|after:today',
+            // 'end_date' => 'date_format:Y-m-d|after:start_date',
             'group_type' => 'in:SOLO,COUPLE,FAMILY,FRIENDS',
             'trip_type' => 'in:WORK,LEISURE',
             'trip_banner' => 'image|mimes:jpeg, png, jpg, gif, svg|max:2048',
@@ -290,22 +274,6 @@ class TripController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="start_date",
-     *         in="query",
-     *         description="date_format:Y-m-d | after:today",
-     *         @OA\Schema(
-     *             type="date"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="end_date",
-     *         in="query",
-     *         description="date_format:Y-m-d | after:start_date",
-     *         @OA\Schema(
-     *             type="date"
-     *         )
-     *     ),
-     *     @OA\Parameter(
      *         name="group_type",
      *         in="query",
      *         description="in:SOLO,COUPLE,FAMILY,FRIENDS",
@@ -321,6 +289,29 @@ class TripController extends Controller
      *             type="string"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *           name="body",
+     *           in="query",
+     *           required=false,
+     *           explode=true,
+     *           @OA\Schema(
+     *               @OA\Property(property="users",
+     *                            type="array",
+     *                            @OA\Items(
+     *                                type="integer",
+     *                            ),
+     *               ),
+     *               @OA\Property(property="destinations",
+     *                            type="array",
+     *                            @OA\Items(
+     *                                type="object",
+     *                                @OA\Property(property="location",  type="string",  ),
+     *                                @OA\Property(property="start_date",  type="string",  ),
+     *                                @OA\Property(property="end_date",  type="string",  ),
+     *                            ),
+     *               ),
+     *           ),
+     *       ),
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation"
@@ -368,8 +359,8 @@ class TripController extends Controller
             'id' => 'required|exists:trips',
             'trip_name' => 'string|max:255',
             'origin' => 'string|max:100',
-            'start_date' => 'date_format:Y-m-d|after:today',
-            'end_date' => 'date_format:Y-m-d|after:start_date',
+            // 'start_date' => 'date_format:Y-m-d|after:today',
+            // 'end_date' => 'date_format:Y-m-d|after:start_date',
             'group_type' => 'in:SOLO,COUPLE,FAMILY,FRIENDS',
             'trip_type' => 'in:WORK,LEISURE',
             'trip_banner' => ['image', 'mimes:jpeg, png, jpg, gif, svg', 'max:2048'],
@@ -456,7 +447,8 @@ class TripController extends Controller
                     ->trips()
                     // ->orderByRaw(DB::raw("-start_date desc"))
                     // ->orderBy('start_date')
-                    ->get();
+                    ->get()
+                    ->sortBy('start_date');
                     // ->toArray();
 
         // foreach ($trips as $trip) {
