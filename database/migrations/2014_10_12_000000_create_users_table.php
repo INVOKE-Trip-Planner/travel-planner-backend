@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->timestamp('last_login_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('last_login_ip')->nullable();
-            $table->string('avatar')->default('placeholder.png');
+            $table->string('avatar')->default('placeholder.jpg');
             $table->enum('gender', ['MALE', 'FEMALE', 'OTHER'])->nullable();
             $table->date('birth_date')->nullable();
             // $table->string('currency')->nullable();

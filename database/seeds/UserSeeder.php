@@ -14,6 +14,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         $faker = \Faker\Factory::create();
+        $faker->seed(crc32('planner'));
 
         $users = [];
 
@@ -24,6 +25,7 @@ class UserSeeder extends Seeder
                 'name' => $faker->name,
                 'email' => "test$index@gmail.com", // $faker->email
                 'password' => Hash::make("test$index"),
+                'avatar' => "test$index.jpg"
             ]);
         }
 
