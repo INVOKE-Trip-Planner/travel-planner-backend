@@ -17,6 +17,11 @@ class TripSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
 
+        $trips = [];
+
+        $destinations = [];
+        $destination_counter = 1;
+
         $transports = [];
 
         for ($i = 1; $i <= 20; $i++) {
@@ -34,7 +39,7 @@ class TripSeeder extends Seeder
                     continue;
                 } else if ($j == 1) {
                     $trip = Trip::create([
-                        'trip_name' => 'Trip to ' . $cities[1],
+                        // 'trip_name' => 'Trip to ' . $cities[1],
                         'origin' => $cities[0],
                         'created_by' => $creator,
                     ]);
@@ -42,14 +47,14 @@ class TripSeeder extends Seeder
                     $trip->users()->sync(array_merge($faker->randomElements($array = range(1, 10), $count = $faker->numberBetween($min=0, $max=4)), [$creator]));
                 }
 
-                $destination = Destination::create([
-                    'trip_id' => $trip->id,
+                array_push($destinations,[
+                    'trip_id' => $i,
                     'location' => $cities[$j],
                 ]);
 
                 // transport to destination
                 array_push($transports, [
-                    'destination_id' => $destination->id,
+                    'destination_id' => $destination_counter,
                     'mode' => $faker->randomElement($array = ['FLIGHT', 'FERRY', 'BUS', 'TRAIN', 'OTHER']),
                     'origin' => $cities[$j - 1],
                     'destination' => $cities[$j],
@@ -59,18 +64,21 @@ class TripSeeder extends Seeder
                 // transport back to origin
                 if ($j === $n - 1) {
                     array_push($transports, [
-                        'destination_id' => $destination->id,
+                        'destination_id' => $destination_counter,
                         'mode' => $faker->randomElement($array = ['FLIGHT', 'FERRY', 'BUS', 'TRAIN', 'OTHER']),
                         'origin' => $cities[$j],
                         'destination' => $cities[0],
                         'booking_id' => $faker->bothify('???###'),
                     ]);
                 }
+
+                $destination_counter++;
             }
 
 
         }
 
+        Destination::insert($destinations);
         Transport::insert($transports);
 
         $transport_count = Transport::all()->count();

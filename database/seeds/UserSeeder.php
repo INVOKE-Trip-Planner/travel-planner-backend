@@ -18,11 +18,12 @@ class UserSeeder extends Seeder
         $users = [];
 
         for ($i = 0; $i < 10; $i++) {
+            $index =  str_pad($i, 4, '0', STR_PAD_LEFT);
             array_push($users, [
-                'username' => "test000$i",
+                'username' => "test$index",
                 'name' => $faker->name,
-                'email' => "test000$i@gmail.com", // $faker->email
-                'password' => Hash::make("test000$i"),
+                'email' => "test$index@gmail.com", // $faker->email
+                'password' => Hash::make("test$index"),
             ]);
         }
 

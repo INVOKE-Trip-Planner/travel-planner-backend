@@ -396,7 +396,9 @@ class TripController extends Controller
 
         if ($request->has('users')) {
             $users = [Auth::id()];
-            array_merge($users, $request->users);
+            $users = array_merge($users, $request->users);
+            // error_log(print_r($request->users, true));
+            // error_log(print_r($users, true));
             $trip->users()->sync($users);
         }
 
