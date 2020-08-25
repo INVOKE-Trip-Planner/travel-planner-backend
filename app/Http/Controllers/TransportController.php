@@ -84,7 +84,7 @@ class TransportController extends Controller
      *     @OA\Parameter(
      *         name="departure_date",
      *         in="query",
-     *         description="date_format:Y-m-d | after:today",
+     *         description="date_format:Y-m-d | after_or_equal:today",
      *         @OA\Schema(
      *             type="date"
      *         )
@@ -92,7 +92,7 @@ class TransportController extends Controller
      *     @OA\Parameter(
      *         name="arrival_date",
      *         in="query",
-     *         description="date_format:Y-m-d | after:departure_date",
+     *         description="date_format:Y-m-d | after_or_equal:departure_date",
      *         @OA\Schema(
      *             type="date"
      *         )
@@ -175,8 +175,8 @@ class TransportController extends Controller
             'mode' => 'required|in:FLIGHT,FERRY,BUS,TRAIN,OTHER',
             'origin' => 'required|string|max:100',
             'destination' => 'required|string|max:100',
-            'departure_date' => 'date_format:Y-m-d|after:today',
-            'arrival_date' => 'date_format:Y-m-d|after:departure_date',
+            'departure_date' => 'date_format:Y-m-d|after_or_equal:today',
+            'arrival_date' => 'date_format:Y-m-d|after_or_equal:departure_date',
             'departure_hour' => 'numeric|min:0|max:23',
             'arrival_hour' => 'numeric|min:0|max:23',
             'departure_minute' => 'numeric|min:0|max:59',
@@ -254,7 +254,7 @@ class TransportController extends Controller
      *     @OA\Parameter(
      *         name="departure_date",
      *         in="query",
-     *         description="date_format:Y-m-d | after:today",
+     *         description="date_format:Y-m-d | after_or_equal:today",
      *         @OA\Schema(
      *             type="date"
      *         )
@@ -262,7 +262,7 @@ class TransportController extends Controller
      *     @OA\Parameter(
      *         name="arrival_date",
      *         in="query",
-     *         description="date_format:Y-m-d | after:departure_date",
+     *         description="date_format:Y-m-d | after_or_equal:departure_date",
      *         @OA\Schema(
      *             type="date"
      *         )
@@ -345,8 +345,8 @@ class TransportController extends Controller
             'mode' => 'in:FLIGHT,FERRY,BUS,TRAIN,OTHER',
             'origin' => 'string|max:100',
             'destination' => 'string|max:100',
-            'departure_date' => 'date_format:Y-m-d|after:today',
-            'arrival_date' => 'date_format:Y-m-d|after:departure_date',
+            'departure_date' => 'date_format:Y-m-d|after_or_equal:today',
+            'arrival_date' => 'date_format:Y-m-d|after_or_equal:departure_date',
             'departure_hour' => 'numeric|min:0|max:23',
             'arrival_hour' => 'numeric|min:0|max:23',
             'departure_minute' => 'numeric|min:0|max:59',
@@ -499,8 +499,8 @@ class TransportController extends Controller
             'transports.*["mode"]' => 'in:FLIGHT,FERRY,BUS,TRAIN,OTHER|required_with:transports',
             'transports.*["origin"]' => 'required_with:transports|string|max:100',
             'transports.*["destination"]' => 'required_with:transports|string|max:100',
-            'transports.*["departure_time"]' => 'date_format:Y-m-d H:i|after:today',
-            'transports.*["arrival_time"]' => 'date_format:Y-m-d H:i|after:departure_time',
+            'transports.*["departure_time"]' => 'date_format:Y-m-d H:i|after_or_equal:today',
+            'transports.*["arrival_time"]' => 'date_format:Y-m-d H:i|after_or_equal:departure_time',
             'transports.*["cost"]'=> 'numeric|min:0',
             'transports.*["operator"]' => 'string|max:100',
             'transports.*["booing_id"]'=> 'string|max:20',

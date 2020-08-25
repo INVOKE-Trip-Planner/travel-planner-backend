@@ -66,7 +66,7 @@ class AccommodationController extends Controller
      *     @OA\Parameter(
      *         name="checkin_date",
      *         in="query",
-     *         description="date_format:Y-m-d | after:today",
+     *         description="date_format:Y-m-d | after_or_equal:today",
      *         @OA\Schema(
      *             type="date"
      *         )
@@ -146,7 +146,7 @@ class AccommodationController extends Controller
         Validator::make($request->all(), [
             'destination_id' => 'required|exists:destinations,id',
             'accommodation_name' => 'required|string|max:100',
-            'checkin_date' => 'date_format:Y-m-d|after:today',
+            'checkin_date' => 'date_format:Y-m-d|after_or_equal:today',
             'checkout_date' => 'date_format:Y-m-d|after:checkin_date',
             'checkin_hour' => 'numeric|min:0|max:23',
             'checkout_hour' => 'numeric|min:0|max:23',
@@ -206,7 +206,7 @@ class AccommodationController extends Controller
      *     @OA\Parameter(
      *         name="checkin_date",
      *         in="query",
-     *         description="date_format:Y-m-d | after:today",
+     *         description="date_format:Y-m-d | after_or_equal:today",
      *         @OA\Schema(
      *             type="date"
      *         )
@@ -286,7 +286,7 @@ class AccommodationController extends Controller
         Validator::make($request->all(), [
             'id' => 'required|exists:accommodations,id',
             'accommodation_name' => 'string|max:100',
-            'checkin_date' => 'date_format:Y-m-d|after:today',
+            'checkin_date' => 'date_format:Y-m-d|after_or_equal:today',
             'checkout_date' => 'date_format:Y-m-d|after:checkin_date',
             'checkin_hour' => 'numeric|min:0|max:23',
             'checkout_hour' => 'numeric|min:0|max:23',
@@ -439,7 +439,7 @@ class AccommodationController extends Controller
             'destination_id' => 'required|exists:destinations,id',
             'accommodations' => 'array',
             'accommodations.*["accommodation_name"]' => 'required_with:accommodations|string|max:100',
-            'accommodations.*["checkin_time"]' => 'date_format:Y-m-d H:i|after:today',
+            'accommodations.*["checkin_time"]' => 'date_format:Y-m-d H:i|after_or_equal:today',
             'accommodations.*["checkout_time"]' => 'date_format:Y-m-d H:i|after:checkin_date',
             'accommodations.*["cost"]'=> 'numeric|min:0',
             'accommodations.*["booing_id"]'=> 'string|max:20',

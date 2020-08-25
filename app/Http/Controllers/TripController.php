@@ -122,8 +122,8 @@ class TripController extends Controller
             Validator::make(['destinations' => $request_destinations], [
                 'destinations' => ['array', new DateNotOverlap('start_date', 'end_date')],
                 'destinations.*["location"]' => 'required_with:destinations|string|max:100',
-                'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
-                'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
+                'destinations.*["start_date"]' => 'date_format:Y-m-d|after_or_equal:today',
+                'destinations.*["end_date"]' => 'date_format:Y-m-d|after_or_equal:start_date',
             ])->validate();
         }
 
@@ -351,8 +351,8 @@ class TripController extends Controller
                 'destinations' => ['array', new DateNotOverlap('start_date', 'end_date')],
                 'destinations.*["id"]' => 'numeric|exists:destinations,id',
                 'destinations.*["location"]' => 'required_with:destinations|string|max:100',
-                'destinations.*["start_date"]' => 'date_format:Y-m-d|after:today',
-                'destinations.*["end_date"]' => 'date_format:Y-m-d|after:start_date',
+                'destinations.*["start_date"]' => 'date_format:Y-m-d|after_or_equal:today',
+                'destinations.*["end_date"]' => 'date_format:Y-m-d|after_or_equal:start_date',
             ])->validate();
         }
 

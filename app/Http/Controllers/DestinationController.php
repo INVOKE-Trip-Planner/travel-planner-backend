@@ -68,7 +68,7 @@ class DestinationController extends Controller
      *     @OA\Parameter(
      *         name="start_date",
      *         in="query",
-     *         description="date_format:Y-m-d | after:today",
+     *         description="date_format:Y-m-d | after_or_equal:today",
      *         @OA\Schema(
      *             type="date"
      *         )
@@ -76,7 +76,7 @@ class DestinationController extends Controller
      *     @OA\Parameter(
      *         name="end_date",
      *         in="query",
-     *         description="date_format:Y-m-d | after:start_date",
+     *         description="date_format:Y-m-d | after_or_equal:start_date",
      *         @OA\Schema(
      *             type="date"
      *         )
@@ -100,8 +100,8 @@ class DestinationController extends Controller
         Validator::make($request->all(), [
             'trip_id' => 'required|exists:trips,id',
             'location' => 'required|string|max:100',
-            'start_date' => 'date_format:Y-m-d|after:today',
-            'end_date' => 'date_format:Y-m-d|after:start_date',
+            'start_date' => 'date_format:Y-m-d|after_or_equal:today',
+            'end_date' => 'date_format:Y-m-d|after_or_equal:start_date',
             'cost'=> 'numeric|min:0',
         ])->validate();
 
@@ -164,7 +164,7 @@ class DestinationController extends Controller
      *     @OA\Parameter(
      *         name="start_date",
      *         in="query",
-     *         description="date_format:Y-m-d | after:today",
+     *         description="date_format:Y-m-d | after_or_equal:today",
      *         @OA\Schema(
      *             type="date"
      *         )
@@ -172,7 +172,7 @@ class DestinationController extends Controller
      *     @OA\Parameter(
      *         name="end_date",
      *         in="query",
-     *         description="date_format:Y-m-d | after:start_date",
+     *         description="date_format:Y-m-d | after_or_equal:start_date",
      *         @OA\Schema(
      *             type="date"
      *         )
