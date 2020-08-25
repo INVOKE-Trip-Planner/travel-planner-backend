@@ -37,12 +37,15 @@ class DateNotOverlap implements Rule
         //         break;
         //     }
         // }
+        data_fill($value, "*.$this->start", null);
+        data_fill($value, "*.$this->end", null);
 
         for($i=0;$i<count($value); $i++){
             for($j=$i+1;$j<count($value); $j++){
                 // Does not allow ranges that 'touch'
                 // if($value[$i][$this->start]<=$value[$j][$this->end] && $value[$i][$this->end]>=$value[$j][$this->start])
-                if($value[$i][$this->start]<$value[$j][$this->end] && $value[$i][$this->end]>$value[$j][$this->start])
+                if($value[$i][$this->start] < $value[$j][$this->end] &&
+                $value[$i][$this->end] > $value[$j][$this->start])
                 {
                     $intersect = false;
                 }

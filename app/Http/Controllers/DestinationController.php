@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Destination;
 use App\Models\Trip;
+use App\Rules\DateNotOverlap;
 use Illuminate\Support\Facades\Validator;
 use Auth;
+use Illuminate\Support\Arr;
 
 class DestinationController extends Controller
 {
@@ -95,15 +97,6 @@ class DestinationController extends Controller
      */
     public function create(Request $request)
     {
-        $trip = Trip::findOrFail($request->trip_id);
-
-        if ($request->has('start_date') || $request->has('end_date')) {
-            $destinations = $trip->destinations()->get()->toArray();
-            array_push($destinations, $request->all());
-        }
-
-        return response()->json($destinations, 200);
-
         Validator::make($request->all(), [
             'trip_id' => 'required|exists:trips,id',
             'location' => 'required|string|max:100',
@@ -111,6 +104,20 @@ class DestinationController extends Controller
             'end_date' => 'date_format:Y-m-d|after:start_date',
             'cost'=> 'numeric|min:0',
         ])->validate();
+
+        $trip = Trip::findOrFail($request->trip_id);
+
+        if ($request->has('start_date') || $request->has('end_date')) {
+            $destinations = $trip->destinations()->get()->toArray();
+            array_push($destinations, $request->all());
+            // Arr::set($destinations, 'end_date', null);
+            // data_fill($destinations, '*.end_date', null);
+            // data_fill($destinations, '*.start_date', null);
+
+            Validator::make(['destinations' => $destinations], [
+                'destinations' => [new DateNotOverlap('start_date', 'end_date')],
+            ])->validate();
+        }
 
         // if (Auth::id() != $trip->created_by) {
         if ($trip->users()->find(Auth::id()) === null) {
@@ -135,7 +142,7 @@ class DestinationController extends Controller
      *     description="Update destination",
      *     operationId="update_destination",
      *     security={{"bearerAuth":{}}},
-     *     deprecated=true,
+     *     deprecated=false,
      *     @OA\Parameter(
      *         name="id",
      *         in="query",
@@ -194,6 +201,18 @@ class DestinationController extends Controller
         ])->validate();
 
         $destination = Destination::findOrFail($request->id);
+
+        $trip = Trip::findOrFail($destination->trip_id);
+
+        if ($request->has('start_date') || $request->has('end_date')) {
+            $destinations = $trip->destinations()->get()->toArray();
+            array_push($destinations, $request->all());
+
+            Validator::make(['destinations' => $destinations], [
+                'destinations' => [new DateNotOverlap('start_date', 'end_date')],
+            ])->validate();
+        }
+
         // $trip = $destination->trip()->first();
         // if (Auth::id() != $trip->created_by) {
         if ($destination->users()->find(Auth::id()) === null) {
@@ -217,7 +236,7 @@ class DestinationController extends Controller
      *     description="Delete destination",
      *     operationId="delete_destination",
      *     security={{"bearerAuth":{}}},
-     *     deprecated=true,
+     *     deprecated=false,
      *     @OA\Parameter(
      *         name="id",
      *         in="query",

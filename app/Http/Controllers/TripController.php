@@ -330,6 +330,7 @@ class TripController extends Controller
     {
         if ($request->has('destinations')) {
             $request_destinations = $request->destinations;
+            error_log(print_r($request_destinations, true));
             $destination_ids = [];
             $destination_update = [];
             $destination_create = [];
@@ -398,7 +399,8 @@ class TripController extends Controller
             $trip->destinations()->whereNotIn('destinations.id', $destination_ids)->delete();
             // $trip->destinations()->update($destination_update);
             foreach($destination_update as $destination) {
-                $trip->destinations()->find($destination['id'])->fill($destination)->save();
+                error_log($destination['id']);
+                $trip->destinations()->findOrFail($destination['id'])->fill($destination)->save();
             }
             $trip->destinations()->createMany($destination_create);
         }
