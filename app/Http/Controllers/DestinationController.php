@@ -44,7 +44,7 @@ class DestinationController extends Controller
      *     description="Add a destination to trip after creation",
      *     operationId="create_destination",
      *     security={{"bearerAuth":{}}},
-     *     deprecated=true,
+     *     deprecated=false,
      *     @OA\Parameter(
      *         name="trip_id",
      *         in="query",
@@ -95,6 +95,15 @@ class DestinationController extends Controller
      */
     public function create(Request $request)
     {
+        $trip = Trip::findOrFail($request->trip_id);
+
+        if ($request->has('start_date') || $request->has('end_date')) {
+            $destinations = $trip->destinations()->get()->toArray();
+            array_push($destinations, $request->all());
+        }
+
+        return response()->json($destinations, 200);
+
         Validator::make($request->all(), [
             'trip_id' => 'required|exists:trips,id',
             'location' => 'required|string|max:100',
@@ -102,8 +111,6 @@ class DestinationController extends Controller
             'end_date' => 'date_format:Y-m-d|after:start_date',
             'cost'=> 'numeric|min:0',
         ])->validate();
-
-        $trip = Trip::findOrFail($request->trip_id);
 
         // if (Auth::id() != $trip->created_by) {
         if ($trip->users()->find(Auth::id()) === null) {

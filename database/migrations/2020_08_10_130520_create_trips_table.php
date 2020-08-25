@@ -25,7 +25,7 @@ class CreateTripsTable extends Migration
             // $table->unsignedDecimal('cost', 8, 2)->nullable();
             $table->enum('group_type', ['SOLO', 'COUPLE', 'FAMILY', 'FRIENDS'])->nullable();
             $table->enum('trip_type', ['WORK', 'LEISURE'])->nullable();
-            $table->string('trip_banner')->nullable();
+            $table->string('trip_banner')->default('placeholder.jpg');
             $table->timestamps();
         });
     }

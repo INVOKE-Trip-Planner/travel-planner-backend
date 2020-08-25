@@ -648,7 +648,7 @@
                         "description": "Error"
                     }
                 },
-                "deprecated": true,
+                "deprecated": false,
                 "security": [
                     {
                         "bearerAuth": []
