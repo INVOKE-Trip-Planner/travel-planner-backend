@@ -126,7 +126,7 @@ class UserController extends Controller
             'email' => ['email:rfc,dns', 'max:255', 'unique:users'],
             'phone' => ['numeric', 'digits_between:10,11', 'unique:users'],
             'password' => ['string', 'min:8', 'confirmed'],
-            'avatar' => ['image', 'mimes:jpeg, png, jpg, gif, svg', 'max:2048'],
+            'avatar' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'gender' => ['in:MALE,FEMALE,OTHER'],
             'birth_date' => ['date_format:Y-m-d', 'before:today'],
         ])->validate();

@@ -161,7 +161,7 @@ class RegisterController extends Controller
             'email' => ['required' ,'email:rfc,dns', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'phone' => ['numeric', 'digits_between:10,11', 'unique:users'],
-            'avatar' => ['image', 'mimes:jpeg, png, jpg, gif, svg', 'max:2048'],
+            'avatar' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'gender' => ['in:MALE,FEMALE,OTHER'],
             'birth_date' => ['date_format:Y-m-d', 'before:today'],
         ])->validate();
