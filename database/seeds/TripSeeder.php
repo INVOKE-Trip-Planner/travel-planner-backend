@@ -17,7 +17,7 @@ class TripSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
 
-        $day_tracker = 30;
+        $day_tracker = -30;
 
         $destinations = [];
         $destination_counter = 1;
