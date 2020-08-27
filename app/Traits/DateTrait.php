@@ -4,7 +4,7 @@ namespace App\Traits;
 
 use DateTime;
 
-trait TestTrait
+trait DateTrait
 {
 
     /**
