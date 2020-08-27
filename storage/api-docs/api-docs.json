@@ -66,7 +66,7 @@
                     {
                         "name": "checkin_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d | after:today",
+                        "description": "date_format:Y-m-d | after_or_equal:today",
                         "schema": {
                             "type": "date"
                         }
@@ -177,7 +177,7 @@
                     {
                         "name": "checkin_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d | after:today",
+                        "description": "date_format:Y-m-d | after_or_equal:today",
                         "schema": {
                             "type": "date"
                         }
@@ -623,7 +623,7 @@
                     {
                         "name": "start_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d | after:today",
+                        "description": "date_format:Y-m-d | after_or_equal:today",
                         "schema": {
                             "type": "date"
                         }
@@ -631,7 +631,7 @@
                     {
                         "name": "end_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d | after:start_date",
+                        "description": "date_format:Y-m-d | after_or_equal:start_date",
                         "schema": {
                             "type": "date"
                         }
@@ -686,7 +686,7 @@
                     {
                         "name": "start_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d | after:today",
+                        "description": "date_format:Y-m-d | after_or_equal:today",
                         "schema": {
                             "type": "date"
                         }
@@ -694,7 +694,7 @@
                     {
                         "name": "end_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d | after:start_date",
+                        "description": "date_format:Y-m-d | after_or_equal:start_date",
                         "schema": {
                             "type": "date"
                         }
@@ -711,7 +711,7 @@
                         "description": "Error"
                     }
                 },
-                "deprecated": true,
+                "deprecated": false,
                 "security": [
                     {
                         "bearerAuth": []
@@ -749,7 +749,7 @@
                         "description": "Error"
                     }
                 },
-                "deprecated": true,
+                "deprecated": false,
                 "security": [
                     {
                         "bearerAuth": []
@@ -1051,6 +1051,222 @@
                 ]
             }
         },
+        "/api/schedule": {
+            "get": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Get all schedules for logged in user",
+                "description": "Get all schedules for logged in user",
+                "operationId": "get_schedule",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": true,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Add a schedule for an itinerary",
+                "description": "Add schedule",
+                "operationId": "create_schedule",
+                "parameters": [
+                    {
+                        "name": "itinerary_id",
+                        "in": "query",
+                        "description": "required | exists:itineraries,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "hour",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:23",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "minute",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:59",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "required | string | min:1",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "string",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "cost",
+                        "in": "query",
+                        "description": "numeric | min:0",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/schedule/update": {
+            "post": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Update schedule",
+                "description": "Update schedule",
+                "operationId": "update_schedule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "required | exists:schedules,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "hour",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:23",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "minute",
+                        "in": "query",
+                        "description": "numeric | min:0 | max:59",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "string | min:1",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "string",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "cost",
+                        "in": "query",
+                        "description": "numeric | min:0",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/schedule/delete": {
+            "post": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Delete schedule",
+                "description": "Delete schedule",
+                "operationId": "delete_schedule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "required | exists:schedules,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/transport": {
             "get": {
                 "tags": [
@@ -1121,7 +1337,7 @@
                     {
                         "name": "departure_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d | after:today",
+                        "description": "date_format:Y-m-d | after_or_equal:today",
                         "schema": {
                             "type": "date"
                         }
@@ -1129,7 +1345,7 @@
                     {
                         "name": "arrival_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d | after:departure_date",
+                        "description": "date_format:Y-m-d | after_or_equal:departure_date",
                         "schema": {
                             "type": "date"
                         }
@@ -1259,7 +1475,7 @@
                     {
                         "name": "departure_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d | after:today",
+                        "description": "date_format:Y-m-d | after_or_equal:today",
                         "schema": {
                             "type": "date"
                         }
@@ -1267,7 +1483,7 @@
                     {
                         "name": "arrival_date",
                         "in": "query",
-                        "description": "date_format:Y-m-d | after:departure_date",
+                        "description": "date_format:Y-m-d | after_or_equal:departure_date",
                         "schema": {
                             "type": "date"
                         }

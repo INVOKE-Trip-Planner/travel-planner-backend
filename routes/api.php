@@ -55,6 +55,10 @@ Route::group([
         Route::post('itinerary/delete', 'ItineraryController@delete');
         Route::post('batch/itinerary', 'ItineraryController@create_batch');
 
+        Route::post('schedule', 'ScheduleController@create');
+        Route::post('schedule/update', 'ScheduleController@update');
+        Route::post('schedule/delete', 'ScheduleController@delete');
+
         Route::get('user/find/{id}', 'UserController@findById');
         Route::get('user/search/{query}', 'UserController@search');
 
