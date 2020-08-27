@@ -109,7 +109,7 @@ class TripController extends Controller
      */
     public function create(Request $request)
     {
-        $start_time = microtime(true);
+        // $start_time = microtime(true);
 
         if ($request->has('destinations')) {
             $request_destinations = $request->destinations;
@@ -219,8 +219,8 @@ class TripController extends Controller
 
         // error_log(print_r($trip, true));
 
-        $execution_time = microtime(true) - $start_time;
-        error_log("Execution time of create trip = $execution_time");
+        // $execution_time = microtime(true) - $start_time;
+        // error_log("Execution time of create trip = $execution_time");
 
         return response()->json($trip, 201);
     }
@@ -399,7 +399,7 @@ class TripController extends Controller
             $trip->destinations()->whereNotIn('destinations.id', $destination_ids)->delete();
             // $trip->destinations()->update($destination_update);
             foreach($destination_update as $destination) {
-                error_log($destination['id']);
+                // error_log($destination['id']);
                 $trip->destinations()->findOrFail($destination['id'])->fill($destination)->save();
             }
             $trip->destinations()->createMany($destination_create);
@@ -439,7 +439,7 @@ class TripController extends Controller
      */
     function find(Request $request)
     {
-        $start_time = microtime(true);
+        // $start_time = microtime(true);
 
         // Eager Loading ??
         // $trips = Trip::with(['user', 'destination', 'transport', 'accommodation', 'itinerary'])->get();
@@ -480,8 +480,8 @@ class TripController extends Controller
 
         // $this->flatten_cost($trips);
 
-        $execution_time = microtime(true) - $start_time;
-        error_log("Execution time of get trips = $execution_time");
+        // $execution_time = microtime(true) - $start_time;
+        // error_log("Execution time of get trips = $execution_time");
 
         return response()->json($trips, 200);
     }

@@ -493,7 +493,7 @@ class AccommodationController extends Controller
         $faker = \Faker\Factory::create();
         $faker->seed(crc32($request->city));
 
-        error_log(crc32($request->city));
+        // error_log(crc32($request->city));
         $num_accommodations = 10;
         $accommodations = [];
 

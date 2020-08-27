@@ -133,14 +133,16 @@ class ItineraryController extends Controller
         $schedules = $itinerary->schedules()->createMany($request_schedules);
         // error_log(print_r($schedules->toArray(), true));
         $schedule_ids = array_column($schedules->toArray(), 'id');
-        $costs = $request->only('schedules.*.cost')['schedules']['*']['cost'];
+        // $costs = $request->only('schedules.*["cost"]')['schedules']['*']['cost'];
+        $costs = array_column($request_schedules, 'cost');
 
         // error_log(print_r($schedule_ids, true));
         // error_log(print_r($request_schedules, true));
         // error_log(print_r(Arr::only($request_schedules, ['*.cost']), true));
 
         // error_log(print_r($costs, true));
-        $cost = array_combine($schedule_ids, $request->only('schedules.*.cost')['schedules']['*']['cost']);
+        // $cost = array_combine($schedule_ids, $request->only('schedules.*.cost')['schedules']['*']['cost']);
+        // error_log(print_r($cost, true));
 
         $new_costs = array_map(function($schedule_id, $cost) {
             return [
@@ -272,7 +274,8 @@ class ItineraryController extends Controller
 
             $schedules = $itinerary->schedules()->createMany($request_schedules);
             $schedule_ids = array_column($schedules->toArray(), 'id');
-            $costs = $request->only('schedules.*.cost')['schedules']['*']['cost'];
+            $costs = array_column($request_schedules, 'cost');
+            // $costs = $request->only('schedules.*.cost')['schedules']['*']['cost'];
             $new_costs = array_map(function($schedule_id, $cost) {
                 return [
                     'costable_id' => $schedule_id,
