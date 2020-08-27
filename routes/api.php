@@ -51,6 +51,7 @@ Route::group([
 
         Route::get('itinerary', 'ItineraryController@get');
         Route::post('itinerary', 'ItineraryController@create');
+        Route::post('itinerary/create', 'ItineraryController@create_only_itinerary');
         Route::post('itinerary/update', 'ItineraryController@update');
         Route::post('itinerary/delete', 'ItineraryController@delete');
         Route::post('batch/itinerary', 'ItineraryController@create_batch');
@@ -64,6 +65,8 @@ Route::group([
 
     });
 
+    Route::get('triposo/articles', 'TriposoController@articles');
+
     Route::get('accommodation/search', 'AccommodationController@search');
 
     Route::post('register', 'Auth\RegisterController@register');
@@ -71,4 +74,5 @@ Route::group([
     Route::get('user/checkavailability', 'UserController@checkUsernameEmailAvailability');
 
     Route::get('v2/documentation', 'CustomSwaggerController@api');
+
 });

@@ -351,6 +351,65 @@ class ItineraryController extends Controller
 
     /**
      * @OA\Post(
+     *     path="/api/itinerary/create",
+     *     tags={"Itinerary"},
+     *     summary="Create an itinerary for a destination without schedules",
+     *     description="Create only itinerary",
+     *     operationId="create_only_itinerary",
+     *     security={{"bearerAuth":{}}},
+     *     deprecated=false,
+     *     @OA\Parameter(
+     *         name="destination_id",
+     *         in="query",
+     *         description="required | exists:destinations,id",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="day",
+     *         in="query",
+     *         description="numeric | min:0",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error"
+     *     )
+     * )
+     */
+    public function create_only_itinerary(Request $request)
+    {
+        Validator::make($request->all(), [
+            'destination_id' => 'required|exists:destinations,id',
+            'day' => 'numeric|min:0',
+        ])->validate();
+
+        $destination = Destination::find($request->destination_id);
+
+        if ($destination->users()->find(Auth::id()) === null) {
+            $response = ['message' => 'Unauthorized'];
+            return response($response, 401);
+        }
+
+        $itinerary = $destination->itineraries()->create($request->all());
+
+        return response()->json($itinerary, 201);
+    }
+
+    /**
+     * @OA\Post(
      *     path="/api/batch/itinerary",
      *     tags={"Itinerary"},
      *     summary="Create multiple itineraries for a destination",

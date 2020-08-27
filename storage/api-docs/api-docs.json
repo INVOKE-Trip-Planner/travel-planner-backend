@@ -1986,6 +1986,35 @@
                 ]
             }
         },
+        "/api/triposo/articles": {
+            "get": {
+                "tags": [
+                    "Triposo"
+                ],
+                "summary": "Find triposo articles by city",
+                "description": "Find triposo articles by city",
+                "operationId": "triposo_articles",
+                "parameters": [
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "required | string",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false
+            }
+        },
         "/api/user": {
             "post": {
                 "tags": [
