@@ -3,6 +3,8 @@
 2. Rename .env.example to .env & edit the following:
     * Change DB_DATABASE to your local database name
     * Add L5_SWAGGER_GENERATE_ALWAYS=true
+    * Add X_TRIPOSO_ACCOUNT=[YOUR TRIPOSO ACCOUNT]
+    * Add X_TRIPOSO_TOKEN=[YOUR TRIPOSO TOKEN]
 3. php artisan key:generate
 4. Generate JWT secret by running php artisan jwt:secret
 5. Create database if not exists in workbench
