@@ -6,17 +6,14 @@ use App\Traits\FullTextSearch;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 use OwenIt\Auditing\Contracts\Auditable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Laravel\Scout\Searchable;
 
 class User extends Authenticatable implements Auditable, JWTSubject
 {
     use Notifiable;
     use \OwenIt\Auditing\Auditable;
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
-    // use Searchable;
     use FullTextSearch;
 
     /**
@@ -66,8 +63,7 @@ class User extends Authenticatable implements Auditable, JWTSubject
      */
     public function destinations()
     {
-        // return $this->hasManyThrough('App\Models\Destination', 'App\Models\Trip');
-        return $this->hasManyDeep('App\Models\Destination', ['trip_user', 'App\Models\Trip']); //->orderByRaw(DB::raw("-destinations.start_date desc"));
+        return $this->hasManyDeep('App\Models\Destination', ['trip_user', 'App\Models\Trip']);
     }
 
     /**
@@ -130,16 +126,4 @@ class User extends Authenticatable implements Auditable, JWTSubject
         return [];
     }
 
-    /**
-     * Get the indexable data array for the model.
-     *
-     * @return array
-     */
-    // public function toSearchableArray()
-    // {
-    //     $array = $this->toArray();
-    //     error_log(print_r($array, true));
-
-    //     return $array;
-    // }
 }

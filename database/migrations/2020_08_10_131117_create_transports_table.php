@@ -26,7 +26,6 @@ class CreateTransportsTable extends Migration
             $table->unsignedTinyInteger('arrival_minute')->nullable();
             $table->string('origin');
             $table->string('destination');
-            // $table->unsignedDecimal('cost', 8, 2)->nullable();
             $table->string('operator')->nullable();
             $table->string('booking_id')->nullable();
             $table->timestamps();

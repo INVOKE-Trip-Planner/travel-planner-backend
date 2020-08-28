@@ -16,7 +16,7 @@ class Trip extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'trip_name', 'created_by', 'cost', 'origin', 'group_type', 'trip_type', 'trip_banner', // 'start_date', 'end_date',
+        'trip_name', 'created_by', 'cost', 'origin', 'group_type', 'trip_type', 'trip_banner', 
     ];
 
     /**

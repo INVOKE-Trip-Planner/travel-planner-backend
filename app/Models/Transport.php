@@ -28,15 +28,6 @@ class Transport extends Model implements Auditable
         'created_at', 'updated_at', 'laravel_through_key',
     ];
 
-    /**
-     * The relationships that should always be loaded.
-     *
-     * @var array
-     */
-    protected $with = [
-        // 'cost',
-    ];
-
     protected $appends = [
         'cost',
     ];

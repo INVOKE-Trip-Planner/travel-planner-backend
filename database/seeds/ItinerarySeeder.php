@@ -17,9 +17,7 @@ class ItinerarySeeder extends Seeder
         $faker = \Faker\Factory::create();
         $destination_count = Destination::all()->count();
         $date_diff = Destination::selectRaw('datediff(end_date, start_date)')->get()->toArray();
-        // $date_diff = Arr::add($date_diff, 'datediff(end_date, start_date)', 3);
         $date_diff = array_column($date_diff, 'datediff(end_date, start_date)');
-        // error_log(print_r($date_diff, true));
         $itineraries = [];
 
         for ($i = 1; $i <= $destination_count; $i ++ ) {

@@ -2,10 +2,7 @@
 
 namespace App\Traits;
 
-use Illuminate\Http\Request;
-use Auth;
 use App\Models\User;
-use App\Task;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Hash;
 
@@ -76,24 +73,4 @@ trait TestTrait
         return $credentials;
     }
 
-    // private function create_tasks($num_task, $user_id) {
-    //     $faker = \Faker\Factory::create();
-    //     $tasks = [];
-
-    //     foreach($user_id as $u) {
-    //         $tasks_per_user = [];
-
-    //         for ($i = 0; $i < $num_task; $i++) {
-    //             $task = Task::create([
-    //                 'task_name' => $faker->sentence,
-    //                 'user_id' => $u,
-    //             ]);
-    //             array_push($tasks_per_user, $task->id);
-    //         }
-
-    //         $tasks[$u] = $tasks_per_user;
-    //     }
-
-    //     return $tasks;
-    // }
 }

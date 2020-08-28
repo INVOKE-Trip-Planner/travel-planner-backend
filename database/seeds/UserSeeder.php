@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             array_push($users, [
                 'username' => "test$index",
                 'name' => $faker->name,
-                'email' => "test$index@gmail.com", // $faker->email
+                'email' => "test$index@gmail.com", 
                 'password' => Hash::make("test$index"),
                 'avatar' => "test$index.jpg"
             ]);

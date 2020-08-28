@@ -24,7 +24,6 @@ class CreateAccommodationsTable extends Migration
             $table->unsignedTinyInteger('checkin_minute')->nullable();
             $table->unsignedTinyInteger('checkout_minute')->nullable();
             $table->string('accommodation_name');
-            // $table->unsignedDecimal('cost', 8, 2)->nullable();
             $table->string('booking_id')->nullable();
             $table->timestamps();
         });

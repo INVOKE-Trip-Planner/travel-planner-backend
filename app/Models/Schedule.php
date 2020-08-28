@@ -16,7 +16,7 @@ class Schedule extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'itinerary_id', 'minute', 'hour', 'title', 'description', // 'cost',
+        'itinerary_id', 'minute', 'hour', 'title', 'description',
     ];
 
     /**
@@ -26,19 +26,6 @@ class Schedule extends Model implements Auditable
      */
     protected $hidden = [
         'created_at', 'updated_at', 'laravel_through_key',
-    ];
-
-    // protected $casts = [
-    //     'schedule' => 'array',
-    // ];
-
-    /**
-     * The relationships that should always be loaded.
-     *
-     * @var array
-     */
-    protected $with = [
-        // 'cost',
     ];
 
     protected $appends = [
@@ -51,28 +38,6 @@ class Schedule extends Model implements Auditable
 
         return $cost ? (float) $cost['cost'] : null;
     }
-
-    /**
-	 * Convert the model instance to an array.
-	 *
-	 * @return array
-	 */
-	// public function toArray()
-	// {
-	// 	$attributes = $this->attributesToArray();
-
-	// 	return array_merge($attributes, $this->relationsToArray());
-	// }
-
-    // this is a recommended way to declare event handlers
-    // public static function boot() {
-    //     parent::boot();
-
-    //     static::deleting(function($schedule) { // before delete() method call this
-    //          $schedule->cost()->delete();
-    //          // do the rest of the cleanup...
-    //     });
-    // }
 
     /**
      * Get the cost of the schedule.

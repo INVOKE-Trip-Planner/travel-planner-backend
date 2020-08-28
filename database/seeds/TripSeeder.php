@@ -40,7 +40,6 @@ class TripSeeder extends Seeder
                     continue;
                 } else if ($j == 1) {
                     $trip = Trip::create([
-                        // 'trip_name' => 'Trip to ' . $cities[1],
                         'origin' => $cities[0],
                         'created_by' => $creator,
                     ]);
@@ -68,7 +67,7 @@ class TripSeeder extends Seeder
                     'mode' => $faker->randomElement($array = ['FLIGHT', 'FERRY', 'BUS', 'TRAIN', 'OTHER']),
                     'origin' => $cities[$j - 1],
                     'destination' => $cities[$j],
-                    'booking_id' => $faker->bothify('???###'), // $faker->randomNumber($nbDigits = 6),
+                    'booking_id' => $faker->bothify('???###'), 
                     'departure_date' => $has_dates ? $start_date : null,
                     'arrival_date' => $has_dates ? $start_date: null,
                 ]);

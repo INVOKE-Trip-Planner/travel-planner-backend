@@ -27,8 +27,6 @@ class ScheduleSeeder extends Seeder
                         'title' => $faker->sentence($nbWords = 6, $variableNbWords = true),
                         'hour' => $faker->numberBetween($min=0, $max=23),
                         'minute' => $faker->numberBetween($min=0, $max=59),
-                        // 'description' => $faker->sentence($nbWords = 6, $variableNbWords = true),
-                        // 'cost' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 500),
                     ]
                 );
             }

@@ -17,7 +17,7 @@ class Itinerary extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'destination_id', 'day', // 'date', 'schedule', 'cost',
+        'destination_id', 'day', 
     ];
 
     /**
@@ -72,13 +72,4 @@ class Itinerary extends Model implements Auditable
         );
     }
 
-    // public function update_schedules($new_schedules) {
-    //     $costs = [];
-
-    //     foreach ($this->schedules() as $schedule) {
-    //         array_push($schedule->cost()->id);
-    //     }
-
-    //     Cost::destroy($costs);
-    // }
 }

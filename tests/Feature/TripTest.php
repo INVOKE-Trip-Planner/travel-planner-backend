@@ -51,9 +51,6 @@ class TripTest extends TestCase
             'destinations' => $destinations,
         ];
 
-        // error_log(print_r($destinations, true));
-        // error_log(print_r($payload, true));
-
         $this->json('POST', 'api/trip', $payload, $credentials[0]['header'])
             ->assertStatus(201)
             ->assertJsonStructure([
@@ -63,7 +60,6 @@ class TripTest extends TestCase
                 'created_by',
                 'start_date',
                 'end_date',
-                // 'cost',
                 'trip_banner',
                 'users' => [
                     '*' => [
@@ -78,7 +74,6 @@ class TripTest extends TestCase
                         'location',
                         'start_date',
                         'end_date',
-                        // 'cost',
                         'transports' => [],
                         'accommodations' => [],
                         'itineraries' => [],
