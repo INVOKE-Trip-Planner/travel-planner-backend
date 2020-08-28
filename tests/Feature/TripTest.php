@@ -20,8 +20,7 @@ class TripTest extends TestCase
 
     public function testCreateTrip()
     {
-        // $users = factory(App\User::class, 3)->make();
-        // $user = factory(User::class)->make();
+
         $num_users = 3;
         $num_destinations = 3;
 
