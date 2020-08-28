@@ -187,16 +187,11 @@ class TransportController extends Controller
         ])->validate();
 
         $destination = Destination::find($request->destination_id);
-        // $trip = $destination->trip()->first();
-        // if (Auth::id() != $trip->created_by) {
+
         if ($destination->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
-
-        // $request_transports = $request['transports'];
-
-        // error_log(print_r($request_transports, true));
 
         $transport = $destination->transports()->create($request->except(['destination_id', 'cost']));
         if ($request->has('cost')) {
@@ -357,9 +352,7 @@ class TransportController extends Controller
         ])->validate();
 
         $transport = Transport::findOrFail($request->id);
-        // $destination = $transport->destination()->first();
-        // $trip = $destination->trip()->first();
-        // if (Auth::id() != $trip->created_by) {
+
         if ($transport->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
@@ -375,12 +368,9 @@ class TransportController extends Controller
             }
         }
 
-        // to get updated values
-        // $transport = Transport::findOrFail($request->id);
         $response = ['message' => 'The transport has been successfully updated.'];
 
         return response()->json($response, 200);
-        // return response()->json($transport, 200);
     }
 
     /**
@@ -422,9 +412,7 @@ class TransportController extends Controller
         ])->validate();
 
         $transport = Transport::findOrFail($request->id);
-        // $destination = $transport->destination()->first();
-        // $trip = $destination->trip()->first();
-        // if (Auth::id() != $trip->created_by) {
+
         if ($transport->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
@@ -507,16 +495,13 @@ class TransportController extends Controller
         ])->validate();
 
         $destination = Destination::find($request->destination_id);
-        // $trip = $destination->trip()->first();
-        // if (Auth::id() != $trip->created_by) {
+
         if ($destination->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
 
         $request_transports = $request['transports'];
-
-        // error_log(print_r($request_transports, true));
 
         $destination->transports()->createMany($request_transports);
 

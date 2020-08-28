@@ -110,24 +110,16 @@ class DestinationController extends Controller
         if ($request->has('start_date') || $request->has('end_date')) {
             $destinations = $trip->destinations()->get()->toArray();
             array_push($destinations, $request->all());
-            // Arr::set($destinations, 'end_date', null);
-            // data_fill($destinations, '*.end_date', null);
-            // data_fill($destinations, '*.start_date', null);
 
             Validator::make(['destinations' => $destinations], [
                 'destinations' => [new DateNotOverlap('start_date', 'end_date')],
             ])->validate();
         }
 
-        // if (Auth::id() != $trip->created_by) {
         if ($trip->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
-
-        // $request_destinations = $request['destinations'];
-
-        // error_log(print_r($request_destinations, true));
 
         $destination = $trip->destinations()->create($request->except('trip_id'));
 
@@ -213,8 +205,6 @@ class DestinationController extends Controller
             ])->validate();
         }
 
-        // $trip = $destination->trip()->first();
-        // if (Auth::id() != $trip->created_by) {
         if ($destination->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
@@ -222,7 +212,6 @@ class DestinationController extends Controller
 
         $destination->update($request->all());
 
-        // return response()->json($destination, 200);
         $response = ['message' => 'The destination has been successfully updated.'];
 
         return response()->json($response, 200);
@@ -267,8 +256,7 @@ class DestinationController extends Controller
         ])->validate();
 
         $destination = Destination::findOrFail($request->id);
-        // $trip = $destination->trip()->first();
-        // if (Auth::id() != $trip->created_by) {
+
         if ($destination->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);

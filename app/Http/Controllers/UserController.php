@@ -182,7 +182,6 @@ class UserController extends Controller
         $users = User::select('id', 'name', 'avatar')->search($query)->get();
 
         return response()->json($users, 200);
-        // return response()->json('Please pass in username or email.', 422);
     }
 
     /**
@@ -216,7 +215,6 @@ class UserController extends Controller
         $user = User::findOrFail($id)->only('id', 'avatar', 'name');
 
         return response()->json($user, 200);
-        // return response()->json('Please pass in username or email.', 422);
     }
 
     /**
@@ -264,20 +262,12 @@ class UserController extends Controller
         ])->validate();
 
         if ($request->has('username')) {
-            // $user = User::select('id', 'avatar')
-            //             ->where('username', request('username'))
-            //             ->get();
             $response = ['message' => 'Username is already taken.'];
         } else if ($request->has('email')) {
-            // $user = User::select('id', 'avatar')
-            //             ->where('email', request('email'))
-            //             ->get();
             $response = ['message' => 'Email is already taken.'];
         }
 
         return response()->json($response, 200);
-        // return response()->json($user, 200);
-        // return response()->json('Please pass in username or email.', 422);
     }
 
 }

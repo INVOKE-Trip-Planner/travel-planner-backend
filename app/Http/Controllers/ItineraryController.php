@@ -8,7 +8,6 @@ use App\Models\Destination;
 use Illuminate\Support\Facades\Validator;
 use Auth;
 use App\Models\Itinerary;
-use Illuminate\Support\Arr;
 
 class ItineraryController extends Controller
 {
@@ -111,17 +110,13 @@ class ItineraryController extends Controller
         ])->validate();
 
         $destination = Destination::find($request->destination_id);
-        // $trip = $destination->trip()->first();
-        // if (Auth::id() != $trip->created_by) {
+
         if ($destination->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
 
-        // $request_itineraries = $request['itineraries'];
-        // error_log(print_r($request_itineraries, true));
         $itinerary = $destination->itineraries()->create($request->except(['destination_id', 'schedules']));
-        // error_log(print_r($itinerary, true));
 
         $request_schedules = $request->schedules;
         foreach ($request_schedules as &$schedule) {
@@ -129,20 +124,10 @@ class ItineraryController extends Controller
                 $schedule = (array) json_decode($schedule);
             }
         }
-        // error_log(print_r($request->schedules, true));
+
         $schedules = $itinerary->schedules()->createMany($request_schedules);
-        // error_log(print_r($schedules->toArray(), true));
         $schedule_ids = array_column($schedules->toArray(), 'id');
-        // $costs = $request->only('schedules.*["cost"]')['schedules']['*']['cost'];
         $costs = array_column($request_schedules, 'cost');
-
-        // error_log(print_r($schedule_ids, true));
-        // error_log(print_r($request_schedules, true));
-        // error_log(print_r(Arr::only($request_schedules, ['*.cost']), true));
-
-        // error_log(print_r($costs, true));
-        // $cost = array_combine($schedule_ids, $request->only('schedules.*.cost')['schedules']['*']['cost']);
-        // error_log(print_r($cost, true));
 
         $new_costs = array_map(function($schedule_id, $cost) {
             return [
@@ -152,13 +137,7 @@ class ItineraryController extends Controller
             ];
         }, $schedule_ids, $costs);
 
-        // error_log(print_r($new_costs, true));
-
         Cost::insert($new_costs);
-
-        // if ($request->has('cost')) {
-        //     $itinerary->cost->create($request->only('cost'));
-        // }
 
         return response()->json($itinerary, 201);
     }
@@ -236,9 +215,7 @@ class ItineraryController extends Controller
         ])->validate();
 
         $itinerary = Itinerary::findOrFail($request->id);
-        // $destination = $itinerary->destination()->first();
-        // $trip = $destination->trip()->first();
-        // if (Auth::id() != $trip->created_by) {
+
         if ($itinerary->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
@@ -246,21 +223,13 @@ class ItineraryController extends Controller
 
         $itinerary->update($request->except(['cost', 'schedules']));
 
-        // if ($request->has('cost')) {
-        //     if ($itinerary->cost) {
-        //         $itinerary->cost()->update($request->only('cost'));
-        //     } else {
-        //         $itinerary->cost()->create($request->only('cost'));
-        //     }
-        // }
-
         if ($request->has('schedules')) {
             $old_costs = [];
 
             foreach ($itinerary->schedules()->get() as $schedule) {
                 array_push($old_costs, $schedule->cost()->first()->id);
             }
-            // error_log(print_r($old_costs, true));
+
             Cost::destroy($old_costs);
 
             $itinerary->schedules()->delete();
@@ -275,7 +244,7 @@ class ItineraryController extends Controller
             $schedules = $itinerary->schedules()->createMany($request_schedules);
             $schedule_ids = array_column($schedules->toArray(), 'id');
             $costs = array_column($request_schedules, 'cost');
-            // $costs = $request->only('schedules.*.cost')['schedules']['*']['cost'];
+
             $new_costs = array_map(function($schedule_id, $cost) {
                 return [
                     'costable_id' => $schedule_id,
@@ -286,10 +255,6 @@ class ItineraryController extends Controller
             Cost::insert($new_costs);
         }
 
-        // to get updated values
-        // $itinerary = Itinerary::findOrFail($request->id);
-
-        // return response()->json($itinerary, 200);
         $response = ['message' => 'The itinerary has been successfully updated.'];
 
         return response()->json($response, 200);
@@ -334,9 +299,7 @@ class ItineraryController extends Controller
         ])->validate();
 
         $itinerary = Itinerary::findOrFail($request->id);
-        // $destination = $itinerary->destination()->first();
-        // $trip = $destination->trip()->first();
-        // if (Auth::id() != $trip->created_by) {
+
         if ($itinerary->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
@@ -468,23 +431,20 @@ class ItineraryController extends Controller
         Validator::make($request->all(), [
             'destination_id' => 'required|exists:destinations,id',
             'itineraries' => 'array',
-            'itineraries.*["date"]' => 'date_format:Y-m-d|after:today', // |required_with:itineraries',
+            'itineraries.*["date"]' => 'date_format:Y-m-d|after:today',
             'itineraries.*["schedule"]' => 'array|required_with:itineraries',
             'itineraries.*["schedule"].*["activity"]' => 'string|min:1|required_with:itineraries',
             'itineraries.*["schedule"].*["cost"]' => 'numeric|min:0',
         ])->validate();
 
         $destination = Destination::find($request->destination_id);
-        // $trip = $destination->trip()->first();
-        // if (Auth::id() != $trip->created_by) {
+
         if ($destination->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
 
         $request_itineraries = $request['itineraries'];
-
-        // error_log(print_r($request_itineraries, true));
 
         $destination->itineraries()->createMany($request_itineraries);
 

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Itinerary;
 use Illuminate\Http\Request;
-use App\Models\Cost;
 use App\Models\Schedule;
 use Illuminate\Support\Facades\Validator;
 use Auth;
@@ -292,6 +291,5 @@ class ScheduleController extends Controller
 
         return response()->json($response, 200);
     }
-
 
 }
