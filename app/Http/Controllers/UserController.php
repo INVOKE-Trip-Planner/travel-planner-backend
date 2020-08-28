@@ -193,7 +193,7 @@ class UserController extends Controller
      *     description="Get user by id",
      *     operationId="user_by_id",
      *     security={{"bearerAuth":{}}},
-     *     deprecated=false,
+     *     deprecated=true,
      *     @OA\Parameter(
      *          @OA\Schema(type="string"),
      *          in="path",
@@ -226,7 +226,7 @@ class UserController extends Controller
      *     summary="Find user",
      *     description="Check username or email availability",
      *     operationId="username_email_availability",
-     *     deprecated=false,
+     *     deprecated=true,
      *     @OA\Parameter(
      *         name="username",
      *         in="query",
