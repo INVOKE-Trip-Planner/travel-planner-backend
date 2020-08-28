@@ -43,10 +43,6 @@ class TriposoController extends Controller
             "https://www.triposo.com/api/20200803/article.json?location_ids=$location_ids&account=$account&token=$token"
         );
 
-        // echo $response;
         return response($response->getBody(), $response->getStatusCode());
-        // return $response->json(); // $response->getBody();
-
-        // return response()->json($response->getBody(), $response->getStatusCode());
     }
 }

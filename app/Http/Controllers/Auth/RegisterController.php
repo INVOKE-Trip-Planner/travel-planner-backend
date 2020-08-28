@@ -178,13 +178,10 @@ class RegisterController extends Controller
             $request->avatar->storeAs('avatars', $avatarName, 'public');
             $user->avatar = $avatarName;
             $user->save();
-        } // else {
-        //     $user->avatar = 'placeholder.png';
-        // }
+        }
 
         $token = $this->guard()->login($user);
-        // $token = JWTAuth::attempt($request->only(['username', 'password']));
-        // $user = User::find($user->id);
+
         $user = $user->fresh();
 
         $execution_time = microtime(true) - $start_time;

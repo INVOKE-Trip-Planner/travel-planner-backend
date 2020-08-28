@@ -157,19 +157,14 @@ class AccommodationController extends Controller
         ])->validate();
 
         $destination = Destination::find($request->destination_id);
-        // $trip = $destination->trip()->first();
-        // if (Auth::id() != $trip->created_by) {
+
         if ($destination->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
 
-        // error_log(print_r($request->except(['destination_id', 'cost']), true));
-        // error_log(print_r($destination->accommodations()->create($request->except(['destination_id', 'cost']))->toSql()));
-
         $accommodation = $destination->accommodations()->create($request->except(['destination_id', 'cost']));
         if ($request->has('cost')) {
-            // error_log(print_r($request->only('cost'), true));
             $accommodation->cost()->create($request->only('cost'));
         }
 
@@ -297,11 +292,6 @@ class AccommodationController extends Controller
         ])->validate();
 
         $accommodation = Accommodation::findOrFail($request->id);
-        // $destination = $accommodation->destination()->first();
-        // $trip = $destination->trip()->first();
-        // if (Auth::id() != $trip->created_by) {
-        // error_log($accommodation->users()->toSql());
-        // return response()->json($accommodation->users()->get(), 200);
 
         if ($accommodation->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
@@ -317,10 +307,6 @@ class AccommodationController extends Controller
                 $accommodation->cost()->create($request->only('cost'));
             }
         }
-
-        // to get updated values
-        // $accommodation = Accommodation::findOrFail($request->id);
-        // return response()->json($accommodation, 200);
 
         $response = ['message' => 'The accommodation has been successfully updated.'];
 
@@ -366,9 +352,7 @@ class AccommodationController extends Controller
         ])->validate();
 
         $accommodation = Accommodation::findOrFail($request->id);
-        // $destination = $accommodation->destination()->first();
-        // $trip = $destination->trip()->first();
-        // if (Auth::id() != $trip->created_by) {
+
         if ($accommodation->users()->find(Auth::id()) === null) {
 
             $response = ['message' => 'Unauthorized'];
@@ -446,16 +430,13 @@ class AccommodationController extends Controller
         ])->validate();
 
         $destination = Destination::find($request->destination_id);
-        // $trip = $destination->trip()->first();
-        // if (Auth::id() != $trip->created_by) {
+
         if ($destination->users()->find(Auth::id()) === null) {
             $response = ['message' => 'Unauthorized'];
             return response($response, 401);
         }
 
         $request_accommodations = $request['accommodations'];
-
-        // error_log(print_r($request_accommodations, true));
 
         $destination->accommodations()->createMany($request_accommodations);
 
@@ -467,7 +448,7 @@ class AccommodationController extends Controller
      *     path="/api/accommodation/search",
      *     tags={"Accommodation"},
      *     summary="Find accommodation by city",
-     *     description="Find accommodation by city",
+     *     description="Find accommodation by city. Generate fake accommodation details.",
      *     operationId="search_accommodation",
      *     deprecated=false,
      *     @OA\Parameter(
@@ -493,14 +474,13 @@ class AccommodationController extends Controller
         $faker = \Faker\Factory::create();
         $faker->seed(crc32($request->city));
 
-        // error_log(crc32($request->city));
         $num_accommodations = 10;
         $accommodations = [];
 
         foreach(range(1, $num_accommodations) as $i) {
             array_push($accommodations, [
                 'hotel_name' => $faker->company . ' ' . $faker->randomElement($array = ['Hotel', 'Resort', 'Suite', 'Homestay', 'Hostel']),
-                'cost' => $faker->numberBetween($min = 300, $max = 2000), // $faker->randomFloat($nbMaxDecimals = 2, $min = 30, $max = 2000),
+                'cost' => $faker->numberBetween($min = 300, $max = 2000),
             ]);
         }
 
