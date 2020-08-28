@@ -467,7 +467,7 @@ class AccommodationController extends Controller
      *     path="/api/accommodation/search",
      *     tags={"Accommodation"},
      *     summary="Find accommodation by city",
-     *     description="Find accommodation by city",
+     *     description="Find accommodation by city. Generate fake accommodation for city searched.",
      *     operationId="search_accommodation",
      *     deprecated=false,
      *     @OA\Parameter(
