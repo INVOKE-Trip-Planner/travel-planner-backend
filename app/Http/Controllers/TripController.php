@@ -402,7 +402,7 @@ class TripController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=204,
+     *         response=200,
      *         description="Successful operation"
      *     ),
      *     @OA\Response(
@@ -431,7 +431,7 @@ class TripController extends Controller
         $trip->delete();
 
         $response = ['message' => 'Trip is successfully deleted.'];
-        return response()->json($response, 204);
+        return response()->json($response, 200);
     }
 
 }
