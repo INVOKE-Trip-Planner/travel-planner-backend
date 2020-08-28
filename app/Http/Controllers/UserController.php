@@ -193,7 +193,7 @@ class UserController extends Controller
      *     description="Get user by id",
      *     operationId="user_by_id",
      *     security={{"bearerAuth":{}}},
-     *     deprecated=true,
+     *     deprecated=false,
      *     @OA\Parameter(
      *          @OA\Schema(type="string"),
      *          in="path",
