@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -136,7 +137,7 @@ class UserController extends Controller
         $user = Auth::user();
 
         if ($request->has('password')) {
-            $data['password'] = Hash::make($data['password']);
+            $data['password'] = Hash::make($request->password);
         }
 
         if ($request->has('avatar')) {

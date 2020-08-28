@@ -65,7 +65,7 @@ Route::group([
 
     });
 
-    Route::get('triposo/articles', 'TriposoController@articles');
+    Route::post('triposo/articles', 'TriposoController@articles');
 
     Route::get('accommodation/search', 'AccommodationController@search');
 

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class TriposoController extends Controller
 {
     /**
-     * @OA\Get(
+     * @OA\Post(
      *     path="/api/triposo/articles",
      *     tags={"Triposo"},
      *     summary="Find triposo articles by city",
@@ -34,7 +34,8 @@ class TriposoController extends Controller
      */
     function articles(Request $request)
     {
-        $location_ids = $request->city;
+        $location_ids = str_replace(' ', '_', ucwords(strtolower($request->city)));
+        // error_log($location_ids);
         $account = '2XZIH948'; //'X-Triposo-Account' => '2XZIH948',
         $token = '61pspj7u7euzhk6b79q687nbycfxextm'; // 'X-Triposo-Token' => '61pspj7u7euzhk6b79q687nbycfxextm',
 
@@ -44,7 +45,8 @@ class TriposoController extends Controller
         );
 
         // echo $response;
-        return $response->getBody();
+        return response($response->getBody(), $response->getStatusCode());
+        // return $response->json(); // $response->getBody();
 
         // return response()->json($response->getBody(), $response->getStatusCode());
     }

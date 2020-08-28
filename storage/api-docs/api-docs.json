@@ -977,6 +977,52 @@
                 ]
             }
         },
+        "/api/itinerary/create": {
+            "post": {
+                "tags": [
+                    "Itinerary"
+                ],
+                "summary": "Create an itinerary for a destination without schedules",
+                "description": "Create only itinerary",
+                "operationId": "create_only_itinerary",
+                "parameters": [
+                    {
+                        "name": "destination_id",
+                        "in": "query",
+                        "description": "required | exists:destinations,id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "day",
+                        "in": "query",
+                        "description": "numeric | min:0",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Error"
+                    }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/batch/itinerary": {
             "post": {
                 "tags": [
@@ -1987,7 +2033,7 @@
             }
         },
         "/api/triposo/articles": {
-            "get": {
+            "post": {
                 "tags": [
                     "Triposo"
                 ],
