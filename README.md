@@ -10,7 +10,7 @@
 5. Create database if not exists in workbench
 6. Migrate tables by running php artisan migrate:refresh
 7. Generate fake data by running php artisan db:seed 
-    * This will generate 10 users with username from 'test0000' til 'test0009' and password same as the username.
+    * This will generate 10 users with username from 'test0001' til 'test0010' and password = 'password'.
 
 
 ## Misc

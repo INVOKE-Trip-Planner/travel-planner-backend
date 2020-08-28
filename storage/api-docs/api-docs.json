@@ -374,7 +374,7 @@
                     "Accommodation"
                 ],
                 "summary": "Find accommodation by city",
-                "description": "Find accommodation by city",
+                "description": "Find accommodation by city. Generate fake accommodation for city searched.",
                 "operationId": "search_accommodation",
                 "parameters": [
                     {
@@ -2014,7 +2014,7 @@
                     }
                 ],
                 "responses": {
-                    "204": {
+                    "200": {
                         "description": "Successful operation"
                     },
                     "401": {
@@ -2038,7 +2038,7 @@
                     "Triposo"
                 ],
                 "summary": "Find triposo articles by city",
-                "description": "Find triposo articles by city",
+                "description": "Find triposo articles by city.",
                 "operationId": "triposo_articles",
                 "parameters": [
                     {
@@ -2058,7 +2058,7 @@
                         "description": "Error"
                     }
                 },
-                "deprecated": false
+                "deprecated": true
             }
         },
         "/api/user": {
@@ -2242,7 +2242,7 @@
                         "description": "Error"
                     }
                 },
-                "deprecated": false,
+                "deprecated": true,
                 "security": [
                     {
                         "bearerAuth": []
@@ -2284,7 +2284,7 @@
                         "description": "Error"
                     }
                 },
-                "deprecated": false
+                "deprecated": true
             }
         }
     },
