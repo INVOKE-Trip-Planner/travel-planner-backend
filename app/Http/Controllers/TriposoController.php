@@ -11,9 +11,9 @@ class TriposoController extends Controller
      *     path="/api/triposo/articles",
      *     tags={"Triposo"},
      *     summary="Find triposo articles by city",
-     *     description="Find triposo articles by city",
+     *     description="Find triposo articles by city.",
      *     operationId="triposo_articles",
-     *     deprecated=false,
+     *     deprecated=true,
      *     @OA\Parameter(
      *         name="city",
      *         in="query",
@@ -35,9 +35,8 @@ class TriposoController extends Controller
     function articles(Request $request)
     {
         $location_ids = str_replace(' ', '_', ucwords(strtolower($request->city)));
-        // error_log($location_ids);
-        $account = '2XZIH948'; //'X-Triposo-Account' => '2XZIH948',
-        $token = '61pspj7u7euzhk6b79q687nbycfxextm'; // 'X-Triposo-Token' => '61pspj7u7euzhk6b79q687nbycfxextm',
+        $account = env('X_TRIPOSO_ACCOUNT');
+        $token = env('X_TRIPOSO_TOKEN');
 
         $client = new \GuzzleHttp\Client();
         $response = $client->request('GET',
